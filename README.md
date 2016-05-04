@@ -13,3 +13,8 @@
 10. sqlalchemy-migrate (0.10.0)
 11. WTForms (2.1)
 12. bootstrap(2.3.2)
+
+## reference
+[The Flask Mega-Tutorial](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+
+[中文版](http://www.pythondoc.com/flask-mega-tutorial/#)
