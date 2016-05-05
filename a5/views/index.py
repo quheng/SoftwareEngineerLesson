@@ -1,5 +1,5 @@
 from flask import render_template
-from config import app
+from managerimport app
 
 @app.route('/a5')
 def a5():
