@@ -6,7 +6,14 @@ a2
 {% block content %}
 <ol class="breadcrumb">
   <li><a href="#">Home</a></li>
-  <li><a href="#">2013</a></li>
+  <li><a href="#">2016</a></li>
   <li class="active">十一月</li>
 </ol>
+<ul class="list-group">
+{% for user in data.userlist %}
+<li class="list-group-item">name: {{user.nickname}}; email: {{user.email}}</li>
+
+{% endfor %}
+</ul>
+
 {% endblock %}
