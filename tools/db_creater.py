@@ -1,6 +1,8 @@
 # !/usr/bin/env python
 # coding=utf8
 # Author: quheng
+import sys
+sys.path.append("..")
 
 from migrate.versioning import api
 from config import SQLALCHEMY_DATABASE_URI

@@ -2,6 +2,9 @@
 # coding=utf8
 # Author: quheng
 
+import sys
+sys.path.append("..")
+
 import imp
 from migrate.versioning import api
 from manager import db

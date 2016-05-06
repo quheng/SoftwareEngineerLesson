@@ -1,0 +1,11 @@
+Flask 
+Flask-Email 
+Flask-Login 
+Flask-Mail 
+Flask-RESTful 
+flask-restful-swagger
+flask-restplus 
+Flask-SQLAlchem
+Flask-WTF
+SQLAlchemy 
+sqlalchemy-migrate 
