@@ -2,11 +2,18 @@
 # coding=utf8
 # Author: quheng
 
-from flask import Flask
+from flask import Flask, redirect
 import sys
 import jinja2
 app = Flask(__name__)
 app.config.from_object('config')
+
+# api
+import api
+@app.route('/docs')
+def docs():
+  return redirect('/static/docs.html')
+
 
 # database
 from flask.ext.sqlalchemy import SQLAlchemy
