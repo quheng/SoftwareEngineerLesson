@@ -7,6 +7,12 @@ from manager import app
 from templates.a2_models import a2_index
 from models import user
 
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template("index/index.html")
+
+
 @app.route('/a2')
 def a2():
     temp_ata = a2_index.data()
