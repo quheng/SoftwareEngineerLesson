@@ -24,6 +24,9 @@ from models import *
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+# admin
+from admin import admin_manager
+
 # send email
 from config import basedir, ADMINS, MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD
 import logging

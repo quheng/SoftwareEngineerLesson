@@ -13,5 +13,8 @@ class User(db.Model):
     def get_users():
         return User.query.all()
 
+    def __unicode__(self):
+        return self.username
+
     def __repr__(self):
         return '<User %r>' % (self.nickname)
