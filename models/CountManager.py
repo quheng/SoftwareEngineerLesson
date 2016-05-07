@@ -1,12 +1,13 @@
 from manager import db
 
 
-class CountManager(db.Mode):
+class CountManager(db.Model):
 	"""docstring for CountManager"""
 	def __init__(self, arg):
 		super(CountManager, self).__init__()
 		self.arg = arg
 
+	@staticmethod
 	def get_count():
 		return CountManager.query.all()
 

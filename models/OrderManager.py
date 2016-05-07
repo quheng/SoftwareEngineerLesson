@@ -1,11 +1,12 @@
 from manager import db
 
-class OrderManager(db.Mode):
+class OrderManager(db.Model):
 	"""docstring for OrderManager"""
 	def __init__(self, arg):
 		super(OrderManager, self).__init__()
 		self.arg = arg
 	
+	@staticmethod
 	def get_order():
 		return OrderManager.query.all()
 
