@@ -10,6 +10,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db_repository/app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
+SQLALCHEMY_ECHO = True
 
 
 # mail server settings
@@ -22,12 +23,6 @@ MAIL_PASSWORD = key.MAIL_PASSWORD
 
 # administrator list
 ADMINS = ['494862190@qq.com']
-
-
-# Create in-memory database
-MANAGER_DATABASE_FILE = 'sample_db.sqlite'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + MANAGER_DATABASE_FILE
-SQLALCHEMY_ECHO = True
 
 # Flask-Security config
 SECURITY_URL_PREFIX = "/admin"

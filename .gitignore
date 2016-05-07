@@ -1,5 +1,3 @@
 *.pyc
 .DS_Store
-key.py
-test.py
 *.log
