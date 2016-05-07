@@ -1,28 +1,27 @@
 ﻿//测试数据
-var orderList = [
-{
-    id:"SE000010325",
-    time: "2016.3.24",
-    user: "ZaneXiao",
+var orderList = [{
+    id:'SE000010325',
+    time: '2016.3.24',
+    user: 'ZaneXiao',
     amount: 66.2,
-    state: "NotDel",
-    imgsrc:"1.jpg"
+    state: 'NotDel',
+    imgsrc: 'http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg'
 },
 {
-    id: "SE000010510",
-    time: "2016.3.22",
-    user: "EowinYe",
+    id: 'SE000010510',
+    time: '2016.3.22',
+    user: 'EowinYe',
     amount: 99.8,
-    state: "Delivery",
-    imgsrc:"2.jpg"
+    state: 'Delivery',
+    imgsrc: 'http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg'
 },
 {
-    id: "SE000010296",
-    time: "2016.3.21",
-    user: "ABC",
+    id: 'SE000010296',
+    time: '2016.3.21',
+    user: 'ABC',
     amount: 12.5,
-    state: "Success",
-    imgsrc: "3.jpg"
+    state: 'Success',
+    imgsrc: 'http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'
 }
 ];
 
@@ -38,13 +37,13 @@ var ORDERS = {
                 title: "云恋酒店（不含早）",
                 quantity:2,
                 amount: 576.0,
-                imgsrc:"1.jpg"
+                imgsrc: "http://www.cysz6.com/upload/hotel/1305/29/28664d284e439a97cbd622d2be6d35d9.jpg"
             },
             {
                 title: "会员增值业务",
                 quantity: 1,
                 amount: 88.8,
-                imgsrc:"3.jpg"
+                imgsrc: "http://img4q.duitang.com/uploads/item/201405/14/20140514113612_vTyFa.jpeg"
             }
         ],
         flow: [
@@ -71,7 +70,7 @@ var ORDERS = {
 var COMPLAINTS = {
     "SE000010325": {
         id: "SE000010325",
-
+       
     }
 };
 
@@ -107,10 +106,12 @@ function drawOrderList()
         .style("top", function (d, i) {
             return divTop + interval * (i) + BackHeight * i+"px";
         })
+        .style("cursor","pointer")
         .on("click", function (d, i) {
             d3.select("#ListGroup")
                 .transition().duration(200)
-                .style("opacity", 0);
+                .style("opacity", 0)
+                .remove();
             drawOrder(d.id);
         });
     orders.each(function(d,i){
@@ -147,7 +148,8 @@ function drawOrderList()
         infTr.append("td")
             .append("img")
             .attr("src", d.imgsrc)
-            .attr("width","96%");
+            .attr("width", "96%")
+            .attr("height","50%");
         infTr.append("td")
             .html(d.user);
         infTr.append("td")
@@ -266,7 +268,8 @@ function drawOrder(orderID)
         tr.append("td")
             .append("img")
             .attr("src", d.imgsrc)
-            .attr("width", "96%");;
+            .attr("width", "96%")
+            .attr("height", termHeight+"px");
         tr.append("td")
             .html(d.title);
         tr.append("td")
@@ -284,14 +287,16 @@ function drawOrder(orderID)
             .html("总金额&nbsp&nbsp&nbsp¥" + order.amount);
 
     //cplDiv
-    cplDiv.style("font-size","85%");
+    cplDiv.style("font-size", "85%")
+        .style("cursor","default");
     cplDiv.append("nobr")
         .html("&nbsp&nbsp交易出现问题？");
     cplDiv.append("nobr")
-        .style("color", "blue")
+        .style("color", "black")
         .html("&nbsp&nbsp申请退款？");
     cplDiv.append("nobr")
         .style("color", "blue")
+        .style("cursor","pointer")
         .html("&nbsp&nbsp投诉该订单？")
         .on("click", function () {
             group.transition().duration(200)
@@ -374,7 +379,7 @@ function drawComplaint(orderID)
         tr.append("td")
            .html(d.time+" "+d.summary);
     });
-
+    
     //cplDiv
     var cplTitle = cplDiv.append("div")
           .attr("class", "OrderTitle")
@@ -405,6 +410,7 @@ function drawComplaint(orderID)
         .style("left", "45%")
         .style("width", "10%")
         .style("height", "30px")
+        .style("cursor","pointer")
         .html("提交")
         .on("click", function () {
             console.log(document.getElementById('textfield').value);
