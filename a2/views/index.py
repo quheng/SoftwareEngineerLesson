@@ -12,9 +12,12 @@ from models import user
 def index():
     return render_template("index/index.html")
 
+@app.route('/a2')
+def a2():
+    return render_template("a2/a2.html")
 
 @app.route('/bug')
-def a2():
+def bug():
     temp_ata = a2_index.data()
     temp_data.userlist = user.User.get_users()
     return render_template("a2/bug.html", data = temp_data)

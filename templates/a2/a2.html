@@ -1,0 +1,114 @@
+{% extends "bootstrap_base.html" %}
+{% block title %}
+a2
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='component.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='mine.css') }}">
+
+<nav class="navbar navbar-fixed-top" role="navigation" style="background-color:#fd7b35;">
+	<div>
+   <div class="navbar-header" >
+      <a class="navbar-brand" style=" color: white; font-size: 40px;" href="#">PayKitty</a>
+   </div>
+   <div >
+      <ul class="nav navbar-nav" style="float: right;">
+
+<div class="dropdown">
+  <button class="dropbtn">~{users.user_type}~ ~{users.user_name}~</button>
+  <div class="dropdown-content">
+    <a href="http://www.runoob.com">我的订单</a>
+    <a href="http://www.runoob.com">账号管理</a>
+    <a href="http://www.runoob.com">退出登录</a>
+  </div>
+</div>
+      </ul>
+   </div>
+
+</nav>
+
+<nav class="cbp-spmenu">
+			<a href="http://tympanus.net/Blueprints/SlidePushMenus/#">1</a>
+			<a style="border-left: 6px solid #fd7b35;" href="http://tympanus.net/Blueprints/SlidePushMenus/#">2</a>
+			<a href="http://tympanus.net/Blueprints/SlidePushMenus/#">3</a>
+			<a href="http://tympanus.net/Blueprints/SlidePushMenus/#">4</a>
+			<a href="http://tympanus.net/Blueprints/SlidePushMenus/#">5</a>
+		</nav>
+
+<box class="whitetab-container">
+  <a href="/a2#">&lt; 返回所有订单<a>
+</box>
+
+    <!-- 妹子写的 -->
+
+
+<div class="main-container">
+<!--   <h3>hello</h3>
+  <h3>thank you</h3>
+  <h3>thank you very much</h3>
+  <h3>hehehehello</h3>
+  <h3>thank you</h3>
+  <h3>thank you very much</h3>
+  <h3>hello</h3>
+  <h3>thank you</h3>
+  <h3>thank you very much</h3>
+  <h3>hehehehello</h3>
+  <h3>thank you</h3>
+  <h3>thank you very much</h3>
+  <h3>hello indian mi fans</h3>
+  <h3>do you like mi 4i</h3>
+  <h3>hello indian mi fans</h3>
+  <h3>do you like mi band</h3>
+  <h3>im very happy to</h3>
+  <h3>to give you everyone</h3>
+  <h3>im very happy to</h3>
+  <h3>to be a gift</h3> -->
+<style>
+    #OrderDiv{
+        background-color:lightblue;
+        width:800px;
+        height:1000px;
+        border-radius:15px;
+        position:relative;
+/*        left:50px;*/
+        margin: 0 auto;
+        top:60px;
+    }
+    .OrderBack{
+        width:84%;
+        position:absolute;
+        left:8%;
+        border-width:0px;
+        border-radius:15px;
+        box-shadow:0px 0px 5px 5px rgba(0, 0, 0, 0.3);
+        background-color:white;
+        font-family:Microsoft YaHei;
+        font-size:20px;
+    }
+    .OrderTitle {
+        width:98%;
+        height:30px;
+        position:absolute;
+        left:1%;
+        border-width:0px;
+        border-radius:13px 13px 0px 0px;
+        background-color:lightgray;
+        font-family:Microsoft YaHei;
+        font-size:85%;
+        line-height:10%;
+    }
+</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='mine.css') }}">
+<script src="a2/d3.min.js"></script> 
+<script src="a2/DrawOrder.js"></script> 
+<div id="OrderDiv">
+</div>
+
+<script>  
+   drawOrderList();
+</script>
+</div>
+
+{% endblock %}
