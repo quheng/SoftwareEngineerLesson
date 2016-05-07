@@ -71,7 +71,7 @@ var ORDERS = {
 var COMPLAINTS = {
     "SE000010325": {
         id: "SE000010325",
-       
+
     }
 };
 
@@ -374,7 +374,7 @@ function drawComplaint(orderID)
         tr.append("td")
            .html(d.time+" "+d.summary);
     });
-    
+
     //cplDiv
     var cplTitle = cplDiv.append("div")
           .attr("class", "OrderTitle")

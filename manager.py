@@ -12,7 +12,7 @@ app.config.from_object('config')
 import api
 @app.route('/docs')
 def docs():
-  return redirect('/static/docs.html')
+    return redirect('/static/docs.html')
 
 
 # database
