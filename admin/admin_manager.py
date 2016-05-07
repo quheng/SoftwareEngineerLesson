@@ -16,3 +16,9 @@ from models import user
 #         return '%s - %s' % (self.key, self.value)
 
 admin.add_view(MyModelView(user.User, db.session))
+admin.add_view(MyModelView(Seller.Seller, db.session))
+admin.add_view(MyModelView(Buyer.Buyer, db.session))
+admin.add_view(MyModelView(OrderManager.OrderManager, db.session))
+admin.add_view(MyModelView(ItemManager.ItemManager, db.session))
+admin.add_view(MyModelView(CountManager.CountManager, db.session))
+
