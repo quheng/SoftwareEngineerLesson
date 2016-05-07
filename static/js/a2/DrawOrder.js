@@ -1,29 +1,30 @@
 ﻿//测试数据
-var orderList = [{
-    id:'SE000010325',
-    time: '2016.3.24',
-    user: 'ZaneXiao',
-    amount: 66.2,
-    state: 'NotDel',
-    imgsrc: 'http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg'
-},
-{
-    id: 'SE000010510',
-    time: '2016.3.22',
-    user: 'EowinYe',
-    amount: 99.8,
-    state: 'Delivery',
-    imgsrc: 'http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg'
-},
-{
-    id: 'SE000010296',
-    time: '2016.3.21',
-    user: 'ABC',
-    amount: 12.5,
-    state: 'Success',
-    imgsrc: 'http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'
-}
-];
+
+//var orderList = [{
+//    id:'SE000010325',
+//    time: '2016.3.24',
+//    user: 'ZaneXiao',
+//    amount: 66.2,
+//    state: 'NotDel',
+//    imgsrc: 'http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg'
+//},
+//{
+//    id: 'SE000010510',
+//    time: '2016.3.22',
+//    user: 'EowinYe',
+//    amount: 99.8,
+//    state: 'Delivery',
+//    imgsrc: 'http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg'
+//},
+//{
+//    id: 'SE000010296',
+//    time: '2016.3.21',
+//    user: 'ABC',
+//    amount: 12.5,
+//    state: 'Success',
+//    imgsrc: 'http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'
+//}
+//];
 
 var ORDERS = {
     "SE000010325": {
@@ -88,13 +89,33 @@ var StateType={
     "Compl":"投诉中"
 };
 
-function drawOrderList()
+function post(URL, PARAMS) {
+    var temp = document.createElement("form");
+    temp.action = URL;
+    temp.method = "post";
+    temp.style.display = "none";
+    for (var x in PARAMS) {
+        var opt = document.createElement("textarea");
+        opt.name = x;
+        opt.value = PARAMS[x];
+        // alert(opt.name)        
+        temp.appendChild(opt);
+    }
+    document.body.appendChild(temp);
+    temp.submit();
+    return temp;
+}
+//post('pages/statisticsJsp/excel.action', {html :prnhtml,cm1:'sdsddsd',cm2:'haha'});  
+
+function drawOrderList(ORDERLIST)
 {
     var div = d3.select("#" + divID);
     var group = div.selectAll("g");
     group.remove();
     group = div.append("g")
         .attr("id", "ListGroup");
+    var orderList = JSON.parse(ORDERLIST);
+    console.log(orderList);
     var BackHeight = 200;
     var interval = 50;
     var orders = group.selectAll("div")
