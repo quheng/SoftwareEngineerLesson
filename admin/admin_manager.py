@@ -4,6 +4,12 @@ from admin_config import MyModelView
 from manager import db
 # add models
 from models import user
+from models import Seller
+from models import Buyer
+from models import OrderManager
+from models import ItemManager
+from models import CountManager
+
 # Customized User model admin
 # class UserInfo(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
