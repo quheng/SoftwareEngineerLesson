@@ -1,7 +1,3 @@
-# !/usr/bin/env python
-# coding=utf8
-# Author: quheng
-
 from manager import db
 
 class User(db.Model):
@@ -13,8 +9,6 @@ class User(db.Model):
     def get_users():
         return User.query.all()
 
-    def __unicode__(self):
-        return self.username
-
     def __repr__(self):
         return '<User %r>' % (self.nickname)
+				
