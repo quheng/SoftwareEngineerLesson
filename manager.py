@@ -14,7 +14,6 @@ import api
 def docs():
     return redirect('/static/docs.html')
 
-
 # database
 from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy(app)
