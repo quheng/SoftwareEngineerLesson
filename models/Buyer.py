@@ -4,10 +4,6 @@ from manager import db
 class Buyer(db.Model):
 	"""docstring for Buyer"""
 
-	def __init__(self, arg):
-		super(Buyer, self).__init__()
-		self.arg = arg
-
 	@staticmethod
 	def get_buyer():
 		return Buyer.query.all()

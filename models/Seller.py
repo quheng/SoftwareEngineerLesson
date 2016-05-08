@@ -4,9 +4,8 @@ from manager import db
 class Seller(db.Model):
 	"""docstring for Seller"""
 
-	def __init__(self, arg):
+	def __init__(self):
 		super(Seller, self).__init__()
-		self.arg = arg
 
 	@staticmethod
 	def get_seller():
@@ -17,5 +16,5 @@ class Seller(db.Model):
 
 	sellerID = db.Column(db.String(20), primary_key = True)
 	sellerName = db.Column(db.String(50), index = True)
-	sellerCount = db.Column(db.String(20), db.ForeignKey('Seller.sellerID'))
+	sellerCount = db.Column(db.String(20), db.ForeignKey('CountManager.countID'))
 	# sellerCount = db.relationship("CountManager", backref = 'count', lazy = 'dynamic', uselist = False)

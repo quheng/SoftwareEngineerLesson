@@ -26,54 +26,52 @@
 //}
 //];
 
-var ORDERS = {
-    "SE000010325": {
-        id: "SE000010325",
-        time: "2016.3.24",
-        user:"ZaneXiao",
-        state: "NotDel",
-        amount: 664.8,
-        content: [
-            {
-                title: "云恋酒店（不含早）",
-                quantity:2,
-                amount: 576.0,
-                imgsrc: "http://www.cysz6.com/upload/hotel/1305/29/28664d284e439a97cbd622d2be6d35d9.jpg"
-            },
-            {
-                title: "会员增值业务",
-                quantity: 1,
-                amount: 88.8,
-                imgsrc: "http://img4q.duitang.com/uploads/item/201405/14/20140514113612_vTyFa.jpeg"
-            }
-        ],
-        flow: [
-            {
-                time: "2016.3.21 14:11",
-                summary:"买家zyy已付款"
-            },
-            {
-                time: "2016.3.22 00:03",
-                summary: "卖家YunlianHotel确认订单"
-            },
-            {
-            time: "2016.3.22 00:04",
-                summary: "卖家YunlianHotel确认发货"
-            },
-            {
-                time: "2016.3.25 19:52",
-                summary: "买家zyy确认收货,交易完成"
-            }
-        ]
-    }
-};
+var ORDERS = '{\
+        "id": "SE000010325",\
+        "time": "2016.3.24",\
+        "user":"ZaneXiao",\
+        "state": "NotDel",\
+        "amount": 664.8,\
+        "content": [\
+            {\
+                "title": "云恋酒店（不含早）",\
+                "quantity":2,\
+                "amount": 576.0,\
+                "imgsrc": "http://www.cysz6.com/upload/hotel/1305/29/28664d284e439a97cbd622d2be6d35d9.jpg"\
+            },\
+            {\
+                "title": "会员增值业务",\
+                "quantity": 1,\
+                "amount": 88.8,\
+                "imgsrc": "http://img4q.duitang.com/uploads/item/201405/14/20140514113612_vTyFa.jpeg"\
+            }\
+        ],\
+        "flow": [\
+            {\
+                "time": "2016.3.21 14:11",\
+                "summary":"买家zyy已付款"\
+            },\
+            {\
+                "time": "2016.3.22 00:03",\
+                "summary": "卖家YunlianHotel确认订单"\
+            },\
+            {\
+            "time": "2016.3.22 00:04",\
+                "summary": "卖家YunlianHotel确认发货"\
+            },\
+            {\
+                "time": "2016.3.25 19:52",\
+                "summary": "买家zyy确认收货,交易完成"\
+            }\
+        ]\
+    }';
 
-var COMPLAINTS = {
-    "SE000010325": {
-        id: "SE000010325",
+//var COMPLAINTS = {
+//    "SE000010325": {
+//        id: "SE000010325",
        
-    }
-};
+//    }
+//};
 
 //测试数据-结束
 
@@ -90,20 +88,19 @@ var StateType={
 };
 
 function post(URL, PARAMS) {
-    var temp = document.createElement("form");
-    temp.action = URL;
-    temp.method = "post";
-    temp.style.display = "none";
-    for (var x in PARAMS) {
-        var opt = document.createElement("textarea");
-        opt.name = x;
-        opt.value = PARAMS[x];
-        // alert(opt.name)        
-        temp.appendChild(opt);
-    }
-    document.body.appendChild(temp);
-    temp.submit();
-    return temp;
+    var result;
+    $.ajax({
+        type: "post",
+        url: URL,
+        data: PARAMS,
+        cache: false,
+        async: false,
+        dataType: "json",
+        success: function (data) {
+            result = data;
+        }
+    });
+    return result;
 }
 //post('pages/statisticsJsp/excel.action', {html :prnhtml,cm1:'sdsddsd',cm2:'haha'});  
 
@@ -133,7 +130,8 @@ function drawOrderList(ORDERLIST)
                 .transition().duration(200)
                 .style("opacity", 0)
                 .remove();
-            drawOrder(d.id);
+            //var ORDERS = post("", "");
+            drawOrder(ORDERS);
         });
     orders.each(function(d,i){
         var order = d3.select(this);
@@ -180,10 +178,10 @@ function drawOrderList(ORDERLIST)
     });
 }
 
-function drawOrder(orderID)
+function drawOrder(ORDERS)
 {
-    orderID = "SE000010325";//测试
-    var order = ORDERS[orderID];//取得订单数据
+    var order = JSON.parse(ORDERS);
+    orderID = order.id;
     var div = d3.select("#" + divID);
     var group = div.append("g")
             .attr("id", "OrderGroup")
@@ -323,14 +321,13 @@ function drawOrder(orderID)
             group.transition().duration(200)
                 .style("opacity", 0)
                 .remove();
-            drawComplaint(orderID);
+            drawComplaint(order);
         });
 }
 
-function drawComplaint(orderID)
+function drawComplaint(order)
 {
-    orderID = "SE000010325";//测试
-    var order = ORDERS[orderID];//取得订单信息
+    orderID = order.id;//测试
     var div = d3.select("#" + divID);
     var group = div.append("g")
             .attr("id", "ComplaintGroup")

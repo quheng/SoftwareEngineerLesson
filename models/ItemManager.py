@@ -2,9 +2,6 @@ from manager import db
 
 class ItemManager(db.Model):
 	"""docstring for ItemManager"""
-	def __init__(self, arg):
-		super(ItemManager, self).__init__()
-		self.arg = arg
 
 	@staticmethod
 	def get_item():
