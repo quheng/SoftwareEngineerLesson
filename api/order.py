@@ -2,6 +2,7 @@ from flask.ext.restful import reqparse, abort, Api, Resource, fields, marshal_wi
 from flask_restful_swagger import swagger
 from api import api
 from flask import request
+from flask.ext.restful import reqparse
 
 class getOrderList(Resource): 
     """get the order list from the userID"""
@@ -15,9 +16,14 @@ class getOrderList(Resource):
             "required": True,
             "allowMultiple": False,
             "dataType": "string",
-            "paramType": "string"}])
+            "paramType": "body"}])
+
 
     def get(self):
-        return "test", 200, {'Access-Control-Allow-Origin': '*'}
-
-        # return request.form['userID'], 200, {'Access-Control-Allow-Origin': '*'}
+        parser = reqparse.RequestParser()
+        parser.add_argument('userID', type=str, required = True)
+        args = parser.parse_args()
+        # userID = int(max(TODOS.keys()).lstrip('todo')) + 1
+        # userID = 'todo%i' % userID
+        userID = {'userID': args['userID']}
+        return userID, 200
