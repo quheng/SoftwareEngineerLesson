@@ -1,7 +1,8 @@
 ﻿//测试数据
 
  var OL = '[{  "id": "SE000010325",   "time": "2016.3.24",  "user": "ZaneXiao",   "amount": 66.2,   "state": "NotDel",  "imgsrc": "http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg"},\
-{"id": "SE000010510","time": "2016.3.22","user": "EowinYe","amount": "99.8","state": "Delivery","imgsrc": "http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg"}]';
+{"id": "SE000010510","time": "2016.3.22","user": "EowinYe","amount": "99.8","state": "Delivery","imgsrc": "http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg"}]';
+
 
 //var orderList = [{
 //    id:'SE000010325',
@@ -136,6 +137,14 @@ function drawOrderList(ORDERLIST)
                 .remove();
             //var ORDERS = post("", "");
             drawOrder(ORDERS);
+        })
+        .on("mouseover", function (d, i) {
+            d3.select(this)
+                .style("box-shadow", "2.1px 2.1px 8px 5px rgba(80, 80, 80, 0.38)");
+        })
+        .on("mouseout", function (d, i) {
+            d3.select(this)
+                .style("box-shadow", "1px 1px 3px 1.5px rgba(0, 0, 0, 0.2)");
         });
     orders.each(function(d,i){
         var order = d3.select(this);
