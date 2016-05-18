@@ -12,9 +12,22 @@ from models import user
 def index():
     return render_template("index/index.html")
 
+@app.route('/orderdetails')
+def orderdetails():
+    return render_template("a2/orderdetails.html")
+
+@app.route('/complaint')
+def complaint():
+    return render_template("a2/complaint.html")
+
+@app.route('/orderlist')
+def complaint():
+    return render_template("a2/orderlist.html")
+
 @app.route('/a2')
 def a2():
     return render_template("a2/a2.html")
+
 
 @app.route('/bug')
 def bug():
