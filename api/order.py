@@ -3,10 +3,6 @@ from flask_restful_swagger import swagger
 from api import api
 from flask import request
 from flask.ext.restful import reqparse
-from datetime import datetime
-from manager import db
-from models.OrderManager import OrderManager
-
 
 testdata = """
 '[{  "id": "SE000010325",   "time": "2016.3.24",  "user": "ZaneXiao",   "amount": 66.2,   "state": "NotDel",  "imgsrc": "http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg"},\
@@ -33,7 +29,6 @@ class getOrderList(Resource):
             "code": 405,
             "message": "Invalid input"
         }])
-        
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('userID', type=str)
@@ -41,122 +36,4 @@ class getOrderList(Resource):
         # userID = int(max(TODOS.keys()).lstrip('todo')) + 1
         # userID = 'todo%i' % userID
         userID = {'userID': args['userID']}
-        return userID, 200
-
-
-
-class insertOrder(Resource):
-    """docstring for insertOrder"""
-    
-    @swagger.operation(
-        notes = "insert an order",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "insert order ",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 400,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('ID', type=str)
-        parser.add_argument('Name', type=str)
-        parser.add_argument('buyer', type=str)
-        parser.add_argument('seller', type=str)
-        parser.add_argument('orderItems', type=str)
-        args = parser.parse_args()
-        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
-        #         args['seller'],args['Items'],orderStatus = "Booking",
-        #         orderTime = datetime.utcnow())
-        # print args['ID']
-        if args['ID']==None:
-            abort(400, message="ID doesn't exist")
-        if args['Name']==None:
-            abort(400, message="Name doesn't exist")
-        if args['buyer']==None:
-            abort(400, message="buyer doesn't exist")
-        if args['seller']==None:
-            abort(400, message="seller doesn't exist")
-        if args['orderItems']==None:
-            abort(400, message="orderItems doesn't exist")
-
-        newOrder = OrderManager()
-        newOrder.orderID = args['ID']
-        newOrder.orderName = args['Name']
-        newOrder.buyer = args['buyer']
-        newOrder.seller = args['seller']
-        newOrder.orderItems = args['orderItems']
-        newOrder.orderStatus = "Booking"
-        newOrder.orderTime = datetime.utcnow()
-        try:
-            OrderManager.insert(newOrder)
-        except Exception, e:
-            abort(400,message="Database error: {0}".format(e))
-        
-        return 'insert successful', 200
-
-
-class deleteOrder(Resource):
-    """docstring for insertOrder"""
-    
-    @swagger.operation(
-        notes = "insert an order",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "insert order ",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 405,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('Name', type=str)
-        args = parser.parse_args()
-        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
-        #         args['seller'],args['Items'],orderStatus = "Booking",
-        #         orderTime = datetime.utcnow())
-        # print args['ID']
-        if args['Name']==None:
-            abort(400, message="Name doesn't exist")
-
-        newOrder = OrderManager()
-        newOrder.orderName = args['Name']
-        newOrder.orderTime = datetime.utcnow()
-        try:
-            OrderManager.delete(args['ID'])
-        except Exception, e:
-            abort(400,message="delete failure")
-        
-        return 'delete successful', 200
-
-
-class selectOrder(object):
-    """docstring for searchOrder"""
-    
-    @staticmethod
-    def select( ID):
-        # OrderManager.query.filter(OrderManager.orderID == orderID).first()
-        # return OrderManager.query.filter(OrderManager.orderID == id).all()
-        return OrderManager.query.all()
-        # return OrderManager.get_order(ID)
-        
-        
-        
+        return testdata, 200
