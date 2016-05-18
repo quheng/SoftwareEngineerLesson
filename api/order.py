@@ -109,11 +109,11 @@ class deleteOrder(Resource):
     """docstring for insertOrder"""
     
     @swagger.operation(
-        notes = "insert an order",
+        notes = "delete an order",
         nickname='list',
         parameters=[{
             "name": "orderID",
-            "description": "insert order ",
+            "description": "delete order ",
             "required": True,
             "allowMultiple": False,
             "dataType": "string",
@@ -148,14 +148,33 @@ class deleteOrder(Resource):
         return 'delete successful', 200
 
 
-class selectOrder(object):
+class selectOrder(Resource):
     """docstring for searchOrder"""
     
-    @staticmethod
-    def select( ID):
+    @swagger.operation(
+        notes = "select an order",
+        nickname='list',
+        parameters=[{
+            "name": "orderID",
+            "description": "select order ",
+            "required": True,
+            "allowMultiple": False,
+            "dataType": "string",
+            "paramType": "string"}],
+        responseMessages=[{
+            "code": 200,
+            "message": "right message"
+        }, {
+            "code": 405,
+            "message": "Invalid input"
+        }])
+
+    def post(self):
         # OrderManager.query.filter(OrderManager.orderID == orderID).first()
         # return OrderManager.query.filter(OrderManager.orderID == id).all()
-        return OrderManager.query.all()
+        table = OrderManager.printTable()
+        encodedjson = json.dumps(table)
+        return encodedjson,200
         # return OrderManager.get_order(ID)
         
         

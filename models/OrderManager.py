@@ -1,4 +1,5 @@
 from manager import db
+import json
 
 class OrderManager(db.Model):
     """docstring for OrderManager"""
@@ -20,14 +21,29 @@ class OrderManager(db.Model):
 
     @staticmethod
     def printTable():
-        ID = OrderManager.orderID
-        name = OrderManager.orderName
-        buyer = OrderManager.buyer
-        seller = OrderManager.seller
-        iterms = OrderManager.orderItems
-        status = OrderManager.orderStatus
-        time = OrderManager.orderTime
-        return ID+" "+name+" "+ buyer+" "+seller+" "+items+" "+status+" "+ time
+        table = OrderManager.query.all()
+        result = []
+        for line in table:
+            temp = {}
+            temp['orderID'] = line.orderID
+            temp['orderName'] = line.orderName
+            temp['buyer'] = line.buyer
+            temp['seller'] = line.seller
+            temp['orderItems'] = line.orderItems
+            temp['orderTime'] = line.orderTime
+            result = [result,temp]
+        return result
+
+
+            # ID = OrderManager.orderID
+            # name = OrderManager.orderName
+            # buyer = OrderManager.buyer
+            # seller = OrderManager.seller
+            # iterms = OrderManager.orderItems
+            # status = OrderManager.orderStatus
+            # time = OrderManager.orderTime
+       
+        # return ID+" "+name+" "+ buyer+" "+seller+" "+items+" "+status+" "+ time
 
 
     def __repr__(self):
