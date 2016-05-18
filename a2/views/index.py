@@ -21,7 +21,7 @@ def complaint():
     return render_template("a2/complaint.html")
 
 @app.route('/orderlist')
-def complaint():
+def orderlist():
     return render_template("a2/orderlist.html")
 
 @app.route('/a2')
