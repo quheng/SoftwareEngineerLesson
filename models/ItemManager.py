@@ -14,5 +14,5 @@ class ItemManager(db.Model):
 	itemName = db.Column(db.String(50), index = True)
 	seller = db.Column(db.String(20), db.ForeignKey('Seller.sellerID'), )
 	# seller = db.relationship("Seller", backref = 'seller', lazy = 'dynamic')
-	itemType = 	db.Column(db.Integer, index = False)
-	itemStatus = db.Column(db.Integer, index = False)
+	itemType = 	db.Column(db.String(20), index = False)
+	itemStatus = db.Column(db.String(20), index = False)
