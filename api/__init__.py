@@ -13,5 +13,6 @@ import order
 api.add_resource(getuser.GetUserID, '/api/UserID')
 # api.add_resource(getuser.GetUserNickname, '/api/nickname')
 # api.add_resource(getseller.GetSellerID, '/api/SellerID')
+api.add_resource(order.insertOrder, '/api/insert')
 api.add_resource(getuser.UpdateUserNickname, '/api/update_nickname')
 api.add_resource(order.getOrderList, '/api/getOrderList')
