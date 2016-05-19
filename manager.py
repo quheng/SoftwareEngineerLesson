@@ -2,9 +2,11 @@
 # coding=utf8
 # Author: quheng
 
-from flask import Flask, redirect
+from flask import Flask, redirect, jsonify
 import sys
 import jinja2
+from flask_swagger import swagger
+
 app = Flask(__name__, static_path = '/a2static')
 app.config.from_object('config')
 
@@ -14,10 +16,18 @@ db = SQLAlchemy(app)
 from models import *
 
 # api
+app.config['SWAGGER'] = {
+    "swagger_version": "2.0",
+    "specs": [
+        {
+            "version": "0.0.1",
+            "title": "PayKitty A2 api",
+            "endpoint": 'a2_spec',
+            "route": '/a2/spec',
+        }
+    ]
+}
 import api
-@app.route('/a2/docs')
-def docs():
-    return redirect('/a2static/docs.html')
 
 # handle error
 import os

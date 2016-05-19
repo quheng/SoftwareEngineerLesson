@@ -5,10 +5,9 @@
 from flask import render_template
 from manager import app
 from templates.a2_models import a2_index
-from models import user
 
 
-@app.route('/orderdetails')
+@app.route('/orderdetails', methods=['GET'])
 def orderdetails():
     return render_template("a2/orderdetails.html")
 

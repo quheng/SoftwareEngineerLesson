@@ -2554,8 +2554,8 @@ var Request = module.exports = function (xhr, params) {
     var self = this;
     self.xhr = xhr;
     self.body = '';
-
     var uri = params.host + ':' + params.port + (params.path || '/');
+    console.log(xhr);
 
     xhr.open(
         params.method || 'GET',
@@ -2606,7 +2606,7 @@ Request.prototype.write = function (s) {
 
 Request.prototype.end = function (s) {
     if (s !== undefined) this.write(s);
-    this.xhr.send(this.body);
+    this.xhr.send(this);
 };
 
 });

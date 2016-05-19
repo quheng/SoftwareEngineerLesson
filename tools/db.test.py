@@ -1,11 +1,13 @@
 # !/usr/bin/env python
 # coding=utf8
 # Author: quheng
+import sys
+sys.path.append("..")
 
 from manager import db
-from models import *
-u = user.User(nickname='Tom', email='tom@email.com')
-db.session.add(u)
+from models import OrderManager
+ID = 1
+status = 1
+line = db.session.query(OrderManager.OrderManager).filter(OrderManager.OrderManager.orderID == ID).update({OrderManager.OrderManager.orderStatus: status})
 db.session.commit()
-users = user.User.query.all()
-print users
+print line

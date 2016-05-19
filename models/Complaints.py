@@ -14,7 +14,6 @@ class Complaints(db.Model):
     def insert(temp):
         db.session.add(temp)
         db.session.commit()
-        
 
     @staticmethod
     def selectByOrderID(ID):
@@ -35,6 +34,3 @@ class Complaints(db.Model):
     # seller = db.relationship("Seller", backref = 'seller', lazy = 'dynamic')
     # orderStatus = db.Column(db.String(20), index = False)
     complaintTime = db.Column(db.DateTime, index = False)
-
-
-                 

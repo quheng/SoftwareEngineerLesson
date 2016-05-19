@@ -1,190 +1,135 @@
-from flask.ext.restful import reqparse, abort, Api, Resource, fields, marshal_with
-from flask_restful_swagger import swagger
-from api import api
-from flask import request
-from flask.ext.restful import reqparse
+from flask import Flask, request, jsonify
 from datetime import datetime
-from manager import db
-import json
+from manager import db, app
 from models.OrderManager import OrderManager
+from flask.ext.restful import abort
 
+@app.route("/a2/api/updateorderstate", methods=['PUT'])
+def UpdateOrderState():
+    """
+    use to update orders state
+    ---
+    tags:
+      - order
+    parameters:
+      - name: orderID
+        in: query
+        type: integer
+        description: order id
+      - name: status
+        in: query
+        type: integer
+        description: new status
+    responses:
+      200:
+        description: update result
+        schema:
+          id: result
+          properties:
+            result:
+              type: string
+              description: The result
+              default: '1'
+    """
+    orderID = request.args.get('orderID')
+    status = request.args.get('status')
+    if orderID is None:
+        abort(400, message="you should pass order id")
+    if status is None:
+        abort(400, message="you should pass status")
+    try:
+        res = OrderManager.UpdateOrderState(orderID, status)
+        res = 1
+    except Exception, e:
+        res = 0
+    return jsonify({'result': res})
 
-testdata = """
-'[{  "id": "SE000010325",   "time": "2016.3.24",  "user": "ZaneXiao",   "amount": 66.2,   "state": "NotDel",  "imgsrc": "http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg"},\
-{"id": "SE000010510","time": "2016.3.22","user": "EowinYe","amount": "99.8","state": "Delivery","imgsrc": "http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg"}]'
-"""
+# @app.route("/a2/api/getorderdetial", methods=['GET'])
+# def GetOrderDetial():
+#     """
+#     use to get orders detial by orderID
+#     ---
+#     tags:
+#       - order
+#     parameters:
+#       - name: orderID
+#         in: query
+#         type: integer
+#         description: size of elements
+#     responses:
+#       200:
+#         description: order detail
+#         schema:
+#           id: return_test
+#           properties:
+#             buyer:
+#               type: Integer
+#               description: buyerId
+#               default: '1'
+#             orderTime:
+#               type: String
+#               description: the order time
+#               default: '2016-05-02 19:11:00'
+#     """
+#     orderID = request.args.get('orderID')
+#     print abort
+#     if orderID is None:
+#         abort(400, message="you should pass order id")
+#     try:
+#         res = OrderManager.selectOrderByID(orderID)
+#     except Exception, e:
+#         abort(400, message="Database error: {0}".format(e))
+#     return jsonify(res)
 
-
-class insertOrder(Resource):
-    """docstring for insertOrder"""
-    
-    @swagger.operation(
-        notes = "insert an order",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "insert order ",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 400,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('ID', type=str)
-        parser.add_argument('Name', type=str)
-        parser.add_argument('buyer', type=str)
-        parser.add_argument('seller', type=str)
-        parser.add_argument('orderItems', type=str)
-        args = parser.parse_args()
-        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
-        #         args['seller'],args['Items'],orderStatus = "Booking",
-        #         orderTime = datetime.utcnow())
-        # print args['ID']
-        # if args['ID']==None:
-            # abort(400, message="ID doesn't exist")
-        if args['Name']==None:
-            abort(400, message="Name doesn't exist")
-        if args['buyer']==None:
-            abort(400, message="buyer doesn't exist")
-        if args['seller']==None:
-            abort(400, message="seller doesn't exist")
-        if args['orderItems']==None:
-            abort(400, message="orderItems doesn't exist")
-
-        newOrder = OrderManager()
-        # newOrder.orderID = args['ID']
-        newOrder.orderName = args['Name']
-        newOrder.buyer = args['buyer']
-        newOrder.seller = args['seller']
-        newOrder.orderItems = args['orderItems']
-        newOrder.orderStatus = 2
-        newOrder.orderTime = datetime.utcnow()
-        try:
-            OrderManager.insert(newOrder)
-        except Exception, e:
-            abort(400,message="Database error: {0}".format(e))
-        
-        return 'insert successful', 200
-
-
-class deleteOrder(Resource):
-    """docstring for insertOrder"""
-    
-    @swagger.operation(
-        notes = "delete an order",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "delete order ",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 405,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('Name', type=str)
-        args = parser.parse_args()
-        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
-        #         args['seller'],args['Items'],orderStatus = "Booking",
-        #         orderTime = datetime.utcnow())
-        # print args['ID']
-        if args['Name']==None:
-            abort(400, message="Name doesn't exist")
-
-        newOrder = OrderManager()
-        newOrder.orderName = args['Name']
-        newOrder.orderTime = datetime.utcnow()
-        try:
-            OrderManager.delete(args['ID'])
-        except Exception, e:
-            abort(400,message="delete failure")
-        
-        return 'delete successful', 200
-
-
-class selectOrder(Resource):
-    """docstring for searchOrder"""
-    
-    @swagger.operation(
-        notes = "select an order",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "select order ",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 405,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        # OrderManager.query.filter(OrderManager.orderID == orderID).first()
-        # return OrderManager.query.filter(OrderManager.orderID == id).all()
-        table = OrderManager.printTable()
-        encodedjson = json.dumps(table)
-        return encodedjson,200
-        # return OrderManager.get_order(ID)
-        
-
-class selectOrderByID(Resource):
-    """docstring for searchOrder"""
-    
-    @swagger.operation(
-        notes = "select an order by ID",
-        nickname='list',
-        parameters=[{
-            "name": "orderID",
-            "description": "select order by ID",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": "string",
-            "paramType": "string"}],
-        responseMessages=[{
-            "code": 200,
-            "message": "right message"
-        }, {
-            "code": 405,
-            "message": "Invalid input"
-        }])
-
-    def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('ID', type=str)
-        args = parser.parse_args()
-        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
-        #         args['seller'],args['Items'],orderStatus = "Booking",
-        #         orderTime = datetime.utcnow())
-        # print args['ID']
-        if args['ID']==None:
-            abort(400, message="ID doesn't exist")
-            
-        try:
-            OrderManager.selectOrderByID(args['ID'])
-        except Exception, e:
-            abort(400,message="select failure")
-        
-        return 'select successful', 200
-        
-        
+@app.route("/a2/api/getorderdetial", methods=['GET'])
+def GetOrderDetial():
+    """
+    use to get orders detial
+    ---
+    tags:
+      - order
+    parameters:
+      - name: orderID
+        in: query
+        type: integer
+        description: order ID
+    responses:
+      200:
+        description: order detail
+        schema:
+          id: return_test
+          properties:
+            buyer:
+              type: Integer
+              description: buyerId
+              default: '1'
+            seller:
+              type: Integer
+              description: sellerId
+              default: '1'
+            orderAmount:
+              type: Float
+              description: the total amount
+              default: '0'
+            orderItems:
+              type: String
+              description: the total order items
+              default: '{"items": [ 1, 2,3,4 ]}'
+            orderStatus:
+              type: String
+              description: the order status
+              default: '0'
+            orderTime:
+              type: String
+              description: the order time
+              default: '2016-05-02 19:11:00'
+    """
+    orderID = request.args.get('orderID')
+    print abort
+    if orderID is None:
+        abort(400, message="you should pass order id")
+    try:
+        res = OrderManager.selectOrderByID(orderID)
+    except Exception, e:
+        abort(400, message="Database error: {0}".format(e))
+    return jsonify(res)
