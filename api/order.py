@@ -152,11 +152,11 @@ class selectOrderByID(Resource):
     """docstring for searchOrder"""
     
     @swagger.operation(
-        notes = "select an order",
+        notes = "select an order by ID",
         nickname='list',
         parameters=[{
             "name": "orderID",
-            "description": "select order ",
+            "description": "select order by ID",
             "required": True,
             "allowMultiple": False,
             "dataType": "string",
@@ -170,11 +170,21 @@ class selectOrderByID(Resource):
         }])
 
     def post(self):
-        # OrderManager.query.filter(OrderManager.orderID == orderID).first()
-        # return OrderManager.query.filter(OrderManager.orderID == id).all()
-        table = OrderManager.printTable()
-        encodedjson = json.dumps(table)
-        return encodedjson,200
-        # return OrderManager.get_order(ID)
+        parser = reqparse.RequestParser()
+        parser.add_argument('ID', type=str)
+        args = parser.parse_args()
+        # temp =  OrderManager(args['ID'],args['Name'],args['buyer'],
+        #         args['seller'],args['Items'],orderStatus = "Booking",
+        #         orderTime = datetime.utcnow())
+        # print args['ID']
+        if args['ID']==None:
+            abort(400, message="ID doesn't exist")
+            
+        try:
+            OrderManager.selectOrderByID(args['ID'])
+        except Exception, e:
+            abort(400,message="select failure")
+        
+        return 'select successful', 200
         
         

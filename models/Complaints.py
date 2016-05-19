@@ -17,12 +17,14 @@ class Complaints(db.Model):
         
 
     @staticmethod
-    def printTable():
-        orderID = Complaints.orderID
-        buyer = Complaints.buyer
-        content = Complaints.content
-        time = Complaints.complaintTime
-        return orderID+" "+ buyer+" "+content+" "+ time
+    def selectByOrderID(ID):
+        temp = Complaints.query.filter(Complaints.orderID == ID).first()
+        result = {}
+        result['orderID'] = Complaints.orderID
+        result['content'] = Complaints.content
+        result['buyer'] = Complaints.buyer
+        result['complaintTime'] = Complaints.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
+        return result
 
     def __repr__(self):
         return '<Count %r>' % (self.orderID)

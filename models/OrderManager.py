@@ -17,6 +17,17 @@ class OrderManager(db.Model):
     def insert(temp):
         db.session.add(temp)
         db.session.commit()
+
+    @staticmethod
+    def selectOrderByID(ID):
+        OrderManager.query.filter(OrderManager.orderID == ID).first()
+        temp['orderID'] = line.orderID
+        temp['orderName'] = line.orderName
+        temp['buyer'] = line.buyer
+        temp['seller'] = line.seller
+        temp['orderStatus'] = line.orderStatus
+        temp['orderItems'] = line.orderItems
+        temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
         
 
     @staticmethod
