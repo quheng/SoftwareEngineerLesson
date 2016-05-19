@@ -5,7 +5,7 @@ from flask_restful_swagger import swagger
 from flask.ext.restful import Api
 
 # This is important:
-api = swagger.docs(Api(app), apiVersion='0.1', api_spec_url='/api/api')
+api = swagger.docs(Api(app), apiVersion='0.1', api_spec_url='/a2/api')
 
 import getuser
 import getseller
