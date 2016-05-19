@@ -8,7 +8,7 @@ from templates.a2_models import a2_index
 from models import user
 
 @app.route('/')
-@app.route('/index')
+@app.route('a2/index')
 def index():
     return render_template("index/index.html")
 
