@@ -15,29 +15,13 @@ from models import *
 
 # api
 import api
-@app.route('/docs')
+@app.route('/a2/docs')
 def docs():
-    return redirect('/static/docs.html')
+    return redirect('/a2static/docs.html')
 
 # handle error
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-
-@app.route('/insert')
-def insert():
-    api.order.insertOrder.insert("ID4",  "Name",  "buyer2",  "seller2",  "Items")
-    return 'Hello World'
-
-@app.route('/select')
-def select():
-    result = api.order.selectOrder.select("ID");
-    html = ""
-    for x in result:
-        temp = x.orderID
-        html += str(temp) + '\n'
-    return html
 
 # admin
 from admin import admin_manager

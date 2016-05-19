@@ -16,10 +16,14 @@ import key
 from wtforms import validators
 from admin_models import Manager, Role
 import flask_admin as admin
+from flask_admin import AdminIndexView
 from flask_admin.contrib import sqla
 from flask_admin.contrib.sqla import filters
 
-admin = admin.Admin(app, name='PayKitty Admin', template_mode='bootstrap3')
+admin = admin.Admin(app, index_view=AdminIndexView(
+    url='/admin'),
+    name='PayKitty Admin',
+    template_mode='bootstrap3')
 
 # Setup Flask-Security
 manager_datastore = SQLAlchemyUserDatastore(db, Manager, Role)
@@ -37,6 +41,7 @@ def security_context_processor():
 class MyModelView(sqla.ModelView):
     column_display_pk = True
     # form_columns = ('id')
+
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
