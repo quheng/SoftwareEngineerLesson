@@ -29,7 +29,7 @@ var ORDERLIST = [{
 var ORDERS = '{\
         "id": "SE000010325",\
         "time": "2016.3.24",\
-        "user":"ZaneXiao",\
+        "seller":"ZaneXiao",\
         "state": "NotDel",\
         "amount": 664.8,\
         "content": [\
