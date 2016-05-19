@@ -30,7 +30,7 @@ class OrderManager(db.Model):
             temp['buyer'] = line.buyer
             temp['seller'] = line.seller
             temp['orderItems'] = line.orderItems
-            temp['orderTime'] = line.orderTime
+            temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
             result = [result,temp]
         return result
 
