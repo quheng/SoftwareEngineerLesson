@@ -139,11 +139,11 @@ function addOrder(tr,d)
     //查看详情
     td = tr.append("td").style("text-align", "center");
     var a = td.append("a")
-       // .attr("href", "complaint.html"+"?"+"id="+d.id)
+       // .attr("href", "complaint"+"?"+"id="+d.id)
         .attr("class","btn btn-primary btn-xs")
-        .html("View");
+        .html("查看详情");
     a.on("click", function () {
-        window.location = "orderdetails.html?id="+d.id;
+        window.location = "orderdetails?id="+d.id;
     });
     a.append("i")
         .attr("class","fa fa-pencil");        
