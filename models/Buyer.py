@@ -14,5 +14,5 @@ class Buyer(db.Model):
 	buyerID = db.Column(db.String(20), primary_key = True)
 	buyerPhoto = db.Column(db.String(100))
 	buyerName = db.Column(db.String(50), index = True)
-	buyerCount = db.Column(db.String(20), db.ForeignKey('CountManager.countID'))
+	buyerCount = db.Column(db.String(20))#, db.ForeignKey('CountManager.countID')
 	# buyerCount = db.relationship("CountManager", backref = 'count', lazy = 'dynamic', uselist = False)

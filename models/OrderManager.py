@@ -17,6 +17,17 @@ class OrderManager(db.Model):
     def insert(temp):
         db.session.add(temp)
         db.session.commit()
+
+    @staticmethod
+    def selectOrderByID(ID):
+        OrderManager.query.filter(OrderManager.orderID == ID).first()
+        temp['orderID'] = line.orderID
+        temp['orderName'] = line.orderName
+        temp['buyer'] = line.buyer
+        temp['seller'] = line.seller
+        temp['orderStatus'] = line.orderStatus
+        temp['orderItems'] = line.orderItems
+        temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
         
 
     @staticmethod
@@ -29,6 +40,7 @@ class OrderManager(db.Model):
             temp['orderName'] = line.orderName
             temp['buyer'] = line.buyer
             temp['seller'] = line.seller
+            temp['orderStatus'] = line.orderStatus
             temp['orderItems'] = line.orderItems
             temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
             result.append(temp)
@@ -51,10 +63,11 @@ class OrderManager(db.Model):
     def __repr__(self):
         return '<Count %r>' % (self.orderID)
 
-    orderID = db.Column(db.String(20), primary_key = True, autoincrement=True)
+    orderID = db.Column(db.Integer, primary_key = True, autoincrement=True)
     orderName = db.Column(db.String(50), index = True)
     buyer = db.Column(db.String(20)) #, db.ForeignKey('Buyer.buyerID')
     seller = db.Column(db.String(20)) # , db.ForeignKey('Seller.sellerID')
+    orderAmount = db.Column(db.Float, index = False, nullable = True)
     orderItems = db.Column(db.String(200), index = False)
     # buyer = db.Column(db.String(20), db.ForeignKey('Buyer.buyerID'))
     # seller = db.Column(db.String(20), db.ForeignKey('Seller.sellerID'))
