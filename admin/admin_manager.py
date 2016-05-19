@@ -9,6 +9,7 @@ from models import Buyer
 from models import OrderManager
 from models import ItemManager
 from models import CountManager
+from models import Complaints
 
 # Customized User model admin
 # class UserInfo(db.Model):
@@ -27,4 +28,5 @@ admin.add_view(MyModelView(Buyer.Buyer, db.session))
 admin.add_view(MyModelView(OrderManager.OrderManager, db.session))
 admin.add_view(MyModelView(ItemManager.ItemManager, db.session))
 admin.add_view(MyModelView(CountManager.CountManager, db.session))
+admin.add_view(MyModelView(Complaints.Complaints, db.session))
 

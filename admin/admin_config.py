@@ -35,6 +35,8 @@ def security_context_processor():
 
 # Create customized model view class
 class MyModelView(sqla.ModelView):
+    column_display_pk = True
+    # form_columns = ('id')
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
             return False

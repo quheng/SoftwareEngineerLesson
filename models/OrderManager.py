@@ -49,7 +49,7 @@ class OrderManager(db.Model):
     def __repr__(self):
         return '<Count %r>' % (self.orderID)
 
-    orderID = db.Column(db.String(20), primary_key = True)
+    orderID = db.Column(db.String(20), primary_key = True, autoincrement=True)
     orderName = db.Column(db.String(50), index = True)
     buyer = db.Column(db.String(20)) #, db.ForeignKey('Buyer.buyerID')
     seller = db.Column(db.String(20)) # , db.ForeignKey('Seller.sellerID')
@@ -59,7 +59,7 @@ class OrderManager(db.Model):
     # buyer = db.relationship("Buyer", backref = 'buyer', lazy = 'dynamic')
     # seller = db.relationship("Seller", backref = 'seller', lazy = 'dynamic')
     orderStatus = db.Column(db.Integer, index = False)
-    orderTime = db.Column(db.Time, index = False)
+    orderTime = db.Column(db.DateTime, index = False)
 
 
                  
