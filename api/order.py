@@ -178,13 +178,11 @@ class selectOrderByID(Resource):
         #         orderTime = datetime.utcnow())
         # print args['ID']
         if args['ID']==None:
-            print "abc"
-            abort(401, message="ID doesn't exist")
-
+            abort(400, message="ID doesn't exist")
+            
         try:
             OrderManager.selectOrderByID(args['ID'])
         except Exception, e:
-            print e
             abort(400,message="select failure")
         
         return 'select successful', 200
