@@ -5,7 +5,7 @@
 from flask import Flask, redirect
 import sys
 import jinja2
-app = Flask(__name__)
+app = Flask(__name__, static_path = '/a2static')
 app.config.from_object('config')
 
 # database
