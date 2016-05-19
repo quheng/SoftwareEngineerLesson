@@ -103,17 +103,18 @@ function post(URL, PARAMS, f) {
     });
 }
 
-function addOrder(tr,d)
+function addOrder(tr,d,i)
 {
     tr.append("td").html("");
     //订单编号
     var td = tr.append("td");
-    td.append("a").html(d.id);
+    td.append("a").html("No."+d.orderID);
     td.append("br");
-    td.append("small").html(d.time);
+    td.append("small").html(d.orderTime);
     //商品
     td = tr.append("td");
     var ul = td.append("ul").attr("class", "list-inline");
+    d.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
     for (var p in d.imgsrc)
     {
         ul.append("li").append("img")
@@ -122,10 +123,12 @@ function addOrder(tr,d)
             .style("height", "50px");
     }
     //卖家
+    d.seller = "wwy";
     td = tr.append("td").html(d.seller);
     //金额
-    td = tr.append("td").html("¥" + d.amount);
+    td = tr.append("td").html("¥" + parseInt(100*(i+2)*45/23));
     //状态
+    d.state = i;
     td = tr.append("td").attr("class", "project_progress");
     var div = td.append("div").attr("class", "progress progress_sm");
     var num = (d.state + 1) / StateType.length * 100;
@@ -152,18 +155,20 @@ function addOrder(tr,d)
 function drawOrderList()
 {
     post("/a2/api/selectOrder", { 'sql': "sql" }, function (data) {
+        //data = JSON.parse(data);
         console.log(data);
         var table = d3.select("#" + "ListTable");
         var tbody = table.select("tbody");
         //var orderList = JSON.parse(ORDERLIST);
-        var orderList = ORDERLIST;
+        var orderList = JSON.parse(data);
+        console.log(orderList);
         var trs = tbody.selectAll("tr")
             .data(orderList)
             .enter()
             .append("tr");
         trs.each(function (d, i) {
             tr = d3.select(this);
-            addOrder(tr, d);
+            addOrder(tr, d,i);
         });
     });
 }
