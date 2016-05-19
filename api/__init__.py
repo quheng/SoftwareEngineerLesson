@@ -17,5 +17,5 @@ api.add_resource(order.insertOrder, '/a2/api/insertOrder')
 api.add_resource(order.selectOrderByID, '/a2/api/selectOrderByID')
 
 # api.add_resource(getuser.GetUserNickname, '/api/nickname')
-# api.add_resource(getseller.GetSellerID, '/api/SellerID')
+# api.add_resource(getseller.GetSellerID, '/api/SellerID'	)
 api.add_resource(getuser.UpdateUserNickname, '/a2/api/update_nickname')

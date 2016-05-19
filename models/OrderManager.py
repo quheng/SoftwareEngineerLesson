@@ -67,6 +67,7 @@ class OrderManager(db.Model):
     orderName = db.Column(db.String(50), index = True)
     buyer = db.Column(db.String(20)) #, db.ForeignKey('Buyer.buyerID')
     seller = db.Column(db.String(20)) # , db.ForeignKey('Seller.sellerID')
+    orderAmount = db.Column(db.Float, index = False, nullable = True)
     orderItems = db.Column(db.String(200), index = False)
     # buyer = db.Column(db.String(20), db.ForeignKey('Buyer.buyerID'))
     # seller = db.Column(db.String(20), db.ForeignKey('Seller.sellerID'))
