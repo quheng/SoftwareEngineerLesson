@@ -18,9 +18,41 @@
 
     <!-- Custom Theme Style -->
     <link href="http://121.42.175.1/static/css/custom.css" rel="stylesheet">
+    <link href="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
+        <!-- PNotify -->
+    <script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+    </script>
+    <!-- /PNotify -->
+
     <div class="container body">
       <div class="main_container">
         <div class="col-md-3 left_col menu_fixed">
@@ -128,7 +160,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>订单详情 <small>SE000000123</small></h2>
+                    <h2>订单详情 <small id="order_ID">SE000000123</small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -148,8 +180,48 @@
                         </li>
                       </ul>
 
-                      <a class="btn btn-success">确认收货</a>
-                      <a class="btn btn-success">投诉订单</a>
+                      <a class="btn btn-success" onclick="new PNotify({
+                                  title: '操作成功',
+                                  text: '您已成功确认收货！',
+                                  type: 'success',
+                                  styling: 'bootstrap3'
+                              });">确认收货</a>
+                      <a class="btn btn-success" id="to_Comp">投诉订单</a>
+
+
+
+<!--                   <button class="btn btn-default source">Success</button>
+
+
+                  <button class="btn btn-default source" onclick="new PNotify({
+                                  title: 'New Thing',
+                                  text: 'Just to let you know, something happened.',
+                                  type: 'info',
+                                  styling: 'bootstrap3'
+                              });">Info</button>
+
+                  <button class="btn btn-default source" onclick="new PNotify({
+                                  title: 'Regular Notice',
+                                  text: 'Check me out! I\'m a notice.',
+                                  styling: 'bootstrap3'
+                              });">Notice</button>
+
+                  <button class="btn btn-default source" onclick="new PNotify({
+                                  title: 'Oh No!',
+                                  text: 'Something terrible happened.',
+                                  type: 'error',
+                                  styling: 'bootstrap3'
+                              });">Error</button>
+
+                  <button class="btn btn-default source" onclick="new PNotify({
+                                  title: 'Oh No!',
+                                  text: 'Something terrible happened.',
+                                  type: 'info',
+                                  styling: 'bootstrap3',
+                                  addclass: 'dark'
+                              });">Dark</button> -->
+
+
                       <br />
 
                     </div>
@@ -239,7 +311,22 @@
     <!-- jQuery custom content scroller -->
     <script src="http://121.42.175.1/static/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
 
+
+    <script src="http://121.42.175.1/static/vendors/iCheck/icheck.min.js"></script>
+    <script src="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.js"></script>
+    <script src="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="http://121.42.175.1/static/vendors/pnotify/dist/pnotify.nonblock.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="http://121.42.175.1/static/js/custom.js"></script>
+          
+<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+      <script>
+          var orderid = location.href.split('id=')[1];
+          d3.select("#order_ID").html(orderid);
+
+          d3.select("#to_Comp").on("click", function(){
+            window.location = "complaint?id="+orderid;
+          });
+      </script>
   </body>
 </html>
