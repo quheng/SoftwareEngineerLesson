@@ -151,16 +151,34 @@ function addOrder(tr,d)
 
 function drawOrderList()
 {
-    var table = d3.select("#" + "ListTable");
-    var tbody = table.select("tbody");
-    //var orderList = JSON.parse(ORDERLIST);
-    var orderList = ORDERLIST;
-    var trs = tbody.selectAll("tr")
-        .data(orderList)
-        .enter()
-        .append("tr");
-    trs.each(function (d, i) {
-        tr = d3.select(this);
-        addOrder(tr,d);
+    post("/a2/api/selectOrder", { 'sql': "sql" }, function (data) {
+        console.log(data);
+        var table = d3.select("#" + "ListTable");
+        var tbody = table.select("tbody");
+        //var orderList = JSON.parse(ORDERLIST);
+        var orderList = ORDERLIST;
+        var trs = tbody.selectAll("tr")
+            .data(orderList)
+            .enter()
+            .append("tr");
+        trs.each(function (d, i) {
+            tr = d3.select(this);
+            addOrder(tr, d);
+        });
+    });
+}
+
+function post(URL, PARAMS, f) {
+    $.ajax({
+        type: "POST",
+        url: URL,
+        data: JSON.stringify(PARAMS),
+        cache: false,
+        // async: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            f(data);
+        }
     });
 }
