@@ -7,10 +7,6 @@ from manager import app
 from templates.a2_models import a2_index
 from models import user
 
-@app.route('/')
-@app.route('/a2/index')
-def index():
-    return render_template("index/index.html")
 
 @app.route('/orderdetails')
 def orderdetails():
@@ -23,14 +19,3 @@ def complaint():
 @app.route('/orderlist')
 def orderlist():
     return render_template("a2/orderlist.html")
-
-@app.route('/a2')
-def a2():
-    return render_template("a2/a2.html")
-
-
-@app.route('/bug')
-def bug():
-    temp_ata = a2_index.data()
-    temp_data.userlist = user.User.get_users()
-    return render_template("a2/bug.html", data = temp_data)
