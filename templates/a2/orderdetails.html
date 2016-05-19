@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -26,30 +26,30 @@
   <body class="nav-md">
         <!-- PNotify -->
     <script>
-      $(document).ready(function() {
-        new PNotify({
-          title: "PNotify",
-          type: "info",
-          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
-          nonblock: {
-              nonblock: true
-          },
-          addclass: 'dark',
-          styling: 'bootstrap3',
-          hide: false,
-          before_close: function(PNotify) {
-            PNotify.update({
-              title: PNotify.options.title + " - Enjoy your Stay",
-              before_close: null
-            });
+      //$(document).ready(function() {
+      //  new PNotify({
+      //    title: "PNotify",
+      //    type: "info",
+      //    text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+      //    nonblock: {
+      //        nonblock: true
+      //    },
+      //    addclass: 'dark',
+      //    styling: 'bootstrap3',
+      //    hide: false,
+      //    before_close: function(PNotify) {
+      //      PNotify.update({
+      //        title: PNotify.options.title + " - Enjoy your Stay",
+      //        before_close: null
+      //      });
 
-            PNotify.queueRemove();
+      //      PNotify.queueRemove();
 
-            return false;
-          }
-        });
+      //      return false;
+      //    }
+      //  });
 
-      });
+      //});
     </script>
     <!-- /PNotify -->
 
@@ -167,15 +167,15 @@
 
                     <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
 
-                      <h3 id="">云恋情侣酒店</h3>
+                      <h3 id="sellerName"></h3>
 
                       <ul class="list-unstyled user_data">
-                        <li>2016.3.21
+                        <li id="orderdate">2016.3.21
                         </li>
 
-                        <li>已发货</li>
+                        <li id="orderstate"></li>
 
-                        <li>
+                        <li id="orderamount">
                           664.8元
                         </li>
                       </ul>
@@ -240,7 +240,7 @@
                           <div role="tabpanel" class="tab-content" id="tab_content2" aria-labelledby="profile-tab">
 
                             <!-- start user projects -->
-                            <table class="data table table-striped no-margin">
+                            <table class="data table table-striped no-margin" id="contentTable">
                               <thead>
                                 <tr>
                                   <th>#</th>
@@ -251,27 +251,7 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
-                                  <td>
-                                    <img src="http://121.42.175.1/static/images/img.jpg"></td>
-                                  <td>云恋情侣酒店森林主题套间（不含早）</td>
-                                  <td>288.0</td>
-                                  <td class="hidden-phone">2</td>
-                                  <td class="vertical-align-mid">
-                                    576.0
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td><img src="http://121.42.175.1/static/images/img.jpg"></td>
-                                  <td>会员增值业务</td>
-                                  <td>88.8</td>
-                                  <td class="hidden-phone">1</td>
-                                  <td class="vertical-align-mid">
-                                    88.8</div>
-                                    </div>
-                                  </td>
-                                </tr>
+                             
                               </tbody>
                             </table>
                             <!-- end user projects -->
@@ -324,10 +304,10 @@
       <script>
           var orderid = location.href.split('id=')[1];
           d3.select("#order_ID").html(orderid);
-
           d3.select("#to_Comp").on("click", function(){
             window.location = "complaint?id="+orderid;
           });
+          drawOrderDetails(orderid);
       </script>
   </body>
 </html>

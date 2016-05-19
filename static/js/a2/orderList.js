@@ -128,7 +128,7 @@ function addOrder(tr,d,i)
     //金额
     td = tr.append("td").html("¥" + parseInt(100*(i+2)*45/23));
     //状态
-    d.state = i;
+    d.state = d.orderStatus;
     td = tr.append("td").attr("class", "project_progress");
     var div = td.append("div").attr("class", "progress progress_sm");
     var num = (d.state + 1) / StateType.length * 100;
@@ -142,11 +142,12 @@ function addOrder(tr,d,i)
     //查看详情
     td = tr.append("td").style("text-align", "center");
     var a = td.append("a")
+        .datum(d.orderID)
        // .attr("href", "complaint"+"?"+"id="+d.id)
         .attr("class","btn btn-primary btn-xs")
         .html("查看详情");
-    a.on("click", function () {
-        window.location = "orderdetails?id="+d.id;
+    a.on("click", function (d) {
+        window.location = "orderdetails?id="+d;
     });
     a.append("i")
         .attr("class","fa fa-pencil");        

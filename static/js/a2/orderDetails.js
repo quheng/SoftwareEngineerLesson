@@ -2,7 +2,7 @@ var ORDERS = '{\
         "id": "SE000010325",\
         "time": "2016.3.24",\
         "user":"ZaneXiao",\
-        "state": "NotDel",\
+        "state": "1",\
         "amount": 664.8,\
         "content": [\
             {\
@@ -15,7 +15,7 @@ var ORDERS = '{\
                 "title": "会员增值业务",\
                 "quantity": 1,\
                 "amount": 88.8,\
-                "imgsrc": "http://img4q.duitang.com/uploads/item/201405/14/20140514113612_vTyFa.jpeg"\
+                "imgsrc": "http://www.cysz6.com/upload/hotel/1305/29/28664d284e439a97cbd622d2be6d35d9.jpg"\
             }\
         ],\
         "flow": [\
@@ -37,6 +37,8 @@ var ORDERS = '{\
             }\
         ]\
     }';
+
+var StateType = ["待付款", "待发货", "已发货", "交易成功", "待退款", "已退款", "投诉中"];
 
 function post(URL, PARAMS, f) {
           $.ajax({
@@ -102,12 +104,46 @@ function addGood(tbody,tr)
 
 function drawInfo(data)
 {
-    
+    console.log(data);
+    d3.select("#sellerName").html(data.user);
+    d3.select("#orderdate").html(data.time);
+    d3.select("#orderstate").html(StateType[data.state]);
+    d3.select("#orderamount").html(data.amount);
+}
+
+function drawGoods(data) {
+    console.log(data);
+    var table = d3.select("#contentTable");
+    var tbody = table.select("tbody");
+    var trs = tbody.selectAll("tr")
+               .data(data)
+               .enter()
+               .append("tr");
+    trs.each(function (d, i) {
+        tr = d3.select(this);
+        tr.append("td").append("img").attr("src", d.imgsrc)
+            .attr("width", "50px")
+            .attr("height","50px");
+        //订单编号
+        var td = tr.append("td").html(d.title);
+        //商品
+        td = tr.append("td").html(d.amount/d.quantity);
+        //
+        td = tr.append("td").attr("class", "hidden-phone").html(d.quantity);
+        //
+        td = tr.append("td").attr("class", "vertical-align-mid").html(d.amount);
+    });
+    //d3.select("#sellerName").html(data.user);
+    //d3.select("#orderdate").html(data.time);
+    //d3.select("#orderstate").html(stateType[data.state]);
+    //d3.select("#orderamount").html(data.amount);
 }
 
 function drawOrderDetails(order_id)
 {
-    post("/a2/api/selectOrder", { 'sql': "sql" }, function (data) {
+    console.log(order_id);
+    post("/a2/api/selectOrder", { 'ID': 1 }, function (data) {
+        console.log(data);
         data = JSON.parse(ORDERS);
         drawInfo(data);
         drawGoods(data.content);
