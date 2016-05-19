@@ -31,8 +31,10 @@ class OrderManager(db.Model):
             temp['seller'] = line.seller
             temp['orderItems'] = line.orderItems
             temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
-            result = [result,temp]
+            result.append(temp)
+        # print result
         return result
+        # return table
 
 
             # ID = OrderManager.orderID
