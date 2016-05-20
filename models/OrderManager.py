@@ -16,7 +16,6 @@ class OrderManager(db.Model):
 
     @staticmethod
     def insertOrder(newOrder):
-        print newOrder.orderTime
         db.session.add(newOrder)
         db.session.commit()
 

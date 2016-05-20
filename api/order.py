@@ -28,7 +28,7 @@ def UpdateOrderState():
           properties:
             result:
               type: string
-              description: The result
+              description: The result, 1 is successful
               default: '1'
     """
     orderID = request.args.get('orderID')
@@ -84,7 +84,7 @@ def InsertOrder():
           properties:
             result:
               type: string
-              description: The result
+              description: The result, 1 is successful
               default: '1'
     """
     newOrder = OrderManager()
