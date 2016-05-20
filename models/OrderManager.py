@@ -15,8 +15,9 @@ class OrderManager(db.Model):
     #
 
     @staticmethod
-    def insert(temp):
-        db.session.add(temp)
+    def insertOrder(newOrder):
+        print newOrder.orderTime
+        db.session.add(newOrder)
         db.session.commit()
 
     @staticmethod
@@ -33,7 +34,7 @@ class OrderManager(db.Model):
         temp['seller'] = line.seller
         temp['orderStatus'] = line.orderStatus
         temp['orderItems'] = line.orderItems
-        temp['orderTime'] = line.orderTime.strftime("%Y-%m-%d %H:%M:%S")
+        temp['orderTime'] = line.orderTime.strftime("%Y %m %d %H %M %S")
         return temp
 
     # @staticmethod
