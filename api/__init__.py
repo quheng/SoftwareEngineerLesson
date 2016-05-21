@@ -32,5 +32,5 @@ def GetComplaintList():
     """
     para = request.args.get('para')
     if para is None:
-        para = request.form['username']
+        para = request.form['para']
     return jsonify({"result": para})
