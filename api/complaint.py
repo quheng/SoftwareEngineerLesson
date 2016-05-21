@@ -31,7 +31,7 @@ from flask.ext.restful import abort
 #     return jsonify({"result": userID})
 
 
-@app.route("/a2/api/newcomplaint", methods=['GET'])
+@app.route("/a2/api/newcomplaint", methods=['POST'])
 def NewComplaint():
     """
     add new complaint
