@@ -155,6 +155,12 @@ function addOrder(tr,d,i)
 
 function drawOrderList()
 {
+    post("http://121.42.175.1/a2/api/test", {para:1}, function (data) {
+        console.log(data);
+    });
+    return;
+
+
     post("/a2/api/selectOrder", { 'sql': "sql" }, function (data) {
         //data = JSON.parse(data);
         console.log(data);
@@ -175,6 +181,7 @@ function drawOrderList()
 }
 
 function post(URL, PARAMS, f) {
+    console.log(JSON.stringify(PARAMS));
     $.ajax({
         type: "POST",
         url: URL,
