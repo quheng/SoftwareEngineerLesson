@@ -296,12 +296,15 @@
 <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/a2/orderDetails.js')}}"></script>
       <script>
-          var orderid = location.href.split('id=')[1];
+          var paras = location.href.split('userID=')[1];
+          var userid = paras.split('&orderID=')[0];
+          var orderid = paras.split('&orderID=')[1];
+          // var orderid = location.href.split('id=')[1];
           // d3.select("#order_ID").html(orderid);
           d3.select("#to_Comp").on("click", function(){
-            window.location = "complaint?id="+orderid;
+            window.location = "complaint?userID="+userid+"&orderID="+orderid;
           });
-          drawOrderDetails(orderid);
+          drawOrderDetails(orderid, userid);
       </script>
   </body>
 </html>

@@ -85,6 +85,24 @@ function get(URL, PARAMS, f) {
     });
 }
 
+function put(URL, PARAMS, f) {
+    $.ajax({
+        type: "PUT",
+        url: URL,
+        data: JSON.stringify(PARAMS),
+//        cache: false,
+        // async: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            f(data, 0);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            f(0, XMLHttpRequest.status);
+        }
+    });
+}
+
 function addGood(tbody,tr)
 {
     tbody.append("tr").html("");
@@ -139,46 +157,134 @@ function payment(order_id)
         title: '操作成功',
         text: '您已成功付款！',
         type: 'success',
-        styling: 'bootstrap3'});
+        styling: 'bootstrap3'
+    });
+    //location.reload();
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 1 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
 }
 
-function drawInfo(data)
+function confirmorder(order_id) {
+
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功确认订单！',
+        type: 'success',
+        styling: 'bootstrap3'
+    });
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 2 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
+}
+
+function receive(orderid) {
+
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功确认收货！',
+        type: 'success',
+        styling: 'bootstrap3'
+    });
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
+}
+
+function refund(orderid) {
+
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功申请退款！',
+        type: 'success',
+        styling: 'bootstrap3'
+    });
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
+}
+
+function accept(orderid) {
+
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功同意退款！',
+        type: 'success',
+        styling: 'bootstrap3'
+    });
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
+}
+
+function reject(orderid) {
+
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功拒绝退款！',
+        type: 'success',
+        styling: 'bootstrap3'
+    });
+    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
+        setTimeout("location.reload();", 3000)
+    });
+}
+
+function drawInfo(data, user_id)
 {
+    var isBuyer;
     console.log(data);
-    d3.select("#sellerName").html(data.seller);
+    if (user_id == data.buyer) {
+        d3.select("#sellerName").html(data.seller);
+        isBuyer = 1;
+    } else {
+        d3.select("#sellerName").html(data.buyer);
+        isBuyer = 0;
+    }
+
     d3.select("#orderdate").html(data.orderTime);
     d3.select("#orderstate").html(StateType[data.orderStatus]);
     d3.select("#orderamount").html(data.orderAmount);
-    if (data.orderStatus==1) {
+    if (data.orderStatus==0) {
         //需要判断是不是买家
-        var div = d3.select("#order_info");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid);").html("付款");
+        if (isBuyer == 1) {
+            var div = d3.select("#order_info");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid);").html("付款");
+        }
     }
 
-    if (data.orderStatus==0) {
+    if (data.orderStatus==1) {
         //需要判断是不是卖家
-        var div = d3.select("#order_info");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功确认订单！',type: 'success',styling: 'bootstrap3'});").html("确认订单");
+        if (isBuyer == 0) {
+            var div = d3.select("#order_info");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid)").html("确认订单");
+        }
     }
 
     if (data.orderStatus==2) {
         //需要判断是不是买家
-        var div = d3.select("#order_info");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功确认收货！',type: 'success',styling: 'bootstrap3'});").html("确认收货");
+        if (isBuyer == 1) {
+            var div = d3.select("#order_info");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid)").html("确认收货");
+        }
     }
 
     if (data.orderStatus==3) {
         //需要判断是不是买家
-        var div = d3.select("#order_info");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功申请退款！',type: 'success',styling: 'bootstrap3'});").html("申请退款");
+        if (isBuyer == 1) {
+            var div = d3.select("#order_info");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "refund(orderid)").html("申请退款");
+        }
     }
 
     if (data.orderStatus==4) {
         //需要判断是不是卖家
-        var div = d3.select("#order_info");
-        var br = div.append("br");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功同意退款！',type: 'success',styling: 'bootstrap3'});").html("同意退款");
-        a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功拒绝退款！',type: 'success',styling: 'bootstrap3'});").html("拒绝退款");
+        if (isBuyer == 0) {
+            var div = d3.select("#order_info");
+            var br = div.append("br");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(id)").html("同意退款");
+            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(id)").html("拒绝退款");
+        }
     }
 
     //已退款和退款失败没有额外按钮
@@ -205,14 +311,14 @@ function drawGoods(data) {
     });
 }
 
-function drawOrderDetails(order_id)
+function drawOrderDetails(order_id, user_id)
 {
     console.log(order_id);
     d3.select("#order_ID").html("订单号："+order_id);
     get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data, error) {
         console.log(data);
         // data = JSON.parse(data);
-        drawInfo(data);
+        drawInfo(data, user_id);
         drawGoods(JSON.parse(data.orderItems).items);
     });
 }
