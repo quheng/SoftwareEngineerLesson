@@ -85,8 +85,24 @@ var ORDERS = '{\
 //    "Compl":"投诉中"
 //};
 
-var StateType = ["待付款","待发货", "已发货","交易成功","待退款","已退款", "投诉中"];
-
+var StateType = ["待付款","待商家确认", "已确认","交易成功","交易关闭","待退款","已退款", "退款失败"];
+var statusNo = {
+    '所有状态':-1,
+    '待付款':0,
+    '待商家确认':1,
+    '商家已确认':2,
+    '交易成功':3,
+    '待退款':5,
+    '已退款':6,
+    '退款失败':7
+};
+var timeNo = {
+    '所有时间':-1,
+    '一日内':0,
+    '一周内':1,
+    '一月内':2,
+    '一年内':3
+}
 
 function post(URL, PARAMS, f) {
     $.ajax({
@@ -98,65 +114,152 @@ function post(URL, PARAMS, f) {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            f(data);
+            f(data,0);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            f(0, XMLHttpRequest.status);
         }
     });
 }
 
-function addOrder(tr,d,i)
-{
-    tr.append("td").html("");
-    //订单编号
-    var td = tr.append("td");
-    td.append("a").html("No."+d.orderID);
-    td.append("br");
-    td.append("small").html(d.orderTime);
-    //商品
-    td = tr.append("td");
-    var ul = td.append("ul").attr("class", "list-inline");
-    d.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
-    for (var p in d.imgsrc)
+function get(URL, PARAMS, f) {
+    URL += '?';
+    var flag = false;
+    for (var p in PARAMS)
     {
-        ul.append("li").append("img")
-            .attr("src", d.imgsrc[p])
-            .style("width", "50px")
-            .style("height", "50px");
+        if (flag) URL += '&';
+        URL += p + '=' + PARAMS[p];
+        flag = true;
     }
-    //卖家
-    d.seller = "wwy";
-    td = tr.append("td").html(d.seller);
-    //金额
-    td = tr.append("td").html("¥" + parseInt(100*(i+2)*45/23));
-    //状态
-    d.state = d.orderStatus;
-    td = tr.append("td").attr("class", "project_progress");
-    var div = td.append("div").attr("class", "progress progress_sm");
-    var num = (d.state + 1) / StateType.length * 100;
-    div.append("div")
-        .attr("class", "progress-bar bg-green")
-        .attr("role", "progressbar")
-        .attr("data-transitiongoal", num)
-        .attr("aria-valuenow", num)
-        .attr("style","width: "+num+"%");
-    td.append("small").html(StateType[d.state]);
-    //查看详情
-    td = tr.append("td").style("text-align", "center");
-    var a = td.append("a")
-        .datum(d.orderID)
-       // .attr("href", "complaint"+"?"+"id="+d.id)
-        .attr("class","btn btn-primary btn-xs")
-        .html("查看详情");
-    a.on("click", function (d) {
-        window.location = "orderdetails?id="+d;
+    console.log(URL);
+    $.ajax({
+        type: "GET",
+        url: URL,
+        // data: JSON.stringify(PARAMS),
+        cache: false,
+        // async: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            f(data,0);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            f(0, XMLHttpRequest.status);
+        }
     });
-    a.append("i")
-        .attr("class","fa fa-pencil");        
 }
 
-function drawOrderList()
+function addOrder(tr,orderID)
 {
-    post("http://121.42.175.1/a2/api/test", {para:1}, function (data) {
+    get("http://121.42.175.1/a2/api/getorderdetial", {'orderID': orderID }, function (data) {
         console.log(data);
+        tr.append("td").html("");
+        //订单编号
+        var td = tr.append("td");
+        td.append("a").html(orderID);
+        td.append("br");
+        td.append("small").html(data.orderTime);
+        //商品
+        td = tr.append("td");
+        var ul = td.append("ul").attr("class", "list-inline");
+        data.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
+        for (var p in data.imgsrc) {
+            ul.append("li").append("img")
+                .attr("src", data.imgsrc[p])
+                .style("width", "50px")
+                .style("height", "50px");
+        }
+        //卖家
+        td = tr.append("td").html(data.seller);
+        //金额
+        td = tr.append("td").html("¥" + data.orderAmount);
+        //状态
+        td = tr.append("td").attr("class", "project_progress");
+        var div = td.append("div").attr("class", "progress progress_sm");
+        var normal;
+        var progress;
+        if (data.orderStatus <= 4) {
+            normal = true;
+            progress = (data.orderStatus + 1) / 4 * 100;
+            if (data.status > 2)
+                progress = 100;
+        }
+        else
+        {
+            normal = false;
+            if (data.orderStatus > 5)
+                progress = 100;
+            else
+                progress = 50;
+        }
+       // progress = 50;
+           div.append("div")
+            .attr("class", function () {
+                var c = "progress-bar"
+                if (data.orderStatus <= 4)
+                    c += " bg-blue";
+                else
+                    c += " bg-red";
+                return c;
+            })
+            .attr("role", "progressbar")
+            .attr("data-transitiongoal", progress)
+            .attr("aria-valuenow", progress)
+            .attr("style", "width: " + progress + "%");
+        td.append("small").html(StateType[data.orderStatus]);
+        //查看详情
+        td = tr.append("td").style("text-align", "center");
+        var a = td.append("a")
+            .datum(orderID)
+           // .attr("href", "complaint"+"?"+"id="+d.id)
+            .attr("class", "btn btn-primary btn-xs")
+            .html("查看详情");
+        a.on("click", function (d) {
+            window.location = "orderdetails?userID=" + userID+"&orderID="+d;
+        });
+        a.append("i")
+            .attr("class", "fa fa-pencil");
+    });
+
+    return;
+      
+}
+
+function drawOrderList(userID,sort)
+{
+    var selTime = d3.select("#selectTime").property("value");
+    selTime = timeNo[selTime];
+    console.log(selTime);
+    var selStatus = d3.select("#selectStatus").property("value");
+    selStatus = statusNo[selStatus];
+    console.log(selStatus);
+    var postObj = new Object();
+    postObj['userID'] = userID;
+    postObj['date'] = selTime;
+    postObj['status'] = selStatus;
+    postObj['sort'] = sort;
+    // console.log("sort: " + sort);
+    console.log(postObj);
+    get("http://121.42.175.1/a2/api/getorder",postObj, function (data) {
+        console.log(data);
+        //console.log("post: "+data);
+        orderList = new Array();
+        data = data['orderIdList'];
+        for (var p in data)
+        {
+            orderList.push(data[p].orderID);
+        }
+        var table = d3.select("#" + "ListTable");
+        var tbody = table.select("tbody");
+        tbody.selectAll("tr").remove();
+        var trs = tbody.selectAll("tr")
+            .data(orderList)
+            .enter()
+            .append("tr");
+        trs.each(function (d, i) {
+            tr = d3.select(this);
+            addOrder(tr,d);
+        });
     });
     return;
 
@@ -180,18 +283,3 @@ function drawOrderList()
     });
 }
 
-function post(URL, PARAMS, f) {
-    console.log(JSON.stringify(PARAMS));
-    $.ajax({
-        type: "POST",
-        url: URL,
-        data: JSON.stringify(PARAMS),
-        cache: false,
-        // async: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (data) {
-            f(data);
-        }
-    });
-}
