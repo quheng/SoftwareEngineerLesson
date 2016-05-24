@@ -50,15 +50,22 @@ function post(URL, PARAMS, f) {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            f(data);
+            f(data,0);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            f(0, XMLHttpRequest.status);
         }
     });
 }
 
 function get(URL, PARAMS, f) {
+    URL += '?';
+    var flag = false;
     for (var p in PARAMS)
     {
-        URL += '?' + p + '=' + PARAMS[p];
+        if (flag) URL += '&';
+        URL += p + '=' + PARAMS[p];
+        flag = true;
     }
     console.log(URL);
     $.ajax({
@@ -70,7 +77,10 @@ function get(URL, PARAMS, f) {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            f(data);
+            f(data,0);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            f(0, XMLHttpRequest.status);
         }
     });
 }
@@ -122,6 +132,16 @@ function addGood(tbody,tr)
 
 }
 
+function payment(order_id)
+{
+    //还需要接更改状态的api
+    new PNotify({
+        title: '操作成功',
+        text: '您已成功付款！',
+        type: 'success',
+        styling: 'bootstrap3'});
+}
+
 function drawInfo(data)
 {
     console.log(data);
@@ -129,13 +149,13 @@ function drawInfo(data)
     d3.select("#orderdate").html(data.orderTime);
     d3.select("#orderstate").html(StateType[data.orderStatus]);
     d3.select("#orderamount").html(data.orderAmount);
-    if (data.orderStatus==0) {
+    if (data.orderStatus==1) {
         //需要判断是不是买家
         var div = d3.select("#order_info");
-        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功付款！',type: 'success',styling: 'bootstrap3'});").html("付款");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid);").html("付款");
     }
 
-    if (data.orderStatus==1) {
+    if (data.orderStatus==0) {
         //需要判断是不是卖家
         var div = d3.select("#order_info");
         var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功确认订单！',type: 'success',styling: 'bootstrap3'});").html("确认订单");
@@ -189,7 +209,7 @@ function drawOrderDetails(order_id)
 {
     console.log(order_id);
     d3.select("#order_ID").html("订单号："+order_id);
-    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data) {
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data, error) {
         console.log(data);
         // data = JSON.parse(data);
         drawInfo(data);
