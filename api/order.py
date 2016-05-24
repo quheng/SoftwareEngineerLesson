@@ -3,6 +3,7 @@ from datetime import datetime
 from manager import db, app
 from models.OrderManager import OrderManager
 from flask.ext.restful import abort
+from models.OrderManager import OrderCondition
 
 @app.route("/a2/api/updateorderstate", methods=['PUT'])
 def UpdateOrderState():
@@ -159,7 +160,6 @@ def GetOrderDetial():
               default: '2016-05-02 19:11:00'
     """
     orderID = request.args.get('orderID')
-    print abort
     if orderID is None:
         abort(400, message="you should pass order id")
     try:
@@ -169,7 +169,7 @@ def GetOrderDetial():
     return jsonify(res)
 
 
-@app.route("/a2/api/getorderdelist", methods=['GET'])
+@app.route("/a2/api/getorderlist", methods=['GET'])
 def GetOrderList():
     """
     use to get orders list of one user
@@ -199,6 +199,65 @@ def GetOrderList():
         res = OrderManager.selectOrderByUser(userID)
     except Exception, e:
         abort(400, message="Database error: {0}".format(e))
+    result = {}
+    result["orderIdList"] = res
+    return jsonify(result)
+
+@app.route("/a2/api/getorder", methods=['GET'])
+def GetOrders():
+    """
+    use to get orders list by condition
+    ---
+    tags:
+      - order
+    parameters:
+      - name: userID
+        in: query
+        type: integer
+        description: user ID
+      - name: date
+        in: query
+        type: integer
+        description: date
+      - name: status
+        in: query
+        type: integer
+        description: status
+      - name: sort
+        in: query
+        type: integer
+        description: sort
+    responses:
+      200:
+        description: order list
+        schema:
+          id: return_test
+          properties:
+            orderIdList:
+              type: Integer
+              description: order id list
+              default: 'a json array'
+    """
+
+    condition = OrderCondition()
+    condition.userID = request.args.get('userID')
+    if condition.userID is None:
+        abort(400, message="you should pass order id")
+    condition.date = request.args.get('date')
+    if condition.date is None:
+        abort(400, message="you should pass order date")
+    condition.status = request.args.get('status')
+    if condition.status is None:
+        abort(400, message="you should pass status")
+    condition.sort = request.args.get('sort')
+    if condition.sort is None:
+        abort(400, message="you should pass sort")
+
+    res = OrderManager.selectOrderByCondition(condition)
+    # try:
+    #     res = OrderManager.selectOrderByCondition(condition)
+    # except Exception, e:
+    #     abort(400, message="Database error: {0}".format(e))
     result = {}
     result["orderIdList"] = res
     return jsonify(result)
