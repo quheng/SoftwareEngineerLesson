@@ -88,12 +88,12 @@ def InsertOrder():
               default: '1'
     """
     newOrder = OrderManager()
-    newOrder.buyer = request.args.get('buyer')
-    newOrder.seller = request.args.get('seller')
-    newOrder.orderAmount = request.args.get('orderAmount')
-    newOrder.orderItems = request.args.get('orderItems')
-    newOrder.orderStatus = request.args.get('orderStatus')
-    data = request.args.get('orderTime')
+    newOrder.buyer = request.form['buyer']
+    newOrder.seller = request.form['seller']
+    newOrder.orderAmount = request.form['orderAmount']
+    newOrder.orderItems = request.form['orderItems']
+    newOrder.orderStatus = request.form['orderStatus']
+    data = request.form['orderTime']
     newOrder.orderTime = datetime.strptime(data, "%Y %m %d %H %M %S")
 
     if newOrder.buyer is None:
@@ -167,3 +167,38 @@ def GetOrderDetial():
     except Exception, e:
         abort(400, message="Database error: {0}".format(e))
     return jsonify(res)
+
+
+@app.route("/a2/api/getorderdelist", methods=['GET'])
+def GetOrderList():
+    """
+    use to get orders list of one user
+    ---
+    tags:
+      - order
+    parameters:
+      - name: userID
+        in: query
+        type: integer
+        description: user ID
+    responses:
+      200:
+        description: order list
+        schema:
+          id: return_test
+          properties:
+            orderIdList:
+              type: Integer
+              description: order id list
+              default: 'a json array'
+    """
+    userID = request.args.get('userID')
+    if userID is None:
+        abort(400, message="you should pass order id")
+    try:
+        res = OrderManager.selectOrderByUser(userID)
+    except Exception, e:
+        abort(400, message="Database error: {0}".format(e))
+    result = {}
+    result["orderIdList"] = res
+    return jsonify(result)

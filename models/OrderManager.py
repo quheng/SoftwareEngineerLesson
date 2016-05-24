@@ -1,6 +1,7 @@
 from manager import db
 import json
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_
 
 class OrderManager(db.Model):
     """docstring for OrderManager"""
@@ -25,8 +26,18 @@ class OrderManager(db.Model):
         db.session.commit()
 
     @staticmethod
+    def selectOrderByUser(ID):
+        line = db.session.query(OrderManager).filter(or_(OrderManager.buyer == ID, OrderManager.seller == ID)).all()
+        res = []
+        for item in line:
+            tem = {}
+            tem['orderID'] = item.orderID
+            res.append(tem)
+        return res
+
+    @staticmethod
     def selectOrderByID(ID):
-        line = db.session.query(OrderManager).filter(OrderManager.orderID == ID).one()
+        line = db.session.query(OrderManager).filter(OrderManager.buyerID == ID).one()
         temp = {}
         temp['orderAmount'] = line.orderAmount
         temp['buyer'] = line.buyer
