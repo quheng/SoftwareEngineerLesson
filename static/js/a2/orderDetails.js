@@ -38,13 +38,33 @@ var ORDERS = '{\
         ]\
     }';
 
-var StateType = ["待付款", "待发货", "已发货", "交易成功", "待退款", "已退款", "投诉中"];
+var StateType = ["待付款", "待商家确认", "已确认", "交易成功", "待退款", "已退款", "退款失败"];
 
 function post(URL, PARAMS, f) {
-          $.ajax({
+    $.ajax({
         type: "POST",
         url: URL,
         data: JSON.stringify(PARAMS),
+        cache: false,
+        // async: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            f(data);
+        }
+    });
+}
+
+function get(URL, PARAMS, f) {
+    for (var p in PARAMS)
+    {
+        URL += '?' + p + '=' + PARAMS[p];
+    }
+    console.log(URL);
+    $.ajax({
+        type: "GET",
+        url: URL,
+        // data: JSON.stringify(PARAMS),
         cache: false,
         // async: false,
         contentType: "application/json",
@@ -105,10 +125,43 @@ function addGood(tbody,tr)
 function drawInfo(data)
 {
     console.log(data);
-    d3.select("#sellerName").html(data.user);
-    d3.select("#orderdate").html(data.time);
-    d3.select("#orderstate").html(StateType[data.state]);
-    d3.select("#orderamount").html(data.amount);
+    d3.select("#sellerName").html(data.seller);
+    d3.select("#orderdate").html(data.orderTime);
+    d3.select("#orderstate").html(StateType[data.orderStatus]);
+    d3.select("#orderamount").html(data.orderAmount);
+    if (data.orderStatus==0) {
+        //需要判断是不是买家
+        var div = d3.select("#order_info");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功付款！',type: 'success',styling: 'bootstrap3'});").html("付款");
+    }
+
+    if (data.orderStatus==1) {
+        //需要判断是不是卖家
+        var div = d3.select("#order_info");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功确认订单！',type: 'success',styling: 'bootstrap3'});").html("确认订单");
+    }
+
+    if (data.orderStatus==2) {
+        //需要判断是不是买家
+        var div = d3.select("#order_info");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功确认收货！',type: 'success',styling: 'bootstrap3'});").html("确认收货");
+    }
+
+    if (data.orderStatus==3) {
+        //需要判断是不是买家
+        var div = d3.select("#order_info");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功申请退款！',type: 'success',styling: 'bootstrap3'});").html("申请退款");
+    }
+
+    if (data.orderStatus==4) {
+        //需要判断是不是卖家
+        var div = d3.select("#order_info");
+        var br = div.append("br");
+        var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功同意退款！',type: 'success',styling: 'bootstrap3'});").html("同意退款");
+        a = div.append("a").attr("class", "btn btn-success").attr("onclick", "new PNotify({title: '操作成功',text: '您已成功拒绝退款！',type: 'success',styling: 'bootstrap3'});").html("拒绝退款");
+    }
+
+    //已退款和退款失败没有额外按钮
 }
 
 function drawGoods(data) {
@@ -121,31 +174,25 @@ function drawGoods(data) {
                .append("tr");
     trs.each(function (d, i) {
         tr = d3.select(this);
+        //此处应该接A3的api
         tr.append("td").append("img").attr("src", d.imgsrc)
             .attr("width", "50px")
             .attr("height","50px");
-        //订单编号
-        var td = tr.append("td").html(d.title);
-        //商品
-        td = tr.append("td").html(d.amount/d.quantity);
-        //
-        td = tr.append("td").attr("class", "hidden-phone").html(d.quantity);
-        //
-        td = tr.append("td").attr("class", "vertical-align-mid").html(d.amount);
+        var td = tr.append("td").html("此处显示商品名");//d.title);
+        td = tr.append("td").html("此处显示单价");//d.amount/d.quantity);
+        td = tr.append("td").attr("class", "hidden-phone").html("此处显示数量");//d.quantity);
+        td = tr.append("td").attr("class", "vertical-align-mid").html("此处显示总价");//d.amount);
     });
-    //d3.select("#sellerName").html(data.user);
-    //d3.select("#orderdate").html(data.time);
-    //d3.select("#orderstate").html(stateType[data.state]);
-    //d3.select("#orderamount").html(data.amount);
 }
 
 function drawOrderDetails(order_id)
 {
     console.log(order_id);
-    post("/a2/api/selectOrder", { 'ID': 1 }, function (data) {
+    d3.select("#order_ID").html("订单号："+order_id);
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data) {
         console.log(data);
-        data = JSON.parse(ORDERS);
+        // data = JSON.parse(data);
         drawInfo(data);
-        drawGoods(data.content);
+        drawGoods(JSON.parse(data.orderItems).items);
     });
 }

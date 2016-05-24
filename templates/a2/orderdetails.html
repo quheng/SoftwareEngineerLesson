@@ -160,16 +160,17 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>订单详情 <small id="order_ID">SE000000123</small></h2>
+                    <h2>订单详情</h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
 
-                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left" id="order_info">
 
                       <h3 id="sellerName"></h3>
 
                       <ul class="list-unstyled user_data">
+                        <li id="order_ID"></li>
                         <li id="orderdate">2016.3.21
                         </li>
 
@@ -179,16 +180,13 @@
                           664.8元
                         </li>
                       </ul>
-
-                      <a class="btn btn-success" onclick="new PNotify({
+<!--                       <a class="btn btn-success" onclick="new PNotify({
                                   title: '操作成功',
                                   text: '您已成功确认收货！',
                                   type: 'success',
                                   styling: 'bootstrap3'
-                              });">确认收货</a>
+                              }); drawOrderDetails(orderid);">确认收货</a> -->
                       <a class="btn btn-success" id="to_Comp">投诉订单</a>
-
-
 
 <!--                   <button class="btn btn-default source">Success</button>
 
@@ -220,10 +218,6 @@
                                   styling: 'bootstrap3',
                                   addclass: 'dark'
                               });">Dark</button> -->
-
-
-                      <br />
-
                     </div>
                     <div class="col-md-9 col-sm-9 col-xs-12">
 
@@ -251,7 +245,7 @@
                                 </tr>
                               </thead>
                               <tbody>
-                             
+
                               </tbody>
                             </table>
                             <!-- end user projects -->
@@ -303,7 +297,7 @@
 <script src="{{ url_for('static', filename='js/a2/orderDetails.js')}}"></script>
       <script>
           var orderid = location.href.split('id=')[1];
-          d3.select("#order_ID").html(orderid);
+          // d3.select("#order_ID").html(orderid);
           d3.select("#to_Comp").on("click", function(){
             window.location = "complaint?id="+orderid;
           });
