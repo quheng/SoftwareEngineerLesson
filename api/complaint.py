@@ -126,10 +126,11 @@ def NewComplaint():
               description: The result, 1 is successful
               default: '1'
     """
+    complaintJson = request.get_json()
     newComplaint = Complaints()
-    newComplaint.buyer = request.form['buyer']
-    newComplaint.content = request.form['content']
-    newComplaint.orderID = request.form['orderID']
+    newComplaint.buyer = complaintJson['buyer']
+    newComplaint.content = complaintJson['content']
+    newComplaint.orderID = int(complaintJson['orderID'])
     newComplaint.complaintTime = datetime.utcnow()
     newComplaint.status = 0
     try:
@@ -137,4 +138,4 @@ def NewComplaint():
         res = 1
     except Exception, e:
         res = 0
-    return jsonify({"result": res})
+    return jsonify({"result": 1})
