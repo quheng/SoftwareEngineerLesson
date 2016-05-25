@@ -98,6 +98,9 @@ function put(URL, PARAMS, f) {
             f(data, 0);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            // console.log(XMLHttpRequest);
+            // console.log(textStatus);
+            // console.log(errorThrown);
             f(0, XMLHttpRequest.status);
         }
     });
@@ -163,7 +166,7 @@ function payment(order_id, amount)
                 styling: 'bootstrap3'
             });
         } else {
-            put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 1 }, function (data, error) {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 1 }, function (data, error) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
@@ -187,7 +190,7 @@ function payment(order_id, amount)
 }
 
 function confirmorder(order_id) {
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 2 }, function (data, error) {
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 2 }, function (data, error) {
         if (1==1/*success*/) {
             new PNotify({
                 title: '操作成功',
@@ -220,7 +223,7 @@ function receive(orderid, sellerid, amount) {
                 styling: 'bootstrap3'
             });
         } else {
-            put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
@@ -244,7 +247,8 @@ function receive(orderid, sellerid, amount) {
 }
 
 function refund(orderid) {
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
+    console.log("orderid:"+orderid);
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
         if (1==1/*success*/) {
             new PNotify({
                 title: '操作成功',
@@ -253,7 +257,7 @@ function refund(orderid) {
                 styling: 'bootstrap3'
             });
 
-            setTimeout("location.reload();", 3000);
+//            setTimeout("location.reload();", 3000);
         } else {
             new PNotify({
                 title: '操作失败',
@@ -288,7 +292,7 @@ function accept(orderid, sellerid, buyerid, amount) {
                         styling: 'bootstrap3'
                     });
                 } else {
-                    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
+                    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
                         if (1==1/*success*/) {
                             new PNotify({
                                 title: '操作成功',
@@ -314,7 +318,7 @@ function accept(orderid, sellerid, buyerid, amount) {
 }
 
 function reject(orderid) {
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
         if (1==1/*success*/) {
             new PNotify({
                 title: '操作成功',
@@ -349,7 +353,7 @@ function drawInfo(data, user_id)
 
     d3.select("#orderdate").html(data.orderTime);
     d3.select("#orderstate").html(StateType[data.orderStatus]);
-    d3.select("#orderamount").html(data.orderAmount);
+    d3.select("#orderamount").html(data.orderAmount+"元");
     if (data.orderStatus==0) {
         //需要判断是不是买家
         if (isBuyer == 1) {
@@ -393,6 +397,13 @@ function drawInfo(data, user_id)
     }
 
     //已退款和退款失败没有额外按钮
+
+    var div = d3.select("#order_info");
+    if (1==2) {//如果没有在投诉中
+        var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comp").html("投诉订单");
+    } else {
+        var li = div.append("li").html("投诉中：此处显示投诉信息，信息可能很长，所以测试一下换行的效果好不好看");
+    }
 }
 
 function drawGoods(data) {
