@@ -5,7 +5,7 @@ from models.OrderManager import OrderManager
 from flask.ext.restful import abort
 from models.OrderManager import OrderCondition
 
-@app.route("/a2/api/updateorderstate", methods=['PUT'])
+@app.route("/a2/api/updateorderstate", methods=['POST'])
 def UpdateOrderState():
     """
     use to update orders state
@@ -95,7 +95,7 @@ def InsertOrder():
     newOrder.orderItems = request.form['orderItems']
     newOrder.orderStatus = request.form['orderStatus']
     data = request.form['orderTime']
-    newOrder.orderTime = datetime.strptime(data, "%Y %m %d %H %M %S")
+    newOrder.orderTime = datetime.strptime(data, "%Y-%m-%d %H:%M:%S")
 
     if newOrder.buyer is None:
         abort(400, message="you should pass enough order")
@@ -167,7 +167,6 @@ def GetOrderDetial():
     except Exception, e:
         abort(400, message="Database error: {0}".format(e))
     return jsonify(res)
-
 
 @app.route("/a2/api/getorderlist", methods=['GET'])
 def GetOrderList():

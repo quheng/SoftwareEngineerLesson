@@ -17,14 +17,19 @@ class Complaints(db.Model):
         db.session.commit()
 
     @staticmethod
-    def selectByOrderID(ID):
-        temp = Complaints.query.filter(Complaints.orderID == ID).first()
-        result = {}
-        result['orderID'] = Complaints.orderID
-        result['content'] = Complaints.content
-        result['buyer'] = Complaints.buyer
-        result['complaintTime'] = Complaints.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
-        return result
+    def selectByStatus():
+        temp = Complaints.query.filter(Complaints.status == 0).all()
+        res = []
+        for item in temp:
+            result = {}
+            result['complaintID'] = item.complaintID
+            result['orderID'] = item.orderID
+            result['content'] = item.content
+            result['buyer'] = item.buyer
+            result['status'] = item.status
+            result['complaintTime'] = item.complaintTime.strftime("%Y-%m-%d %H:%M:%S")
+            res.append(result)
+        return res
 
     def __repr__(self):
         return '<Count %r>' % (self.orderID)

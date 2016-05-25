@@ -4,31 +4,32 @@ from manager import db, app
 from models.Complaints import Complaints
 from flask.ext.restful import abort
 
-# @app.route("/a2/api/getcomplaintlist", methods=['GET'])
-# def GetComplaintList():
-#     """
-#     use to get complaint list
-#     ---
-#     tags:
-#       - complaint
-#     parameters:
-#       - name: userID
-#         in: query
-#         type: integer
-#         description: size of elements
-#     responses:
-#       200:
-#         description: A single user item
-#         schema:
-#           id: return_test
-#           properties:
-#             result:
-#               type: string
-#               description: The test
-#               default: 'test'
-#     """
-#     userID = request.args.get('userID')
-#     return jsonify({"result": userID})
+@app.route("/a2/api/getcomplaintbystatus", methods=['GET'])
+def GetComplaintByStatus():
+    """
+    use to get complaint list
+    ---
+    tags:
+      - complaint
+    responses:
+      200:
+        description: A single user item
+        schema:
+          id: return_test
+          properties:
+            result:
+              type: string
+              description: The test
+              default: 'test'
+    """
+    res = Complaints.selectByStatus()
+    try:
+        res = Complaints.selectByStatus()
+    except Exception, e:
+        res = 0
+    result = {}
+    result["result"] = res
+    return jsonify({"result": result})
 
 
 @app.route("/a2/api/newcomplaint", methods=['POST'])
@@ -63,9 +64,9 @@ def NewComplaint():
               default: '1'
     """
     newComplaint = Complaints()
-    newComplaint.buyer = request.args.get('buyer')
-    newComplaint.content = request.args.get('content')
-    newComplaint.orderID = request.args.get('orderID')
+    newComplaint.buyer = request.form['buyer']
+    newComplaint.content = request.form['content']
+    newComplaint.orderID = srequest.form['orderID']
     newComplaint.complaintTime = datetime.utcnow()
     newComplaint.status = 0
     try:
