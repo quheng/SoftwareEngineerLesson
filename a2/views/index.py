@@ -9,12 +9,12 @@ from templates.a2_models import a2_index
 
 @app.route('/orderdetails', methods=['GET'])
 def orderdetails():
-    return render_template("a2/orderdetails.html", userID)
+    return render_template("a2/orderdetails.html", userID = 1)
 
 @app.route('/complaint')
 def complaint():
-    return render_template("a2/complaint.html", userID)
+    return render_template("a2/complaint.html", userID = 1)
 
 @app.route('/orderlist')
 def orderlist():
-    return render_template("a2/orderlist.html", userID)
+    return render_template("a2/orderlist.html", userID = 1)
