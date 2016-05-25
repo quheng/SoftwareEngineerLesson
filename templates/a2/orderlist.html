@@ -113,7 +113,7 @@
                                   <a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu" style="display:block;">
                                       <li>
-                                          <a href="a2.html">所有订单</a>
+                                          <a href="orderlist">所有订单</a>
                                       </li>
                                   </ul>
                               </li>
@@ -241,84 +241,50 @@
         <!-- page content -->
           <div class="right_col" role="main" style="min-height:639px;" >
               <div class="">
-                  <div class="page-title">
-                      <div class="title_left">
-                          <h3>订单管理<small></small></h3>
+                  <div class="" style="height:150px">
+                      <div class="page-title">
+                          <div class="title_left">
+                              <h3>订单管理<small></small></h3>
+                          </div>
+
                       </div>
-                      
-                  </div>
-                  <div class="title_right" style="position:absolute;right:-30px;top:0px">
-                      <div class="x_content" style="position:absolute;right:0px;top:58px; width:820px;">
-                          <nav class="navbar " role="navigation">
-                              <div class="nav navbar-nav navbar-left">
-                                  <g class="btn-group">
-                                      <button type="button" class="btn btn-default navbar-btn" id="timeButton">按时间</button>
-                                      <button type="button" class="btn btn-default navbar-btn" id="stateButton">按状态</button>
-                                  </g>
+                      <div class="title_right" style="position:absolute;top:60px;left:890px;">
+                          <div class="nav navbar-nav navbar-left" style="position:relative;">
+                              <g class=" btn-group">
+                              <button type="button" class="btn btn-default navbar-btn" id="timeButton">按时间</button>
+                              <button type="button" class="btn btn-default navbar-btn" id="stateButton">按状态</button>
+                              </g>
+                          </div>
+                          <div class="navbar-text" style="font-size:16px;position:relative;left:0px">筛选：</div>
+                          <div class="nav navbar-nav navbar-left" style="position:relative;top:8.5px">
+                              <select class="form-control" style="" id="selectTime">
+                                  <option>所有时间</option>
+                                  <option>一日内</option>
+                                  <option>一周内</option>
+                                  <option>一月内</option>
+                                  <option>一年内</option>
+                              </select>
+                          </div>
+                          <div class="nav navbar-nav navbar-left" style="position:relative;top:8.5px">
+                              <select class="form-control" style="" id="selectStatus">
+                                  <option>所有状态</option>
+                                  <option>待付款</option>
+                                  <option>待商家确认</option>
+                                  <option>商家已确认</option>
+                                  <option>交易成功</option>
+                                  <option>待退款</option>
+                                  <option>已退款</option>
+                                  <option>退款失败</option>
+                              </select>
+                          </div>
+                          <form class="navbar-form navbar-right" role="search" style="position:relative;top:-5px;z-index:0">
+                              <div class="input-group">
+                                  <input type="text" class="form-control" placeholder="查找指定订单" id="searchText">
+                                  <span class="input-group-btn">
+                                      <button class="btn btn-default" type="button" id="searchButton">查找</button>
+                                  </span>
                               </div>
-                              <p class="navbar-text" style="font-size:16px;">筛选：</p>
-                              <div class="nav navbar-nav navbar-left">
-                                  <select class="form-control" style="position:absolute;top:9px;width:150px" id="selectTime">
-                                      <option>所有时间</option>
-                                      <option>一日内</option>
-                                      <option>一周内</option>
-                                      <option>一月内</option>
-                                      <option>一年内</option>
-                                  </select>
-                                  <select class="form-control" style="position:absolute;top:9px;left:363px;width:150px" id="selectStatus">
-                                      <option>所有状态</option>
-                                      <option>待付款</option>
-                                      <option>待商家确认</option>
-                                      <option>商家已确认</option>
-                                      <option>交易成功</option>
-                                      <option>待退款</option>
-                                      <option>已退款</option>
-                                      <option>退款失败</option>
-                                  </select>
-                              </div>
-                              <form class="navbar-form navbar-right" role="search" style="position:absolute;top:1px; left:500px">
-                                  <div class="input-group">
-                                      <input type="text" class="form-control" placeholder="查找指定订单" id="searchText">
-                                      <span class="input-group-btn">
-                                          <button class="btn btn-default" type="button" id="searchButton">查找</button>
-                                      </span>
-                                  </div>
-                              </form>
-                              <!--<ul class="nav navbar-nav navbar-left">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            所有时间
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">所有时间</a></li>
-                            <li><a href="#">一日内</a></li>
-                            <li><a href="#">一周内</a></li>
-                            <li><a href="#">一月内</a></li>
-                            <li><a href="#">一年内</a></li>
-                        </ul>
-                    </li>
-                </ul>-->
-                              <!--<ul class="nav navbar-nav navbar-left">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            所有状态
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">所有状态</a></li>
-                            <li><a href="#">待付款</a></li>
-                            <li><a href="#">待商家确认</a></li>
-                            <li><a href="#">商家已确认</a></li>
-                            <li><a href="#">交易成功</a></li>
-                            <li><a href="#">交易关闭</a></li>
-                            <li><a href="#">待退款</a></li>
-                            <li><a href="#">已退款</a></li>
-                            <li><a href="#">退款失败</a></li>
-                        </ul>
-                    </li>
-                </ul>-->
-                          </nav>
+                          </form>
                       </div>
                   </div>
                   <div class="clearfix"></div>
@@ -357,7 +323,7 @@
                                               <th style="width: 1%"></th>
                                               <th style="width: 20%">订单编号</th>
                                               <th></th>
-                                              <th>卖家</th>
+                                              <th id="borsTh"></th>
                                               <th>金额</th>
                                               <th>状态</th>
                                               <th style="width: 18%"></th>
@@ -414,51 +380,60 @@
           <h4 class="ui-pnotify-title"></h4>
           <div class="ui-pnotify-text" aria-role="alert" style="font-size:20px;">无符合条件订单</div>
       </div>
-      <script>
-          var userID = 1;
-          d3.select("#timeButton").on("click", function () {
-              console.log("click time button");
-              drawOrderList(userID, 0);
-             // drawOrderList();
-          });
-          d3.select("#stateButton").on("click", function () {
-              console.log("#stateButton");
-              drawOrderList(userID, 1);
-             // drawOrderList();
-          })
-          d3.select("#selectTime").on("change", function () {
-              console.log("selectTime");
-              drawOrderList(userID, 0);
-          });
-          d3.select("#selectStatus").on("change", function () {
-              console.log("selectStatus");
-              drawOrderList(userID, 0);
-          });
-          d3.select("#searchButton").on("click", function () {
-              console.log("searchButton");
-              var searchID = document.getElementById('searchText').value;
-              if (!searchID)
-              {
-                  drawOrderList(userID, 0);
-                  return;
+      <script>   
+          var userID;
+          var userType;
+          post("http://121.42.175.1/a2/api/test?para=1", { 'para': { 'accountID': 123 } }, function (data, error) {
+              console.log(data);
+              userID = 1;
+              userType = 0;
+              var th = d3.select("#borsTh");
+              if (userType == 0) {
+                  th.html("卖家");
               }
-              var table = d3.select("#" + "ListTable");
-              var tbody = table.select("tbody");
-              tbody.selectAll("tr").remove();
-              get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': searchID }, function (data, error) {
-                  if (error || data.buyer != userID)
-                  {
-                      d3.select("#notifyDIV").style("display", "block");
-                      setTimeout(function () {
-                          d3.select("#notifyDIV").style("display", "none");
-                      }, 800);
+              else {
+                  th.html("买家");
+              }
+              d3.select("#timeButton").on("click", function () {
+                  console.log("click time button");
+                  drawOrderList(userID, 0);
+              });
+              d3.select("#stateButton").on("click", function () {
+                  console.log("#stateButton");
+                  drawOrderList(userID, 1);
+              })
+              d3.select("#selectTime").on("change", function () {
+                  console.log("selectTime");
+                  drawOrderList(userID, 0);
+              });
+              d3.select("#selectStatus").on("change", function () {
+                  console.log("selectStatus");
+                  drawOrderList(userID, 0);
+              });
+              d3.select("#searchButton").on("click", function () {
+                  console.log("searchButton");
+                  var searchID = document.getElementById('searchText').value;
+                  if (!searchID) {
+                      drawOrderList(userID, 0);
                       return;
                   }
+                  var table = d3.select("#" + "ListTable");
+                  var tbody = table.select("tbody");
+                  tbody.selectAll("tr").remove();
+                  get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': searchID }, function (data, error) {
+                      if (error || data.buyer != userID) {
+                          d3.select("#notifyDIV").style("display", "block");
+                          setTimeout(function () {
+                              d3.select("#notifyDIV").style("display", "none");
+                          }, 800);
+                          return;
+                      }
                       var tr = tbody.append("tr").datum(searchID);
                       addOrder(tr, searchID);
+                  });
               });
-          });
-          drawOrderList(userID,0);
+              drawOrderList(userID, 0);
+          });         
       </script>
   </body>
 </html>

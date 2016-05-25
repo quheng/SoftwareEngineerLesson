@@ -151,6 +151,7 @@ function get(URL, PARAMS, f) {
 
 function addOrder(tr,orderID)
 {
+    var oppoType = ['seller','buyer'];
     get("http://121.42.175.1/a2/api/getorderdetial", {'orderID': orderID }, function (data) {
         console.log(data);
         tr.append("td").html("");
@@ -169,8 +170,14 @@ function addOrder(tr,orderID)
                 .style("width", "50px")
                 .style("height", "50px");
         }
-        //卖家
-        td = tr.append("td").html(data.seller);
+        //卖家/买家
+        td = tr.append("td").attr('id', 'td' + orderID);
+        post("http://121.42.175.1/a2/api/test?para=1", { 'para': { 'accountID': data[oppoType[userType]] } }, function (data, error) {
+            console.log(data);
+            var name = oppoType[userType];
+            td = d3.select("#td" + orderID)
+                .html(name);
+        });
         //金额
         td = tr.append("td").html("¥" + data.orderAmount);
         //状态
