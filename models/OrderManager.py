@@ -47,9 +47,6 @@ class OrderManager(db.Model):
             tem = {}
             tem['orderID'] = item.orderID
             tem['orderAmount'] = item.orderAmount
-            para = {'accountID': item.buyer}
-            r = requests.post("121.42.175.1/A1/API/userInfoAPI", params=para)
-            print r
             tem['buyer'] = item.buyer
             tem['seller'] = item.seller
             tem['orderStatus'] = item.orderStatus

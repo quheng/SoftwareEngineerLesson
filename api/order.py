@@ -33,7 +33,7 @@ def UpdateOrderState():
               default: '1'
     """
     orderJson = request.get_json()
-    
+
     orderID = orderJson['orderID']
     status = orderJson['status']
     if orderID is None:
@@ -271,6 +271,7 @@ def getAllOrder():
               default: 'a json array'
     """
     userID = request.args.get('userID')
+    res = OrderManager.selectAllOrder(userID)
     if userID is None:
         abort(400, message="you should pass order id")
     try:
