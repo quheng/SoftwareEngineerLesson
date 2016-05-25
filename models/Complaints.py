@@ -12,7 +12,6 @@ class Complaints(db.Model):
 
     @staticmethod
     def insertComplaints(newComplaint):
-        newComplaint.complaintTime
         db.session.add(newComplaint)
         db.session.commit()
 
