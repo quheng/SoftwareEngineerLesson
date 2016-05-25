@@ -17,8 +17,4 @@ def complaint():
 
 @app.route('/orderlist')
 def orderlist():
-    try:
-        userID = request.cookies.get("kitty")
-        return render_template("a2/orderlist.html", userID = 1)
-    except Exception as e:
-        return redirect("http://121.42.175.1/login")
+    render_template("a2/orderlist.html", userID = 1)
