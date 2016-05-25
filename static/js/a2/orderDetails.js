@@ -213,7 +213,7 @@ function confirmorder(order_id) {
 }
 
 function receive(orderid, sellerid, amount) {
-    post("http://121.42.175.1/A1/API/addmoney", { 'accountID': 123/*sellerid*/, 'amount': amount}, function (data, error) {
+    post("http://121.42.175.1/A1/API/addmoney", { 'accountID': sellerid, 'amount': amount}, function (data, error) {
         data=JSON.parse(data.data).result;
         console.log(data);
         if (data != "OK") {
@@ -271,7 +271,7 @@ function refund(orderid) {
 }
 
 function accept(orderid, sellerid, buyerid, amount) {
-    post("http://121.42.175.1/A1/API/submoney", { 'accountID': 123/*sellerid*/, 'amount': amount}, function (data, error) {
+    post("http://121.42.175.1/A1/API/submoney", { 'accountID': sellerid, 'amount': amount}, function (data, error) {
         data=JSON.parse(data.data).result;
         console.log(data);
         if (data == "NoEnoughMoney") {
@@ -282,7 +282,7 @@ function accept(orderid, sellerid, buyerid, amount) {
                 styling: 'bootstrap3'
             });
         } else {
-            post("http://121.42.175.1/A1/API/addmoney", { 'accountID': 123/*buyerid*/, 'amount': amount}, function (data, error) {
+            post("http://121.42.175.1/A1/API/addmoney", { 'accountID': buyerid, 'amount': amount}, function (data, error) {
                 data=JSON.parse(data.data).result;
                 console.log(data);
                 if (data != "OK") {
@@ -344,13 +344,14 @@ function drawInfo(data, user_id)
 {
     var isBuyer;
     console.log(data);
-    if (user_id == data.buyer) {
-        d3.select("#sellerName").html(data.seller);
-        isBuyer = 1;
-    } else {
-        d3.select("#sellerName").html(data.buyer);
-        isBuyer = 0;
-    }
+    isBuyer = 1 - userType;
+    //if (user_id == data.buyer) {
+    //    d3.select("#sellerName").html(data.seller);
+    //    isBuyer = 1;
+    //} else {
+    //    d3.select("#sellerName").html(data.buyer);
+    //    isBuyer = 0;
+    //}
 
     d3.select("#orderdate").html(data.orderTime);
     d3.select("#orderstate").html(StateType[data.orderStatus]);
@@ -401,7 +402,11 @@ function drawInfo(data, user_id)
 
     var div = d3.select("#order_info");
     if (1==1) {//如果没有在投诉中
-        var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comp").html("投诉订单");
+        var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comp").html("投诉订单")
+            .on("click", function () {
+                console.log("click");
+                window.location = "complaint?orderID=" + orderid;
+            });
     } else {
         var li = div.append("li").html("投诉中：此处显示投诉信息，信息可能很长，所以测试一下换行的效果好不好看");
     }
@@ -418,13 +423,13 @@ function drawGoods(data) {
     trs.each(function (d, i) {
         tr = d3.select(this);
         //此处应该接A3的api
-        tr.append("td").append("img").attr("src", d.imgsrc)
+        tr.append("td").append("img").attr("src", "http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg")
             .attr("width", "50px")
             .attr("height","50px");
-        var td = tr.append("td").html("此处显示商品名");//d.title);
-        td = tr.append("td").html("此处显示单价");//d.amount/d.quantity);
-        td = tr.append("td").attr("class", "hidden-phone").html("此处显示数量");//d.quantity);
-        td = tr.append("td").attr("class", "vertical-align-mid").html("此处显示总价");//d.amount);
+        var td = tr.append("td").html("商品"+i);//d.title);
+        td = tr.append("td").html("2.5");//d.amount/d.quantity);
+        td = tr.append("td").attr("class", "hidden-phone").html("2");//d.quantity);
+        td = tr.append("td").attr("class", "vertical-align-mid").html("5.0");//d.amount);
     });
 }
 

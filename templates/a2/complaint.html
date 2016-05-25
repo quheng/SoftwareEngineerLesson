@@ -40,7 +40,7 @@
                           <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
                       </div>
                       <div class="profile_info">
-                          <span>welcome,</span>
+                          <span>您好,</span>
                           <h2 class="userName"></h2>
                       </div>
                   </div>
@@ -54,13 +54,13 @@
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
                               <li>
-                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
+                                  <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
-                                          <a href="tables.html">旅店与飞行器预定</a>
+                                          <a href="/account/info">账户记录</a>
                                       </li>
                                       <li>
-                                          <a href="tables_dynamic.html">管理员</a>
+                                          <a href="/account/transaction">交易信息</a>
                                       </li>
                                   </ul>
                               </li>
@@ -73,13 +73,17 @@
                                   </ul>
                               </li>
                               <li>
-                                  <a><i class="fa fa-user"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
+                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
-                                          <a href="fixed_sidebar.html">我的账户</a>
+                                          <a href="/a3/">旅店与飞行器预定</a>
+                                      </li>
+                                      <li>
+                                          <a href="/a3/admin/">管理员</a>
                                       </li>
                                   </ul>
                               </li>
+
                           </ul>
                       </div>
                     
@@ -216,69 +220,100 @@
     <script src="http://121.42.175.1/static/js/custom.js"></script>
     <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
       <script>
-    function post(URL, PARAMS, f) {
-        $.ajax({
-            type: "POST",
-            url: URL,
-            data: JSON.stringify(PARAMS),
-            cache: false,
-            // async: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                f(data, 0);
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                f(0, XMLHttpRequest.status);
-            }
-        });
-    }
-    function Data(user, content, orderID) {
-        this.user = user;
-        this.content = content;
-        this.orderID = orderID;
-    }
-    function response(data, status) {
-        console.log(data.result);
-        console.log(status);
-        if (status == 0) {
-            new PNotify({
-                title: '操作成功',
-                text: '您已成功提交投诉申请！',
-                type: 'success',
-                styling: 'bootstrap3'
-            });
-            setTimeout(function () {
-                window.location = "orderdetails?orderID="+orderid;
-            }, 1500);
-        }
-    }
+          function post(URL, PARAMS, f) {
+              console.log(JSON.stringify(PARAMS));
+              $.ajax({
+                  type: "POST",
+                  url: URL,
+                  data: JSON.stringify(PARAMS),
+                  cache: false,
+                  // async: false,
+                  contentType: "application/json",
+                  dataType: "json",
+                  success: function (data) {
+                      f(data, 0);
+                  },
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      f(0, XMLHttpRequest.status);
+                  }
+              });
+          }
+
+          function get(URL, PARAMS, f) {
+              URL += '?';
+              var flag = false;
+              for (var p in PARAMS)
+              {
+                  if (flag) URL += '&';
+                  URL += p + '=' + PARAMS[p];
+                  flag = true;
+              }
+              console.log(URL);
+              $.ajax({
+                  type: "GET",
+                  url: URL,
+                  // data: JSON.stringify(PARAMS),
+                  cache: false,
+                  // async: false,
+                  contentType: "application/json",
+                  dataType: "json",
+                  beforeSend: function (XMLHttpRequest) {
+                      console.log(XMLHttpRequest);
+                  },
+                  success: function (data) {
+                      f(data,0);
+                  },
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      f(0, XMLHttpRequest.status);
+                  }
+              });
+          }
+
+          function Data(user, content, orderID) {
+              this.buyer = user;
+              this.content = content;
+              this.orderID = orderID;
+          }
+
+          function response(data, error) {
+              if (error)
+              {
+                  console.log(error);
+              }
+              else{
+                  new PNotify({
+                      title: '操作成功',
+                      text: '您已成功提交投诉申请！',
+                      type: 'success',
+                      styling: 'bootstrap3'
+                  });
+                  setTimeout(function () {
+                      window.location = "orderdetails?orderID="+orderid;
+                  }, 1500);
+              }
+          }
     </script>
     <script>
           var userid = {{userID}}
           var orderid = location.href.split('orderID=')[1];
           d3.select("#orderid").html("投诉订单号：" + orderid);
-          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error) {
-              data = JSON.parse(data.data);
-              var accountName = data.AccountName;
-              d3.selectAll(".userName").html(accountName);
-          });
+          //post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error) {
+          //    data = JSON.parse(data.data);
+          //    var accountName = data.AccountName;
+          //    d3.selectAll(".userName").html(accountName);
+          //});
           var btn = document.getElementById("postcomplaint");
           btn.onclick = function () {
-              console.log("click");
               var text = document.getElementById("message");
               var order = document.getElementById("orderid");
               var userID = userid;
-              console.log("userID: "+userID);
-              console.log(order.innerText);
               //console.log(user.innerText);
               var head = order.innerText;
               var orderID = head.split("投诉订单号：", 2)[1];
-              var content = text.innerText;
+              var content = text.value;
               var url = "http://121.42.175.1/a2/api/newcomplaint";
-              console.log(orderID);
-              post(url, new Data(userID, content, orderID), response);
-
+              //post(url, new Data(userID, content, orderID), response);
+              post(url, {'buyer':userID, 'content':content, 'orderID':orderID}, response);
           }
     </script>
   </body>

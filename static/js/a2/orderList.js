@@ -85,7 +85,7 @@ var ORDERS = '{\
 //    "Compl":"投诉中"
 //};
 
-var StateType = ["待付款","待商家确认", "已确认","交易成功","交易关闭","待退款","已退款", "退款失败"];
+var StateType = ["待付款","待商家确认", "商家已确认","交易成功","交易关闭","待退款","已退款", "退款失败"];
 var statusNo = {
     '所有状态':-1,
     '待付款':0,
@@ -235,7 +235,6 @@ function drawOrderList(userID,sort)
 {
     var selTime = d3.select("#selectTime").property("value");
     selTime = timeNo[selTime];
-    console.log(selTime);
     var selStatus = d3.select("#selectStatus").property("value");
     selStatus = statusNo[selStatus];
     console.log(selStatus);

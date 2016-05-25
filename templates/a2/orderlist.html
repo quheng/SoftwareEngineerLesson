@@ -37,7 +37,7 @@
                           <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
                       </div>
                       <div class="profile_info">
-                          <span>welcome,</span>
+                          <span>您好,</span>
                           <h2 class="userName"></h2>
                       </div>
                   </div>
@@ -51,13 +51,13 @@
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
                               <li>
-                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
+                                  <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
-                                          <a href="tables.html">旅店与飞行器预定</a>
+                                          <a href="/account/info">账户记录</a>
                                       </li>
                                       <li>
-                                          <a href="tables_dynamic.html">管理员</a>
+                                          <a href="/account/transaction">交易信息</a>
                                       </li>
                                   </ul>
                               </li>
@@ -70,13 +70,17 @@
                                   </ul>
                               </li>
                               <li>
-                                  <a><i class="fa fa-user"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
+                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
-                                          <a href="fixed_sidebar.html">我的账户</a>
+                                          <a href="/a3/">旅店与飞行器预定</a>
+                                      </li>
+                                      <li>
+                                          <a href="/a3/admin/">管理员</a>
                                       </li>
                                   </ul>
                               </li>
+
                           </ul>
                       </div>
                   </div>
@@ -240,11 +244,9 @@
       </div>
       <script> 
           var userID = {{userID}};
-          console.log("id:"+userID);
           var userType;
-          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error) {
+          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userID }, function (data, error) {
               data = JSON.parse(data.data);
-              userID = 1;
               userType = data.Type;
               userName = data.AccountName;
               d3.selectAll(".userName").html(data.AccountName);
@@ -256,23 +258,18 @@
                   th.html("买家");
               }
               d3.select("#timeButton").on("click", function () {
-                  console.log("click time button");
                   drawOrderList(userID, 0);
               });
               d3.select("#stateButton").on("click", function () {
-                  console.log("#stateButton");
                   drawOrderList(userID, 1);
               })
               d3.select("#selectTime").on("change", function () {
-                  console.log("selectTime");
                   drawOrderList(userID, 0);
               });
               d3.select("#selectStatus").on("change", function () {
-                  console.log("selectStatus");
                   drawOrderList(userID, 0);
               });
               d3.select("#searchButton").on("click", function () {
-                  console.log("searchButton");
                   var searchID = document.getElementById('searchText').value;
                   if (!searchID) {
                       drawOrderList(userID, 0);

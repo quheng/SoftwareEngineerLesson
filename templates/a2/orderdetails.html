@@ -69,7 +69,7 @@
                 <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>welcome,</span>
+                <span>您好,</span>
                 <h2 class="username"></h2>
               </div>
             </div>
@@ -81,29 +81,39 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <h3>&nbsp</h3>
-                <ul class="nav side-menu">
+                  <ul class="nav side-menu">
+                      <li>
+                          <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                              <li>
+                                  <a href="/account/info">账户记录</a>
+                              </li>
+                              <li>
+                                  <a href="/account/transaction">交易信息</a>
+                              </li>
+                          </ul>
+                      </li>
+                      <li class="active">
+                          <a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu" style="display:block;">
+                              <li>
+                                  <a href="orderlist">所有订单</a>
+                              </li>
+                          </ul>
+                      </li>
+                      <li>
+                          <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                              <li>
+                                  <a href="/a3/">旅店与飞行器预定</a>
+                              </li>
+                              <li>
+                                  <a href="/a3/admin/">管理员</a>
+                              </li>
+                          </ul>
+                      </li>
 
-                  <li><a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="tables.html">旅店与飞行器预订</a>
-                      </li>
-                      <li><a href="tables_dynamic.html">管理员</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="active"><a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu" style="display: block;">
-                      <li><a href="orderlist">所有订单</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-user"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="fixed_sidebar.html">我的账户</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
+                  </ul>
               </div>
             </div>
           </div>
@@ -289,19 +299,22 @@
           // var paras = location.href.split('userID=')[1];
           // var userid = paras.split('&orderID=')[0];
           // var orderid = paras.split('&orderID=')[1];
-          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error) {
+          var userid = {{userID}};
+          var orderid = location.href.split('orderID=')[1];
+          var userType;
+          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userid }, function (data, error) {
               data = JSON.parse(data.data);
               var accountName = data.AccountName;
               d3.selectAll(".username").html(accountName);
+              userType = data.Type;
+              drawOrderDetails(orderid, userid);
           });
 
-          var userid = {{userID}};
-          var orderid = location.href.split('orderID=')[1];
           // d3.select("#order_ID").html(orderid);
-          d3.select("#to_Comp").on("click", function(){
-            window.location = "complaint?orderID="+orderid;
-          });
-          drawOrderDetails(orderid, userid);
+          //d3.select("#to_Comp").on("click", function(){
+          //    console.log("click");
+          //  window.location = "complaint?orderID="+orderid;
+          //});
       </script>
   </body>
 </html>
