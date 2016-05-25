@@ -41,11 +41,12 @@ var ORDERS = '{\
 var StateType = ["待付款", "待商家确认", "已确认", "交易成功", "待退款", "已退款", "退款失败"];
 
 function post(URL, PARAMS, f) {
+    console.log(JSON.stringify(PARAMS));
     $.ajax({
         type: "POST",
         url: URL,
         data: JSON.stringify(PARAMS),
-        cache: false,
+ //       cache: false,
         // async: false,
         contentType: "application/json",
         dataType: "json",
@@ -223,7 +224,7 @@ function receive(orderid, sellerid, amount) {
                 styling: 'bootstrap3'
             });
         } else {
-            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 2 }, function (data, error) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
@@ -232,7 +233,7 @@ function receive(orderid, sellerid, amount) {
                     styling: 'bootstrap3'
                     });
 
-                    setTimeout("location.reload();", 3000);
+                 //   setTimeout("location.reload();", 3000);
                 } else {
                     new PNotify({
                         title: '操作失败',
@@ -364,7 +365,7 @@ function drawInfo(data, user_id)
 
     if (data.orderStatus==1) {
         //需要判断是不是卖家
-        if (isBuyer == 0) {
+        if (isBuyer == 1) {
             var div = d3.select("#order_info");
             var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid)").html("确认订单");
         }
@@ -399,7 +400,7 @@ function drawInfo(data, user_id)
     //已退款和退款失败没有额外按钮
 
     var div = d3.select("#order_info");
-    if (1==2) {//如果没有在投诉中
+    if (1==1) {//如果没有在投诉中
         var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comp").html("投诉订单");
     } else {
         var li = div.append("li").html("投诉中：此处显示投诉信息，信息可能很长，所以测试一下换行的效果好不好看");
