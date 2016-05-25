@@ -172,9 +172,10 @@ function addOrder(tr,orderID)
         }
         //卖家/买家
         td = tr.append("td").attr('id', 'td' + orderID);
-        post("http://121.42.175.1/a2/api/test?para=1", { 'para': { 'accountID': data[oppoType[userType]] } }, function (data, error) {
-            console.log(data);
-            var name = oppoType[userType];
+        //'accountID': data[oppoType[userType]] 
+        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error){ 
+            data = JSON.parse(data.data);
+            var name = data.AccountName;
             td = d3.select("#td" + orderID)
                 .html(name);
         });
@@ -222,14 +223,12 @@ function addOrder(tr,orderID)
             .attr("class", "btn btn-primary btn-xs")
             .html("查看详情");
         a.on("click", function (d) {
-            window.location = "orderdetails?userID=" + userID+"&orderID="+d;
+            window.location = "orderdetails?orderID="+d;
         });
         a.append("i")
             .attr("class", "fa fa-pencil");
     });
-
     return;
-      
 }
 
 function drawOrderList(userID,sort)
