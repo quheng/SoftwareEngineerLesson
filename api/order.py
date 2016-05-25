@@ -32,8 +32,8 @@ def UpdateOrderState():
               description: The result, 1 is successful
               default: '1'
     """
-    orderID = request.args.get('orderID')
-    status = request.args.get('status')
+    orderID = request.form['orderID']
+    status = request.form['status']
     if orderID is None:
         abort(400, message="you should pass order id")
     if status is None:

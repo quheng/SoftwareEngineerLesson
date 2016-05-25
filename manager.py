@@ -9,10 +9,6 @@ from flask_swagger import swagger
 
 app = Flask(__name__, static_path = '/a2static')
 app.config.from_object('config')
-app.config.update(
-    SECRET_KEY='paykitty',
-    SESSION_COOKIE_NAME='cookiespace'
-)
 
 # database
 from flask.ext.sqlalchemy import SQLAlchemy

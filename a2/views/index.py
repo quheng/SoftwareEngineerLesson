@@ -2,7 +2,7 @@
 # coding=utf8
 # Author: quheng
 
-from flask import render_template, session
+from flask import render_template, session, redirect
 from manager import app
 from templates.a2_models import a2_index
 
@@ -17,4 +17,8 @@ def complaint():
 
 @app.route('/orderlist')
 def orderlist():
-    return render_template("a2/orderlist.html", userID = 1)
+    try:
+        userID = request.cookies.get("kitty")
+        return render_template("a2/orderlist.html", userID = 1)
+    except Exception as e:
+        return redirect("http://121.42.175.1/login")
