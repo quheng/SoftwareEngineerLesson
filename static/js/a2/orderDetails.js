@@ -365,7 +365,7 @@ function drawInfo(data, user_id)
 
     if (data.orderStatus==1) {
         //需要判断是不是卖家
-        if (isBuyer == 1) {
+        if (isBuyer == 0) {
             var div = d3.select("#order_info");
             var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid)").html("确认订单");
         }
