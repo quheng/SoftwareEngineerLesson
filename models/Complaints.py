@@ -29,6 +29,18 @@ class Complaints(db.Model):
         return 1
 
     @staticmethod
+    def selectByID(ID):
+        temp = Complaints.query.filter(Complaints.complaintID == ID).one()
+        result = {}
+        result['complaintID'] = temp.complaintID
+        result['orderID'] = temp.orderID
+        result['content'] = temp.content
+        result['buyer'] = temp.buyer
+        result['status'] = temp.status
+        result['complaintTime'] = temp.complaintTime.strftime("%Y-%m-%d %H:%M:%S")
+        return result
+
+    @staticmethod
     def selectByStatus():
         temp = Complaints.query.filter(Complaints.status == 0).all()
         res = []

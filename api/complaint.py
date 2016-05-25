@@ -30,6 +30,36 @@ def GetComplaintByStatus():
     result["result"] = res
     return jsonify({"result": result})
 
+@app.route("/a2/api/getcomplaintbyid", methods=['GET'])
+def GetComplaintByID():
+    """
+    use to get complaint list
+    ---
+    tags:
+      - complaint
+    parameters:
+      - name: complaintID
+        in: query
+        type: integer
+        description: complaint ID
+    responses:
+      200:
+        description: A single user item
+        schema:
+          id: return_test
+          properties:
+            result:
+              type: string
+              description: The test
+              default: 'test'
+    """
+    complaintID = request.args.get('complaintID')
+    try:
+        res = Complaints.selectByID(complaintID)
+    except Exception, e:
+        res = 0
+    return jsonify({"result": res})
+
 @app.route("/a2/api/getcomplaintstatus", methods=['GET'])
 def GetComplaintStatus():
     """
@@ -71,7 +101,7 @@ def updateComplaintsStatus():
       - name: complaintID
         in: query
         type: integer
-        description: buyer ID
+        description: complaint ID
       - name: status
         in: query
         type: integer
@@ -126,11 +156,10 @@ def NewComplaint():
               description: The result, 1 is successful
               default: '1'
     """
-    complaintJson = request.get_json()
     newComplaint = Complaints()
-    newComplaint.buyer = complaintJson['buyer']
-    newComplaint.content = complaintJson['content']
-    newComplaint.orderID = int(complaintJson['orderID'])
+    newComplaint.buyer = request.form['buyer']
+    newComplaint.content = request.form['content']
+    newComplaint.orderID = request.form['orderID']
     newComplaint.complaintTime = datetime.utcnow()
     newComplaint.status = 0
     try:
@@ -138,4 +167,4 @@ def NewComplaint():
         res = 1
     except Exception, e:
         res = 0
-    return jsonify({"result": 1})
+    return jsonify({"result": res})
