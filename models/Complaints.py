@@ -17,6 +17,13 @@ class Complaints(db.Model):
         db.session.commit()
 
     @staticmethod
+    def GetComplaintStatus(ID):
+        temp = Complaints.query.filter(Complaints.complaintID == ID).one()
+        res = {}
+        res["status"] = temp.status
+        return res
+
+    @staticmethod
     def updateComplaints(ID, status):
         db.session.query(Complaints).filter(Complaints.complaintID == ID).update({Complaints.status: status})
         db.session.commit()

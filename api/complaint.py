@@ -30,6 +30,36 @@ def GetComplaintByStatus():
     result["result"] = res
     return jsonify({"result": result})
 
+@app.route("/a2/api/getcomplaintstatus", methods=['GET'])
+def GetComplaintStatus():
+    """
+    use to get complaint status
+    ---
+    tags:
+      - complaint
+    parameters:
+      - name: complaintID
+        in: query
+        type: integer
+        description: buyer ID
+    responses:
+      200:
+        description: A single user item
+        schema:
+          id: return_test
+          properties:
+            result:
+              type: string
+              description: The test
+              default: 'test'
+    """
+    complaintID = request.args.get('complaintID')
+    try:
+        res = Complaints.GetComplaintStatus(complaintID)
+    except Exception, e:
+        res = 0
+    return jsonify({"result": res})
+
 @app.route("/a2/api/updatecomplaintsstatus", methods=['POST'])
 def updateComplaintsStatus():
     """
@@ -63,9 +93,7 @@ def updateComplaintsStatus():
         res = Complaints.updateComplaints(complaintID, status)
     except Exception, e:
         res = 0
-    result = {}
-    result["result"] = res
-    return jsonify({"result": result})
+    return jsonify({"result": res})
 
 @app.route("/a2/api/newcomplaint", methods=['POST'])
 def NewComplaint():
