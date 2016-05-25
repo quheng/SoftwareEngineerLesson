@@ -203,6 +203,41 @@ def GetOrderList():
     result["orderIdList"] = res
     return jsonify(result)
 
+@app.route("/a2/api/getallorder", methods=['GET'])
+def getAllOrder():
+    """
+    use to get all orders details of one user
+    ---
+    tags:
+      - order
+    parameters:
+      - name: userID
+        in: query
+        type: integer
+        description: user ID
+    responses:
+      200:
+        description: order list
+        schema:
+          id: return_test
+          properties:
+            orderIdList:
+              type: json array
+              description: order details list
+              default: 'a json array'
+    """
+    userID = request.args.get('userID')
+    if userID is None:
+        abort(400, message="you should pass order id")
+    try:
+        res = OrderManager.selectAllOrder(userID)
+    except Exception, e:
+        abort(400, message="Database error: {0}".format(e))
+    result = {}
+    result["orderDetailList"] = res
+    return jsonify(result)
+
+
 @app.route("/a2/api/getorder", methods=['GET'])
 def GetOrders():
     """

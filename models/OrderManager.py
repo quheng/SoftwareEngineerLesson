@@ -39,6 +39,22 @@ class OrderManager(db.Model):
         return res
 
     @staticmethod
+    def selectAllOrder(ID):
+        line = db.session.query(OrderManager).filter(or_(OrderManager.buyer == ID, OrderManager.seller == ID)).all()
+        res = []
+        for item in line:
+            tem = {}
+            tem['orderID'] = item.orderID
+            tem['orderAmount'] = item.orderAmount
+            tem['buyer'] = item.buyer
+            tem['seller'] = item.seller
+            tem['orderStatus'] = item.orderStatus
+            tem['orderItems'] = item.orderItems
+            tem['orderTime'] = item.orderTime.strftime("%Y-%m-%d %H:%M:%S")
+            res.append(tem)
+        return res
+
+    @staticmethod
     def selectOrderByCondition(c):
         query = db.session.query(OrderManager).filter(or_(OrderManager.buyer == c.userID, OrderManager.seller == c.userID))
         if (int(c.status) != -1):
@@ -81,25 +97,8 @@ class OrderManager(db.Model):
         temp['seller'] = line.seller
         temp['orderStatus'] = line.orderStatus
         temp['orderItems'] = line.orderItems
-        temp['orderTime'] = line.orderTime.strftime("%Y %m %d %H %M %S")
+        temp['orderTime'] = line.orderTime.strftime("%Y-%m-%d %H:%M:%S")
         return temp
-
-    # @staticmethod
-    # def printTable():
-    #     table = OrderManager.query.all()
-    #     result = []
-    #     for line in table:
-    #         temp = {}
-    #         temp['orderID'] = line.orderID
-    #         temp['orderName'] = line.orderName
-    #         temp['buyer'] = line.buyer
-    #         temp['seller'] = line.seller
-    #         temp['orderStatus'] = line.orderStatus
-    #         temp['orderItems'] = line.orderItems
-    #         temp['orderTime'] = line.orderTime.strftime("%A, %d. %B %Y %I:%M%p")
-    #         result.append(temp)
-    #     # print result
-    #     return result
 
     def __repr__(self):
         return '<Count %r>' % (self.orderID)
