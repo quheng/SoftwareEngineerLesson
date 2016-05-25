@@ -120,48 +120,46 @@
                           <div class="title_left">
                               <h3>订单管理<small></small></h3>
                           </div>
-
-                      </div>
-                      <div class="title_right" style="position:absolute;top:60px;left:860px;">
-                          <div class="nav navbar-nav navbar-left" style="">
-                              <g class=" btn-group">
-                              <button type="button" class="btn btn-default navbar-btn" id="timeButton">按时间</button>
-                              <button type="button" class="btn btn-default navbar-btn" id="stateButton">按状态</button>
-                              </g>
-                          </div>
-                          <div class="navbar-text" style="font-size:16px;position:absolute;left:130px;width:50px">筛选：</div>
-                          <div class="nav navbar-nav navbar-left" style="position:absolute;left:200px;width:130px;top:8.5px">
-                              <select class="form-control" style="" id="selectTime">
-                                  <option>所有时间</option>
-                                  <option>一日内</option>
-                                  <option>一周内</option>
-                                  <option>一月内</option>
-                                  <option>一年内</option>
-                              </select>
-                          </div>
-                          <div class="nav navbar-nav navbar-left" style="position:absolute;left:330px;width:130px;top:8.5px">
-                              <select class="form-control" style="" id="selectStatus">
-                                  <option>所有状态</option>
-                                  <option>待付款</option>
-                                  <option>待商家确认</option>
-                                  <option>商家已确认</option>
-                                  <option>交易成功</option>
-                                  <option>待退款</option>
-                                  <option>已退款</option>
-                                  <option>退款失败</option>
-                              </select>
-                          </div>
-                          <form class="navbar-form navbar-right" role="search" style="position:absolute;top:48px;left:185px;width:300px;z-index:0">
-                              <div class="input-group">
-                                  <input type="text" class="form-control" placeholder="查找指定订单" id="searchText">
-                                  <span class="input-group-btn">
-                                      <button class="btn btn-default" type="button" id="searchButton">查找</button>
-                                  </span>
-                              </div>
-                          </form>
                       </div>
                   </div>
-                  <div class="clearfix"></div>
+                  <div class="title_right" style="position:absolute;top:60px;right:350px;">
+                      <div class="nav navbar-nav navbar-left" style="">
+                          <g class=" btn-group">
+                              <button type="button" class="btn btn-default navbar-btn" id="timeButton">按时间</button>
+                              <button type="button" class="btn btn-default navbar-btn" id="stateButton">按状态</button>
+                          </g>
+                      </div>
+                      <div class="navbar-text" style="font-size:16px;position:absolute;left:130px;width:50px">筛选：</div>
+                      <div class="nav navbar-nav navbar-left" style="position:absolute;left:200px;width:130px;top:8.5px">
+                          <select class="form-control" style="" id="selectTime">
+                              <option>所有时间</option>
+                              <option>一日内</option>
+                              <option>一周内</option>
+                              <option>一月内</option>
+                              <option>一年内</option>
+                          </select>
+                      </div>
+                      <div class="nav navbar-nav navbar-left" style="position:absolute;left:330px;width:133px;top:8.5px">
+                          <select class="form-control" style="" id="selectStatus">
+                              <option>所有状态</option>
+                              <option>待付款</option>
+                              <option>待商家确认</option>
+                              <option>商家已确认</option>
+                              <option>交易成功</option>
+                              <option>待退款</option>
+                              <option>已退款</option>
+                              <option>退款失败</option>
+                          </select>
+                      </div>
+                      <form class="navbar-form navbar-right" role="search" style="position:absolute;top:48px;left:200px;width:300px;z-index:0">
+                          <div class="input-group">
+                              <input type="text" class="form-control" placeholder="查找指定订单" id="searchText">
+                              <span class="input-group-btn">
+                                  <button class="btn btn-default" type="button" id="searchButton">查找</button>
+                              </span>
+                          </div>
+                      </form>
+                  </div>
                   <div class="row">
                       <div class="col-md-12">
                           <div class="x_panel">
@@ -240,7 +238,7 @@
           <h4 class="ui-pnotify-title"></h4>
           <div class="ui-pnotify-text" aria-role="alert" style="font-size:20px;">无符合条件订单</div>
       </div>
-      <script>   
+      <script> 
           var userID = {{userID}};
           console.log("id:"+userID);
           var userType;
