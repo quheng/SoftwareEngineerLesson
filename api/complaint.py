@@ -126,6 +126,7 @@ def NewComplaint():
               description: The result, 1 is successful
               default: '1'
     """
+    return "!"
     newComplaint = Complaints()
     newComplaint.buyer = request.form['buyer']
     newComplaint.content = request.form['content']
