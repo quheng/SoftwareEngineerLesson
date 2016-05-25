@@ -150,83 +150,188 @@ function addGood(tbody,tr)
 
 }
 
-function payment(order_id)
+function payment(order_id, amount)
 {
-    //还需要接更改状态的api
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功付款！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
-    //location.reload();
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 1 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+    post("http://121.42.175.1/A1/API/submoney", { 'accountID': userid, 'amount': amount}, function (data, error) {
+        data=JSON.parse(data.data).result;
+        console.log(data);
+        if (data == "NoEnoughMoney") {
+            new PNotify({
+                title: '操作失败',
+                text: '您的余额不足。',
+                type: 'error',
+                styling: 'bootstrap3'
+            });
+        } else {
+            put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 1 }, function (data, error) {
+                if (1==1/*success*/) {
+                    new PNotify({
+                        title: '操作成功',
+                        text: '您已成功付款！',
+                        type: 'success',
+                        styling: 'bootstrap3'
+                    });
+
+                    setTimeout("location.reload();", 3000);
+                } else {
+                    new PNotify({
+                        title: '操作失败',
+                        text: '服务器出了点问题，请稍后再试……',
+                        type: 'dark',
+                        styling: 'bootstrap3'
+                    });
+                }
+            });
+        }
     });
 }
 
 function confirmorder(order_id) {
-
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功确认订单！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
     put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': order_id, 'status': 2 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+        if (1==1/*success*/) {
+            new PNotify({
+                title: '操作成功',
+                text: '您已成功确认订单！',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+
+            setTimeout("location.reload();", 3000);
+        } else {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        }
     });
 }
 
-function receive(orderid) {
+function receive(orderid, sellerid, amount) {
+    post("http://121.42.175.1/A1/API/addmoney", { 'accountID': 123/*sellerid*/, 'amount': amount}, function (data, error) {
+        data=JSON.parse(data.data).result;
+        console.log(data);
+        if (data != "OK") {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        } else {
+            put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
+                if (1==1/*success*/) {
+                    new PNotify({
+                        title: '操作成功',
+                        text: '您已成功确认收货！',
+                        type: 'success',
+                    styling: 'bootstrap3'
+                    });
 
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功确认收货！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 3 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+                    setTimeout("location.reload();", 3000);
+                } else {
+                    new PNotify({
+                        title: '操作失败',
+                        text: '服务器出了点问题，请稍后再试……',
+                        type: 'dark',
+                        styling: 'bootstrap3'
+                    });
+                }
+            });
+        }
     });
 }
 
 function refund(orderid) {
-
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功申请退款！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
     put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+        if (1==1/*success*/) {
+            new PNotify({
+                title: '操作成功',
+                text: '您已成功申请退款！',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+
+            setTimeout("location.reload();", 3000);
+        } else {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        }
     });
 }
 
-function accept(orderid) {
+function accept(orderid, sellerid, buyerid, amount) {
+    post("http://121.42.175.1/A1/API/submoney", { 'accountID': 123/*sellerid*/, 'amount': amount}, function (data, error) {
+        data=JSON.parse(data.data).result;
+        console.log(data);
+        if (data == "NoEnoughMoney") {
+            new PNotify({
+                title: '操作失败',
+                text: '您的余额不足。',
+                type: 'error',
+                styling: 'bootstrap3'
+            });
+        } else {
+            post("http://121.42.175.1/A1/API/addmoney", { 'accountID': 123/*buyerid*/, 'amount': amount}, function (data, error) {
+                data=JSON.parse(data.data).result;
+                console.log(data);
+                if (data != "OK") {
+                    new PNotify({
+                        title: '操作失败',
+                        text: '服务器出了点问题，请稍后再试……',
+                        type: 'dark',
+                        styling: 'bootstrap3'
+                    });
+                } else {
+                    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
+                        if (1==1/*success*/) {
+                            new PNotify({
+                                title: '操作成功',
+                                text: '您已成功同意退款！',
+                                type: 'success',
+                                styling: 'bootstrap3'
+                            });
 
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功同意退款！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
-    put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+                            setTimeout("location.reload();", 3000);
+                        } else {
+                            new PNotify({
+                                title: '操作失败',
+                                text: '服务器出了点问题，请稍后再试……',
+                                type: 'dark',
+                                styling: 'bootstrap3'
+                            });
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
 function reject(orderid) {
-
-    new PNotify({
-        title: '操作成功',
-        text: '您已成功拒绝退款！',
-        type: 'success',
-        styling: 'bootstrap3'
-    });
     put("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
-        setTimeout("location.reload();", 3000)
+        if (1==1/*success*/) {
+            new PNotify({
+                title: '操作成功',
+                text: '您已成功拒绝退款！',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+
+            setTimeout("location.reload();", 3000);
+        } else {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        }
     });
 }
 
@@ -249,7 +354,7 @@ function drawInfo(data, user_id)
         //需要判断是不是买家
         if (isBuyer == 1) {
             var div = d3.select("#order_info");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid);").html("付款");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid, "+data.orderAmount+");").html("付款");
         }
     }
 
@@ -265,7 +370,7 @@ function drawInfo(data, user_id)
         //需要判断是不是买家
         if (isBuyer == 1) {
             var div = d3.select("#order_info");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid)").html("确认收货");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+")").html("确认收货");
         }
     }
 
@@ -282,8 +387,8 @@ function drawInfo(data, user_id)
         if (isBuyer == 0) {
             var div = d3.select("#order_info");
             var br = div.append("br");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(id)").html("同意退款");
-            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(id)").html("拒绝退款");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(orderid, "+data.seller+", "+data.buyer+", "+data.orderAmount+")").html("同意退款");
+            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(orderid)").html("拒绝退款");
         }
     }
 

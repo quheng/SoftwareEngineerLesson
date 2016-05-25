@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>支付猫 | 老太太服务网</title>
+    <title>PayKitty</title>
 
     <!-- Bootstrap -->
     <link href="http://121.42.175.1/static/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -58,7 +58,7 @@
         <div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>支付猫</span></a>
+              <a href="index.html" class="site_title"><i class="fa fa-leaf"></i> <span>PayKitty</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -69,8 +69,8 @@
                 <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>欢迎欢迎,</span>
-                <h2>zyy</h2>
+                <span>welcome,</span>
+                <h2 class="username"></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -83,17 +83,17 @@
                 <h3>&nbsp</h3>
                 <ul class="nav side-menu">
 
-                  <li><a><i class="fa fa-rmb"></i> 在线预订 <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">机票</a>
+                      <li><a href="tables.html">旅店与飞行器预订</a>
                       </li>
-                      <li><a href="tables_dynamic.html">酒店</a>
+                      <li><a href="tables_dynamic.html">管理员</a>
                       </li>
                     </ul>
                   </li>
                   <li class="active"><a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu" style="display: block;">
-                      <li><a href="a2.html">所有订单</a>
+                      <li><a href="orderlist">所有订单</a>
                       </li>
                     </ul>
                   </li>
@@ -123,18 +123,11 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="http://121.42.175.1/static/images/img.jpg" alt="">Zyy
+                    <img src="http://121.42.175.1/static/images/img.jpg" alt=""/>
+                    <span class="username"></span>
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;">  我的订单</a>
-                    </li>
-                    <li>
-                      <a href="javascript:;">
-                        <!--<span class="badge bg-red pull-right">50%</span>-->
-                        <span>账户管理</span>
-                      </a>
-                    </li>
                     <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
                     </li>
                   </ul>
@@ -296,13 +289,20 @@
 <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/a2/orderDetails.js')}}"></script>
       <script>
-          var paras = location.href.split('userID=')[1];
-          var userid = paras.split('&orderID=')[0];
-          var orderid = paras.split('&orderID=')[1];
-          // var orderid = location.href.split('id=')[1];
+          // var paras = location.href.split('userID=')[1];
+          // var userid = paras.split('&orderID=')[0];
+          // var orderid = paras.split('&orderID=')[1];
+          post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error) {
+              data = JSON.parse(data.data);
+              var accountName = data.AccountName;
+              d3.selectAll(".username").html(accountName);
+          });
+
+          var userid = {{userID}};
+          var orderid = location.href.split('orderID=')[1];
           // d3.select("#order_ID").html(orderid);
           d3.select("#to_Comp").on("click", function(){
-            window.location = "complaint?userID="+userid+"&orderID="+orderid;
+            window.location = "complaint?orderID="+orderid;
           });
           drawOrderDetails(orderid, userid);
       </script>
