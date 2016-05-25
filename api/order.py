@@ -202,6 +202,48 @@ def GetOrderList():
     result["orderIdList"] = res
     return jsonify(result)
 
+@app.route("/a2/api/getorderlistbydate", methods=['GET'])
+def GetOrderListByDate():
+    """
+    use to get orders list by date
+    ---
+    tags:
+      - order
+    parameters:
+      - name: start
+        in: query
+        type: string
+        description: start time
+      - name: end
+        in: query
+        type: string
+        description: end time
+    responses:
+      200:
+        description: order list
+        schema:
+          id: return_test
+          properties:
+            orderIdList:
+              type: Integer
+              description: order id list
+              default: 'a json array'
+    """
+    start = request.args.get('start')
+    start = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    end = request.args.get('end')
+    end = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+    if start is None:
+        abort(400, message="you should pass order id")
+    try:
+        res = OrderManager.getOrderListByDate(start, end)
+    except Exception, e:
+        abort(400, message="Database error: {0}".format(e))
+    result = {}
+    result["orderIdList"] = res
+    return jsonify(result)
+
+
 @app.route("/a2/api/getallorder", methods=['GET'])
 def getAllOrder():
     """

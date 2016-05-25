@@ -1,7 +1,7 @@
 from manager import db
 import json
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from datetime import datetime
 from datetime import timedelta
 from dateutil import relativedelta
@@ -50,6 +50,22 @@ class OrderManager(db.Model):
             para = {'accountID': item.buyer}
             r = requests.post("121.42.175.1/A1/API/userInfoAPI", params=para)
             print r
+            tem['buyer'] = item.buyer
+            tem['seller'] = item.seller
+            tem['orderStatus'] = item.orderStatus
+            tem['orderItems'] = item.orderItems
+            tem['orderTime'] = item.orderTime.strftime("%Y-%m-%d %H:%M:%S")
+            res.append(tem)
+        return res
+
+    @staticmethod
+    def getOrderListByDate(start, end):
+        line = db.session.query(OrderManager).filter(and_(OrderManager.orderTime < end, OrderManager.orderTime > start)).all()
+        res = []
+        for item in line:
+            tem = {}
+            tem['orderID'] = item.orderID
+            tem['orderAmount'] = item.orderAmount
             tem['buyer'] = item.buyer
             tem['seller'] = item.seller
             tem['orderStatus'] = item.orderStatus
