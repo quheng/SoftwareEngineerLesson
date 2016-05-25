@@ -129,7 +129,7 @@ def NewComplaint():
     newComplaint = Complaints()
     newComplaint.buyer = request.form['buyer']
     newComplaint.content = request.form['content']
-    newComplaint.orderID = srequest.form['orderID']
+    newComplaint.orderID = request.form['orderID']
     newComplaint.complaintTime = datetime.utcnow()
     newComplaint.status = 0
     try:
