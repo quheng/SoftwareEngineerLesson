@@ -17,4 +17,4 @@ def complaint():
 
 @app.route('/orderlist')
 def orderlist():
-    render_template("a2/orderlist.html", userID = 123)
+    return render_template("a2/orderlist.html", userID = 123)
