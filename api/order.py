@@ -91,12 +91,13 @@ def InsertOrder():
               default: '1'
     """
     newOrder = OrderManager()
-    newOrder.buyer = request.form['buyer']
-    newOrder.seller = request.form['seller']
-    newOrder.orderAmount = request.form['orderAmount']
-    newOrder.orderItems = request.form['orderItems']
-    newOrder.orderStatus = request.form['orderStatus']
-    data = request.form['orderTime']
+    orderJson = request.get_json()
+    newOrder.buyer = orderJson['buyer']
+    newOrder.seller = orderJson['seller']
+    newOrder.orderAmount = orderJson['orderAmount']
+    newOrder.orderItems = orderJson['orderItems']
+    newOrder.orderStatus = orderJson['orderStatus']
+    data = orderJson['orderTime']
     newOrder.orderTime = datetime.strptime(data, "%Y-%m-%d %H:%M:%S")
 
     if newOrder.buyer is None:
