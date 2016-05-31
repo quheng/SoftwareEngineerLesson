@@ -152,8 +152,7 @@ function get(URL, PARAMS, f) {
 function addOrder(tr,orderID)
 {
     var oppoType = ['seller','buyer'];
-    get("http://121.42.175.1/a2/api/getorderdetial", {'orderID': orderID }, function (data) {
-        console.log(data);
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': orderID }, function (data) {
         tr.append("td").html("");
         //订单编号
         var td = tr.append("td");
@@ -286,5 +285,35 @@ function drawOrderList(userID,sort)
             addOrder(tr, d,i);
         });
     });
+}
+
+function search()
+{
+    var searchID = document.getElementById('searchText').value;
+    if (!searchID) {
+        drawOrderList(userID, 0);
+        return;
+    }
+    var table = d3.select("#" + "ListTable");
+    var tbody = table.select("tbody");
+    tbody.selectAll("tr").remove();
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': searchID }, function (data, error) {
+        if (error || data.buyer != userID) {
+            d3.select("#notifyDIV").style("display", "block");
+            setTimeout(function () {
+                d3.select("#notifyDIV").style("display", "none");
+            }, 800);
+            return;
+        }
+        var tr = tbody.append("tr").datum(searchID);
+        addOrder(tr, searchID);
+    });
+}
+
+function EnterPress(e) { //传入 event
+    var e = e || window.event;
+    if (e.keyCode == 13) {
+        search();
+    }
 }
 
