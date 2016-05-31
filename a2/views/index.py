@@ -2,7 +2,7 @@
 # coding=utf8
 # Author: quheng
 
-from flask import render_template, session, redirect
+from flask import render_template, session, request, redirect
 from manager import app
 from templates.a2_models import a2_index
 
@@ -13,7 +13,7 @@ def orderdetails():
     if ID:
         return render_template("a2/orderdetails.html", userID = ID)
     else:
-        redirect("http://121.42.175.1/login")
+        return redirect("http://121.42.175.1/login")
 
 @app.route('/complaint')
 def complaint():
