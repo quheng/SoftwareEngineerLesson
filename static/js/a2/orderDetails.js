@@ -437,10 +437,11 @@ function drawOrderDetails(order_id, user_id)
 {
     console.log(order_id);
     d3.select("#order_ID").html("订单号："+order_id);
-    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data, error) {
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': order_id }, function (data, error) {
         console.log(data);
         // data = JSON.parse(data);
         drawInfo(data, user_id);
+        console.log(data.orderItems);
         drawGoods(JSON.parse(data.orderItems).items);
     });
 }
