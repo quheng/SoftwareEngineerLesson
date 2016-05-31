@@ -157,9 +157,10 @@ def NewComplaint():
               default: '1'
     """
     newComplaint = Complaints()
-    newComplaint.buyer = request.form['buyer']
-    newComplaint.content = request.form['content']
-    newComplaint.orderID = request.form['orderID']
+    paser = request.get_json()
+    newComplaint.buyer = paser['buyer']
+    newComplaint.content = paser['content']
+    newComplaint.orderID = paser['orderID']
     newComplaint.complaintTime = datetime.utcnow()
     newComplaint.status = 0
     try:
