@@ -9,7 +9,11 @@ from templates.a2_models import a2_index
 
 @app.route('/orderdetails', methods=['GET'])
 def orderdetails():
-    return render_template("a2/orderdetails.html", userID = 123)
+    ID = request.cookies.get('kitty')
+    if ID:
+        return render_template("a2/orderdetails.html", userID = ID)
+    else:
+        redirect("http://121.42.175.1/login")
 
 @app.route('/complaint')
 def complaint():
