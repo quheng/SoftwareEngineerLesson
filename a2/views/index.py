@@ -17,8 +17,16 @@ def orderdetails():
 
 @app.route('/complaint')
 def complaint():
-    return render_template("a2/complaint.html", userID = 123)
+    ID = request.cookies.get('kitty')
+    if ID:
+        return render_template("a2/complaint.htl", userID = ID)
+    else:
+        return redirect("http://121.42.175.1/login")
 
 @app.route('/orderlist')
 def orderlist():
-    return render_template("a2/orderlist.html", userID = 123)
+    ID = request.cookies.get('kitty')
+    if ID:
+        return render_template("a2/orderlist.htl", userID = ID)
+    else:
+        return redirect("http://121.42.175.1/login")
