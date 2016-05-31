@@ -19,7 +19,7 @@ def orderdetails():
 def complaint():
     ID = request.cookies.get('kitty')
     if ID:
-        return render_template("a2/complaint.htl", userID = ID)
+        return render_template("a2/complaint.html", userID = ID)
     else:
         return redirect("http://121.42.175.1/login")
 
@@ -27,6 +27,6 @@ def complaint():
 def orderlist():
     ID = request.cookies.get('kitty')
     if ID:
-        return render_template("a2/orderlist.htl", userID = ID)
+        return render_template("a2/orderlist.html", userID = ID)
     else:
         return redirect("http://121.42.175.1/login")
