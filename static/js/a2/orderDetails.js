@@ -224,7 +224,7 @@ function receive(orderid, sellerid, amount) {
                 styling: 'bootstrap3'
             });
         } else {
-            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 2 }, function (data, error) {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 3 }, function (data, error) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
@@ -233,7 +233,7 @@ function receive(orderid, sellerid, amount) {
                     styling: 'bootstrap3'
                     });
 
-                 //   setTimeout("location.reload();", 3000);
+                 setTimeout("location.reload();", 3000);
                 } else {
                     new PNotify({
                         title: '操作失败',
@@ -258,7 +258,7 @@ function refund(orderid) {
                 styling: 'bootstrap3'
             });
 
-//            setTimeout("location.reload();", 3000);
+            setTimeout("location.reload();", 3000);
         } else {
             new PNotify({
                 title: '操作失败',
