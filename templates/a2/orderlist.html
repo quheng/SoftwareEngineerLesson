@@ -100,12 +100,12 @@
                           <li class="">
                               <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                   <img src="http://121.42.175.1/static/images/img.jpg" alt=""/>
-                                  <span class="userName">Zyy</span>
+                                  <span class="userName"></span>
                                   <span class=" fa fa-angle-down"></span>
                               </a>
                               <ul class="dropdown-menu dropdown-usermenu pull-right">
                                   <li>
-                                      <a href="login.html"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
+                                      <a href="/logout"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
                                   </li>
                               </ul>
                           </li>
@@ -147,15 +147,15 @@
                           <select class="form-control" style="" id="selectStatus">
                               <option>所有状态</option>
                               <option>待付款</option>
-                              <option>待商家确认</option>
-                              <option>商家已确认</option>
-                              <option>交易成功</option>
+                              <option>待商家确认房间/待出票</option>
+                              <option>房间已确认/已出票</option>
+                              <option>已入住/已乘机</option>
                               <option>待退款</option>
                               <option>已退款</option>
                               <option>退款失败</option>
                           </select>
                       </div>
-                      <form class="navbar-form navbar-right" role="search" style="position:absolute;top:41px;left:200px;width:300px;z-index:0" action="javascript:void(0);">
+                      <form class="navbar-form navbar-right" role="search" style="position:absolute;top:41px;left:185px;width:300px;z-index:0" action="javascript:void(0);">
                           <div class="input-group">
                               <input type="text" class="form-control" placeholder="查找指定订单" id="searchText" onkeypress="EnterPress(event)" onkeydown="" />
                               <span class="input-group-btn">
@@ -246,11 +246,6 @@
           var userID = {{userID}};
           var searchContent = location.href.split('search=')[1];
           var userType;
-          get("http://121.42.75.1/a3/getdetail", {  'ID': 'H1' }, function (data, error) {
-              console.log(data);
-             // data = JSON.parse(data.data);
-          
-          });
           post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userID }, function (data, error) {
               data = JSON.parse(data.data);
               userType = data.Type;
