@@ -405,17 +405,15 @@ function drawInfo(data, user_id)
     var isBuyer;
     console.log(data);
     isBuyer = 1 - userType;
-    //if (user_id == data.buyer) {
-    //    d3.select("#sellerName").html(data.seller);
-    //    isBuyer = 1;
-    //} else {
-    //    d3.select("#sellerName").html(data.buyer);
-    //    isBuyer = 0;
-    //}
+    if (isBuyer==1) {
+       d3.select("#sellerName").html(data.seller);
+    } else {
+       d3.select("#sellerName").html(data.buyer);
+    }
 
     d3.select("#orderdate").html(data.orderTime);
-    console.log("test~" + JSON.parse(data.orderItems).items[0][0]);
-    if (JSON.parse(data.orderItems).items[0][0]=="H") {
+    console.log("test~" + JSON.parse(data.orderItems)[0].id);
+    if (JSON.parse(data.orderItems)[0].id[0]=="H") {
         d3.select("#orderstate").html(StateTypeH[data.orderStatus]);
     } else {
         d3.select("#orderstate").html(StateTypeT[data.orderStatus]);
@@ -497,7 +495,7 @@ function drawInfo(data, user_id)
     }
 }
 
-function drawGoods(data) {
+function drawGoods(alldata, data) {
     console.log(data);
     var table = d3.select("#contentTable");
     var tbody = table.select("tbody");
@@ -507,14 +505,22 @@ function drawGoods(data) {
                .append("tr");
     trs.each(function (d, i) {
         tr = d3.select(this);
-        //此处应该接A3的api
-        tr.append("td").append("img").attr("src", "http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg")
-            .attr("width", "50px")
-            .attr("height","50px");
-        var td = tr.append("td").html("商品"+i);//d.title);
-        td = tr.append("td").html("2.5");//d.amount/d.quantity);
-        td = tr.append("td").attr("class", "hidden-phone").html("2");//d.quantity);
-        td = tr.append("td").attr("class", "vertical-align-mid").html("5.0");//d.amount);
+        get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
+            console.log(itemData);
+            console.log(itemData.File_Pos);
+            tr.append("td").append("img").attr("src", "http://121.42.175.1:5003/"+itemData.File_Pos)
+                .attr("width", "100px")
+                .attr("height","100px");
+            var td = tr.append("td").html(itemData.Hotel_Name);//d.title);
+            td = tr.append("td").html(alldata.orderAmount+"元");//d.amount/d.quantity);
+            td = tr.append("td").attr("class", "hidden-phone").html("1");//d.quantity);
+            td = tr.append("td").attr("class", "vertical-align-mid").html(alldata.orderAmount+"元");//d.amount);
+        });
+
+        // tr.append("td").append("img").attr("src", "http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg")
+        //     .attr("width", "50px")
+        //     .attr("height","50px");
+
     });
 }
 
@@ -526,7 +532,7 @@ function drawOrderDetails(order_id, user_id)
         console.log(data);
         // data = JSON.parse(data);
         drawInfo(data, user_id);
-        console.log(data.orderItems);
-        drawGoods(JSON.parse(data.orderItems).items);
+        console.log(JSON.parse(data.orderItems));
+        drawGoods(data, JSON.parse(data.orderItems));
     });
 }
