@@ -78,9 +78,9 @@
                                       <li>
                                           <a href="/a3/">旅店与飞行器预定</a>
                                       </li>
-                                      <li>
+                                      <!--<li>
                                           <a href="/a3/admin/">管理员</a>
-                                      </li>
+                                      </li>-->
                                   </ul>
                               </li>
 
@@ -111,7 +111,7 @@
                               </a>
                               <ul class="dropdown-menu dropdown-usermenu pull-right">
                                   <li>
-                                      <a href="login.html"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
+                                      <a href="/logout"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
                                   </li>
                               </ul>
                           </li>
@@ -233,7 +233,9 @@
                       f(data, 0);
                   },
                   error: function (XMLHttpRequest, textStatus, errorThrown) {
-                      f(0, XMLHttpRequest.status);
+                      //console.log("lala");
+                      //f(0, XMLHttpRequest.status);
+                      f(0, 1);
                   }
               });
           }
@@ -264,6 +266,7 @@
                   },
                   error: function (XMLHttpRequest, textStatus, errorThrown) {
                       f(0, XMLHttpRequest.status);
+                      //f(0, 1);
                   }
               });
           }
@@ -275,9 +278,16 @@
           }
 
           function response(data, error) {
+              //console.log(error);
               if (error)
               {
                   console.log(error);
+                  new PNotify({
+                      title: '操作失败',
+                      text: '请重新提交投诉申请！',
+                      type: 'fail',
+                      styling: 'bootstrap3'
+                  });
               }
               else{
                   new PNotify({
@@ -310,9 +320,16 @@
               var head = order.innerText;
               var orderID = head.split("投诉订单号：", 2)[1];
               var content = text.value;
-              var url = "http://121.42.175.1/a2/api/newcomplaint";
-              //post(url, new Data(userID, content, orderID), response);
-              post(url, {'buyer':userID, 'content':content, 'orderID':orderID}, response);
+              console.log(content.length);
+              if(content.length==0)
+              {
+                  alert("投诉理由不能为空");
+              }
+              else{
+                  var url = "http://121.42.175.1/a2/api/newcomplaint";
+                  //post(url, new Data(userID, content, orderID), response);
+                  post(url, {'buyer':userID, 'content':content, 'orderID':orderID}, response);
+              }
           }
     </script>
   </body>
