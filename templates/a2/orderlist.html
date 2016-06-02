@@ -73,11 +73,11 @@
                                   <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
-                                          <a href="/a3/">旅店与飞行器预定</a>
+                                          <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
                                       </li>
-                                      <li>
+                                      <!--<li>
                                           <a href="/a3/admin/">管理员</a>
-                                      </li>
+                                      </li>-->
                                   </ul>
                               </li>
 
@@ -100,12 +100,12 @@
                           <li class="">
                               <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                   <img src="http://121.42.175.1/static/images/img.jpg" alt=""/>
-                                  <span class="userName">Zyy</span>
+                                  <span class="userName"></span>
                                   <span class=" fa fa-angle-down"></span>
                               </a>
                               <ul class="dropdown-menu dropdown-usermenu pull-right">
                                   <li>
-                                      <a href="login.html"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
+                                      <a href="/logout"><i class="fa fa-sign-out pull-right"></i> 退出登陆</a>
                                   </li>
                               </ul>
                           </li>
@@ -133,7 +133,7 @@
                               <button type="button" class="btn btn-default navbar-btn" id="stateButton">按状态</button>
                           </g>
                       </div>
-                      <div class="navbar-text" style="font-size:16px;position:absolute;left:130px;width:50px">筛选：</div>
+                      <div class="navbar-text" style="font-size:16px;position:absolute;top:1px;left:130px;width:50px">筛选：</div>
                       <div class="nav navbar-nav navbar-left" style="position:absolute;left:200px;width:130px;top:8.5px">
                           <select class="form-control" style="" id="selectTime">
                               <option>所有时间</option>
@@ -147,17 +147,17 @@
                           <select class="form-control" style="" id="selectStatus">
                               <option>所有状态</option>
                               <option>待付款</option>
-                              <option>待商家确认</option>
-                              <option>商家已确认</option>
-                              <option>交易成功</option>
+                              <option>待商家确认房间/待出票</option>
+                              <option>房间已确认/已出票</option>
+                              <option>已入住/已乘机</option>
                               <option>待退款</option>
                               <option>已退款</option>
                               <option>退款失败</option>
                           </select>
                       </div>
-                      <form class="navbar-form navbar-right" role="search" style="position:absolute;top:48px;left:200px;width:300px;z-index:0">
+                      <form class="navbar-form navbar-right" role="search" style="position:absolute;top:41px;left:185px;width:300px;z-index:0" action="javascript:void(0);">
                           <div class="input-group">
-                              <input type="text" class="form-control" placeholder="查找指定订单" id="searchText">
+                              <input type="text" class="form-control" placeholder="查找指定订单" id="searchText" onkeypress="EnterPress(event)" onkeydown="" />
                               <span class="input-group-btn">
                                   <button class="btn btn-default" type="button" id="searchButton">查找</button>
                               </span>
@@ -244,6 +244,7 @@
       </div>
       <script> 
           var userID = {{userID}};
+          var searchContent = location.href.split('search=')[1];
           var userType;
           post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userID }, function (data, error) {
               data = JSON.parse(data.data);
@@ -269,28 +270,20 @@
               d3.select("#selectStatus").on("change", function () {
                   drawOrderList(userID, 0);
               });
+              //d3.select("#searchText").on("onkeypress",function(e){
+              //    console.log("keypress");
+              //});
               d3.select("#searchButton").on("click", function () {
-                  var searchID = document.getElementById('searchText').value;
-                  if (!searchID) {
-                      drawOrderList(userID, 0);
-                      return;
-                  }
-                  var table = d3.select("#" + "ListTable");
-                  var tbody = table.select("tbody");
-                  tbody.selectAll("tr").remove();
-                  get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': searchID }, function (data, error) {
-                      if (error || data.buyer != userID) {
-                          d3.select("#notifyDIV").style("display", "block");
-                          setTimeout(function () {
-                              d3.select("#notifyDIV").style("display", "none");
-                          }, 800);
-                          return;
-                      }
-                      var tr = tbody.append("tr").datum(searchID);
-                      addOrder(tr, searchID);
-                  });
+                  search();
               });
-              drawOrderList(userID, 0);
+              if (searchContent)
+              {
+                  document.getElementById('searchText').value = searchContent;
+              }
+              else
+              {
+                  drawOrderList(userID, 0);
+              }
           });         
       </script>
   </body>

@@ -85,13 +85,13 @@ var ORDERS = '{\
 //    "Compl":"投诉中"
 //};
 
-var StateType = ["待付款","待商家确认", "商家已确认","交易成功","交易关闭","待退款","已退款", "退款失败"];
+var StateType = ["待付款", "待商家确认房间/待出票", "房间已确认/已出票", "已入住/已乘机", "交易关闭", "待退款", "已退款", "退款失败"];
 var statusNo = {
     '所有状态':-1,
     '待付款':0,
-    '待商家确认':1,
-    '商家已确认':2,
-    '交易成功':3,
+    '待商家确认房间/待出票': 1,
+    '房间已确认/已出票': 2,
+    '已入住/已乘机': 3,
     '待退款':5,
     '已退款':6,
     '退款失败':7
@@ -152,8 +152,7 @@ function get(URL, PARAMS, f) {
 function addOrder(tr,orderID)
 {
     var oppoType = ['seller','buyer'];
-    get("http://121.42.175.1/a2/api/getorderdetial", {'orderID': orderID }, function (data) {
-        console.log(data);
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': orderID }, function (data) {
         tr.append("td").html("");
         //订单编号
         var td = tr.append("td");
@@ -161,15 +160,36 @@ function addOrder(tr,orderID)
         td.append("br");
         td.append("small").html(data.orderTime);
         //商品
+        items = JSON.parse(data.orderItems);
+        console.log(items);
         td = tr.append("td");
-        var ul = td.append("ul").attr("class", "list-inline");
-        data.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
-        for (var p in data.imgsrc) {
-            ul.append("li").append("img")
-                .attr("src", data.imgsrc[p])
-                .style("width", "50px")
-                .style("height", "50px");
-        }
+        var ul = td.append("ul").attr("class", "list-inline").attr("id","UL"+orderID);
+        var lis = ul.selectAll("li")
+            .data(items)
+            .enter()
+            .append("li");
+        lis.each(function (d, i) {
+            var li = d3.select(this);
+            get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
+                console.log(itemData);
+                console.log(itemData.File_Pos);
+                //d3.select("#" + "O" + orderID)
+                //var li = d3.select("#"+"O"+)
+                li.append("img")
+                    .attr("src","http://121.42.175.1:5003/"+itemData.File_Pos)
+                    .style("width", "50px")
+                    .style("height", "50px");
+                // data = JSON.parse(data.data);
+            });
+        });
+       
+        //data.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg', 'http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
+        //for (var p in data.imgsrc) {
+        //    ul.append("li").append("img")
+        //        .attr("src", data.imgsrc[p])
+        //        .style("width", "50px")
+        //        .style("height", "50px");
+        //}
         //卖家/买家
         td = tr.append("td").attr('id', 'td' + orderID);
         //'accountID': data[oppoType[userType]] 
@@ -286,5 +306,35 @@ function drawOrderList(userID,sort)
             addOrder(tr, d,i);
         });
     });
+}
+
+function search()
+{
+    var searchID = document.getElementById('searchText').value;
+    if (!searchID) {
+        drawOrderList(userID, 0);
+        return;
+    }
+    var table = d3.select("#" + "ListTable");
+    var tbody = table.select("tbody");
+    tbody.selectAll("tr").remove();
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': searchID }, function (data, error) {
+        if (error || data.buyer != userID) {
+            d3.select("#notifyDIV").style("display", "block");
+            setTimeout(function () {
+                d3.select("#notifyDIV").style("display", "none");
+            }, 800);
+            return;
+        }
+        var tr = tbody.append("tr").datum(searchID);
+        addOrder(tr, searchID);
+    });
+}
+
+function EnterPress(e) { //传入 event
+    var e = e || window.event;
+    if (e.keyCode == 13) {
+        search();
+    }
 }
 

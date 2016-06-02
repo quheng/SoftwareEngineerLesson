@@ -38,7 +38,10 @@ var ORDERS = '{\
         ]\
     }';
 
-var StateType = ["待付款", "待商家确认", "已确认", "交易成功", "待退款", "已退款", "退款失败"];
+var StateType = ["待付款", "待商家确认", "已确认", "交易成功", "交易关闭", "待退款", "已退款", "退款失败"];
+var StateTypeH = ["待付款", "待商家确认有房", "已确认有房", "已入住", "交易关闭", "待退款", "已退款", "退款失败"];
+var StateTypeT = ["待付款", "待出票", "已出票", "已乘机", "交易关闭", "待退款", "已退款", "退款失败"];
+
 
 function post(URL, PARAMS, f) {
     console.log(JSON.stringify(PARAMS));
@@ -224,7 +227,7 @@ function receive(orderid, sellerid, amount) {
                 styling: 'bootstrap3'
             });
         } else {
-            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 2 }, function (data, error) {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 3 }, function (data, error) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
@@ -233,7 +236,7 @@ function receive(orderid, sellerid, amount) {
                     styling: 'bootstrap3'
                     });
 
-                 //   setTimeout("location.reload();", 3000);
+                 setTimeout("location.reload();", 3000);
                 } else {
                     new PNotify({
                         title: '操作失败',
@@ -249,7 +252,7 @@ function receive(orderid, sellerid, amount) {
 
 function refund(orderid) {
     console.log("orderid:"+orderid);
-    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
         if (1==1/*success*/) {
             new PNotify({
                 title: '操作成功',
@@ -258,7 +261,7 @@ function refund(orderid) {
                 styling: 'bootstrap3'
             });
 
-//            setTimeout("location.reload();", 3000);
+            setTimeout("location.reload();", 3000);
         } else {
             new PNotify({
                 title: '操作失败',
@@ -293,7 +296,7 @@ function accept(orderid, sellerid, buyerid, amount) {
                         styling: 'bootstrap3'
                     });
                 } else {
-                    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 5 }, function (data, error) {
+                    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
                         if (1==1/*success*/) {
                             new PNotify({
                                 title: '操作成功',
@@ -318,8 +321,65 @@ function accept(orderid, sellerid, buyerid, amount) {
     });
 }
 
+function closeorder(orderid) {
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 4 }, function (data, error) {
+        if (1==1/*success*/) {
+            new PNotify({
+                title: '操作成功',
+                text: '您已成功取消订单！',
+                type: 'success',
+                styling: 'bootstrap3'
+            });
+
+            setTimeout("location.reload();", 3000);
+        } else {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        }
+    });
+}
+
+function closeorderandrefund(orderid, buyerid, amount) {
+post("http://121.42.175.1/A1/API/addmoney", { 'accountID': buyerid, 'amount': amount}, function (data, error) {
+        data=JSON.parse(data.data).result;
+        console.log(data);
+        if (data != "OK") {
+            new PNotify({
+                title: '操作失败',
+                text: '服务器出了点问题，请稍后再试……',
+                type: 'dark',
+                styling: 'bootstrap3'
+            });
+        } else {
+            post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID':parseInt(orderid), 'status': 4 }, function (data, error) {
+                if (1==1/*success*/) {
+                    new PNotify({
+                        title: '操作成功',
+                        text: '您已成功取消订单，已付款项已退款至您的账户！',
+                        type: 'success',
+                    styling: 'bootstrap3'
+                    });
+
+                 setTimeout("location.reload();", 3000);
+                } else {
+                    new PNotify({
+                        title: '操作失败',
+                        text: '服务器出了点问题，请稍后再试……',
+                        type: 'dark',
+                        styling: 'bootstrap3'
+                    });
+                }
+            });
+        }
+    });
+}
+
 function reject(orderid) {
-    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 6 }, function (data, error) {
+    post("http://121.42.175.1/a2/api/updateorderstate", { 'orderID': orderid, 'status': 7 }, function (data, error) {
         if (1==1/*success*/) {
             new PNotify({
                 title: '操作成功',
@@ -345,22 +405,27 @@ function drawInfo(data, user_id)
     var isBuyer;
     console.log(data);
     isBuyer = 1 - userType;
-    //if (user_id == data.buyer) {
-    //    d3.select("#sellerName").html(data.seller);
-    //    isBuyer = 1;
-    //} else {
-    //    d3.select("#sellerName").html(data.buyer);
-    //    isBuyer = 0;
-    //}
+    if (isBuyer==1) {
+       d3.select("#sellerName").html(data.seller);
+    } else {
+       d3.select("#sellerName").html(data.buyer);
+    }
 
     d3.select("#orderdate").html(data.orderTime);
-    d3.select("#orderstate").html(StateType[data.orderStatus]);
+    console.log("test~" + JSON.parse(data.orderItems)[0].id);
+    if (JSON.parse(data.orderItems)[0].id[0]=="H") {
+        d3.select("#orderstate").html(StateTypeH[data.orderStatus]);
+    } else {
+        d3.select("#orderstate").html(StateTypeT[data.orderStatus]);
+    }
     d3.select("#orderamount").html(data.orderAmount+"元");
     if (data.orderStatus==0) {
         //需要判断是不是买家
         if (isBuyer == 1) {
             var div = d3.select("#order_info");
+            var br = div.append("br");
             var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "payment(orderid, "+data.orderAmount+");").html("付款");
+            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "closeorder(orderid)").html("取消订单");
         }
     }
 
@@ -368,15 +433,33 @@ function drawInfo(data, user_id)
         //需要判断是不是卖家
         if (isBuyer == 0) {
             var div = d3.select("#order_info");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid)").html("确认订单");
+            var br = div.append("br");
+            var a;
+            if (JSON.parse(data.orderItems).items[0][0]=="H") {
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认有房");
+            } else {
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认出票");
+            }
+            
+            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "closeorderandrefund(orderid, "+data.buyer+", "+data.orderAmount+");").html("取消订单");
+        } else {
+            var div = d3.select("#order_info");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "refund(orderid);").html("申请退款");
         }
     }
 
     if (data.orderStatus==2) {
-        //需要判断是不是买家
-        if (isBuyer == 1) {
+        //需要判断是不是卖家
+        if (isBuyer == 0) {
             var div = d3.select("#order_info");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+")").html("确认收货");
+            var a;
+            if (JSON.parse(data.orderItems).items[0][0]=="H") {
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认入住");
+            } else {
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认乘机");
+            }
+
+        //    var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认收货");
         }
     }
 
@@ -384,21 +467,21 @@ function drawInfo(data, user_id)
         //需要判断是不是买家
         if (isBuyer == 1) {
             var div = d3.select("#order_info");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "refund(orderid)").html("申请退款");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "refund(orderid);").html("申请退款");
         }
     }
 
-    if (data.orderStatus==4) {
+    if (data.orderStatus==5) {
         //需要判断是不是卖家
         if (isBuyer == 0) {
             var div = d3.select("#order_info");
             var br = div.append("br");
-            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(orderid, "+data.seller+", "+data.buyer+", "+data.orderAmount+")").html("同意退款");
-            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(orderid)").html("拒绝退款");
+            var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(orderid, "+data.seller+", "+data.buyer+", "+data.orderAmount+");").html("同意退款");
+            a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(orderid);").html("拒绝退款");
         }
     }
 
-    //已退款和退款失败没有额外按钮
+    //交易关闭、已退款和退款失败没有额外按钮
 
     var div = d3.select("#order_info");
     if (1==1) {//如果没有在投诉中
@@ -412,7 +495,7 @@ function drawInfo(data, user_id)
     }
 }
 
-function drawGoods(data) {
+function drawGoods(alldata, data) {
     console.log(data);
     var table = d3.select("#contentTable");
     var tbody = table.select("tbody");
@@ -422,14 +505,22 @@ function drawGoods(data) {
                .append("tr");
     trs.each(function (d, i) {
         tr = d3.select(this);
-        //此处应该接A3的api
-        tr.append("td").append("img").attr("src", "http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg")
-            .attr("width", "50px")
-            .attr("height","50px");
-        var td = tr.append("td").html("商品"+i);//d.title);
-        td = tr.append("td").html("2.5");//d.amount/d.quantity);
-        td = tr.append("td").attr("class", "hidden-phone").html("2");//d.quantity);
-        td = tr.append("td").attr("class", "vertical-align-mid").html("5.0");//d.amount);
+        get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
+            console.log(itemData);
+            console.log(itemData.File_Pos);
+            tr.append("td").append("img").attr("src", "http://121.42.175.1:5003/"+itemData.File_Pos)
+                .attr("width", "100px")
+                .attr("height","100px");
+            var td = tr.append("td").html(itemData.Hotel_Name);//d.title);
+            td = tr.append("td").html(alldata.orderAmount+"元");//d.amount/d.quantity);
+            td = tr.append("td").attr("class", "hidden-phone").html("1");//d.quantity);
+            td = tr.append("td").attr("class", "vertical-align-mid").html(alldata.orderAmount+"元");//d.amount);
+        });
+
+        // tr.append("td").append("img").attr("src", "http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg")
+        //     .attr("width", "50px")
+        //     .attr("height","50px");
+
     });
 }
 
@@ -437,10 +528,11 @@ function drawOrderDetails(order_id, user_id)
 {
     console.log(order_id);
     d3.select("#order_ID").html("订单号："+order_id);
-    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': 1 }, function (data, error) {
+    get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': order_id }, function (data, error) {
         console.log(data);
         // data = JSON.parse(data);
         drawInfo(data, user_id);
-        drawGoods(JSON.parse(data.orderItems).items);
+        console.log(JSON.parse(data.orderItems));
+        drawGoods(data, JSON.parse(data.orderItems));
     });
 }
