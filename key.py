@@ -1,3 +1,4 @@
+
 MAIL_USERNAME = '***'
 MAIL_PASSWORD = '***'
 MANAGER_NAME = '***'
