@@ -176,7 +176,7 @@ function addOrder(tr,orderID)
                 //d3.select("#" + "O" + orderID)
                 //var li = d3.select("#"+"O"+)
                 li.append("img")
-                    .attr("src", itemData.File_Pos)
+                    .attr("src","http://121.42.175.1:5003/"+itemData.File_Pos)
                     .style("width", "50px")
                     .style("height", "50px");
                 // data = JSON.parse(data.data);
