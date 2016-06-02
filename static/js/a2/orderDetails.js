@@ -406,9 +406,22 @@ function drawInfo(data, user_id)
     console.log(data);
     isBuyer = 1 - userType;
     if (isBuyer==1) {
-       d3.select("#sellerName").html(data.seller);
+        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': data.seller }, function (data1, error) {
+              data1 = JSON.parse(data1.data);
+              var accountName = data1.AccountName;
+              console.log("sellername "+accountName);
+              // d3.selectAll(".username").html(accountName);
+              d3.select("#sellerName").html(accountName);
+          });
+       // d3.select("#sellerName").html(data.seller);
     } else {
-       d3.select("#sellerName").html(data.buyer);
+        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': data.buyer }, function (data1, error) {
+              data1 = JSON.parse(data1.data);
+              var accountName = data1.AccountName;
+              // d3.selectAll(".username").html(accountName);
+              d3.select("#sellerName").html(accountName);
+          });
+       // d3.select("#sellerName").html(data.buyer);
     }
 
     d3.select("#orderdate").html(data.orderTime);
@@ -435,7 +448,7 @@ function drawInfo(data, user_id)
             var div = d3.select("#order_info");
             var br = div.append("br");
             var a;
-            if (JSON.parse(data.orderItems).items[0][0]=="H") {
+            if (JSON.parse(data.orderItems)[0].id[0]=="H") {
                 a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认有房");
             } else {
                 a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认出票");
@@ -453,7 +466,7 @@ function drawInfo(data, user_id)
         if (isBuyer == 0) {
             var div = d3.select("#order_info");
             var a;
-            if (JSON.parse(data.orderItems).items[0][0]=="H") {
+            if (JSON.parse(data.orderItems)[0].id[0]=="H") {
                 a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认入住");
             } else {
                 a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认乘机");
