@@ -1,91 +1,4 @@
-﻿//测试数据
-
-var ORDERLIST = [{
-    id:'SE000010325',
-    time: '2016.3.24',
-    seller: 'ZaneXiao',
-    amount: 66.2,
-    state: 1,
-    imgsrc: ['http://img1.imgtn.bdimg.com/it/u=1371246895,4061054626&fm=206&gp=0.jpg']
-},
-{
-    id: 'SE000010510',
-    time: '2016.3.22',
-    seller: 'EowinYe',
-    amount: 99.8,
-    state: 2,
-    imgsrc: ['http://d.hiphotos.baidu.com/image/h%3D200/sign=201258cbcd80653864eaa313a7dca115/ca1349540923dd54e54f7aedd609b3de9c824873.jpg']
-},
-{
-    id: 'SE000010296',
-    time: '2016.3.21',
-    seller: 'ABC',
-    amount: 12.5,
-    state: 3,
-    imgsrc: ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg']
-}
-];
-
-var ORDERS = '{\
-        "id": "SE000010325",\
-        "time": "2016.3.24",\
-        "user":"ZaneXiao",\
-        "state": "NotDel",\
-        "amount": 664.8,\
-        "content": [\
-            {\
-                "title": "云恋酒店（不含早）",\
-                "quantity":2,\
-                "amount": 576.0,\
-                "imgsrc": "http://www.cysz6.com/upload/hotel/1305/29/28664d284e439a97cbd622d2be6d35d9.jpg"\
-            },\
-            {\
-                "title": "会员增值业务",\
-                "quantity": 1,\
-                "amount": 88.8,\
-                "imgsrc": "http://img4q.duitang.com/uploads/item/201405/14/20140514113612_vTyFa.jpeg"\
-            }\
-        ],\
-        "flow": [\
-            {\
-                "time": "2016.3.21 14:11",\
-                "summary":"买家zyy已付款"\
-            },\
-            {\
-                "time": "2016.3.22 00:03",\
-                "summary": "卖家YunlianHotel确认订单"\
-            },\
-            {\
-            "time": "2016.3.22 00:04",\
-                "summary": "卖家YunlianHotel确认发货"\
-            },\
-            {\
-                "time": "2016.3.25 19:52",\
-                "summary": "买家zyy确认收货,交易完成"\
-            }\
-        ]\
-    }';
-
-//var COMPLAINTS = {
-//    "SE000010325": {
-//        id: "SE000010325",
-       
-//    }
-//};
-
-//测试数据-结束
-
-//var StateType={
-//    "NotPay":"待付款",
-//    "NotDel":"待发货",
-//    "Delivery":"已发货",
-//    "Success":"交易成功",
-//    "NotRef":"待退款",
-//    "Refund":"已退款",
-//    "Compl":"投诉中"
-//};
-
-var StateType = ["待付款", "待商家确认房间/待出票", "房间已确认/已出票", "已入住/已乘机", "交易关闭", "待退款", "已退款", "退款失败"];
+﻿var StateType = ["待付款", "待商家确认房间/待出票", "房间已确认/已出票", "已入住/已乘机", "交易关闭", "待退款", "已退款", "退款失败"];
 var statusNo = {
     '所有状态':-1,
     '待付款':0,
@@ -161,7 +74,6 @@ function addOrder(tr,orderID)
         td.append("small").html(data.orderTime);
         //商品
         items = JSON.parse(data.orderItems);
-        console.log(items);
         td = tr.append("td");
         var ul = td.append("ul").attr("class", "list-inline").attr("id","UL"+orderID);
         var lis = ul.selectAll("li")
@@ -171,29 +83,17 @@ function addOrder(tr,orderID)
         lis.each(function (d, i) {
             var li = d3.select(this);
             get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
-                console.log(itemData);
-                console.log(itemData.File_Pos);
-                //d3.select("#" + "O" + orderID)
-                //var li = d3.select("#"+"O"+)
                 li.append("img")
                     .attr("src","http://121.42.175.1:5003/"+itemData.File_Pos)
                     .style("width", "50px")
                     .style("height", "50px");
-                // data = JSON.parse(data.data);
             });
         });
        
-        //data.imgsrc = ['http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg', 'http://img2.imgtn.bdimg.com/it/u=355596720,3737965610&fm=206&gp=0.jpg'];
-        //for (var p in data.imgsrc) {
-        //    ul.append("li").append("img")
-        //        .attr("src", data.imgsrc[p])
-        //        .style("width", "50px")
-        //        .style("height", "50px");
-        //}
+        
         //卖家/买家
         td = tr.append("td").attr('id', 'td' + orderID);
-        //'accountID': data[oppoType[userType]] 
-        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': 123 }, function (data, error){ 
+        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': data.seller }, function (data, error){ 
             data = JSON.parse(data.data);
             var name = data.AccountName;
             td = d3.select("#td" + orderID)
@@ -220,7 +120,6 @@ function addOrder(tr,orderID)
             else
                 progress = 50;
         }
-       // progress = 50;
            div.append("div")
             .attr("class", function () {
                 var c = "progress-bar"
@@ -239,7 +138,6 @@ function addOrder(tr,orderID)
         td = tr.append("td").style("text-align", "center");
         var a = td.append("a")
             .datum(orderID)
-           // .attr("href", "complaint"+"?"+"id="+d.id)
             .attr("class", "btn btn-primary btn-xs")
             .html("查看详情");
         a.on("click", function (d) {
@@ -263,11 +161,7 @@ function drawOrderList(userID,sort)
     postObj['date'] = selTime;
     postObj['status'] = selStatus;
     postObj['sort'] = sort;
-    // console.log("sort: " + sort);
-    console.log(postObj);
     get("http://121.42.175.1/a2/api/getorder",postObj, function (data) {
-        console.log(data);
-        //console.log("post: "+data);
         orderList = new Array();
         data = data['orderIdList'];
         for (var p in data)
@@ -284,26 +178,6 @@ function drawOrderList(userID,sort)
         trs.each(function (d, i) {
             tr = d3.select(this);
             addOrder(tr,d);
-        });
-    });
-    return;
-
-
-    post("/a2/api/selectOrder", { 'sql': "sql" }, function (data) {
-        //data = JSON.parse(data);
-        console.log(data);
-        var table = d3.select("#" + "ListTable");
-        var tbody = table.select("tbody");
-        //var orderList = JSON.parse(ORDERLIST);
-        var orderList = JSON.parse(data);
-        console.log(orderList);
-        var trs = tbody.selectAll("tr")
-            .data(orderList)
-            .enter()
-            .append("tr");
-        trs.each(function (d, i) {
-            tr = d3.select(this);
-            addOrder(tr, d,i);
         });
     });
 }
