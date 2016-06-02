@@ -93,11 +93,10 @@ class OrderManager(db.Model):
         query = query.filter(OrderManager.orderTime > date)
 
         if (int(c.sort) == 0):
-            query.order_by(OrderManager.orderTime)
+            line = query.order_by(OrderManager.orderTime).all()
         else:
-            query.order_by(OrderManager.orderStatus)
+            line = query.order_by(OrderManager.orderStatus).all()
 
-        line = query.all()
         res = []
         for item in line:
             tem = {}
