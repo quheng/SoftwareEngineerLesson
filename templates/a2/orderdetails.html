@@ -168,19 +168,15 @@
 
                       <ul class="list-unstyled user_data">
                         <li id="order_ID"></li>
-                        <li id="orderdate"></li>
+                        <li id="orderdate">2016.3.21
+                        </li>
 
                         <li id="orderstate"></li>
-                        
+
                         <li id="orderamount">
-                        <li id="ordercode"></li>
+                          664.8元
                         </li>
                       </ul>
-                                      <!-- Small modal -->
-                  <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button> -->
-
-                  
-
 <!--                       <a class="btn btn-success" onclick="new PNotify({
                                   title: '操作成功',
                                   text: '您已成功确认收货！',
@@ -262,8 +258,6 @@
             </div>
           </div>
         </div>
-
-
         <!-- /page content -->
 
         <!-- footer content -->
@@ -276,39 +270,6 @@
         <!-- /footer content -->
       </div>
     </div>
-
-<!--     <div class="alert ui-pnotify-container alert-info ui-pnotify-shadow" role="alert" style="min-height: 16px; position:absolute; height:140px; top:200px; left:500px; width:550px;display:none"  id="confirm_Order">
-          <br>
-          <input type="text" class="form-control" placeholder="输入验证码" id="codeText">
-          <br>
-          <button class="btn btn-default" type="button" id="confirmButton">确认</button>
-
-          <button class="btn btn-default" type="button" id="cancelButton">取消</button>
-          <br>
-      </div>
- -->
-        <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="visibility:visible; display:none; position:absolute; top:200px;" id = "confirm_Order">
-                    <div class="modal-dialog modal-sm">
-                      <div class="modal-content">
-
-                        <div class="modal-header">
-                          <button type="button" class="close cancel" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" >×</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel2">验证码输入</h4>
-                        </div>
-                        <div class="modal-body">
-                          <!-- <h4>Text in a modal</h4> -->
-                         <input type="text" class="form-control" placeholder="请输入验证码" id="codeText">
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default cancel" data-dismiss="modal" >取消</button>
-                          <button type="button" class="btn btn-primary" id="confirmButton">确认</button>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-
 
     <!-- jQuery -->
     <script src="http://121.42.175.1/static/vendors/jquery/dist/jquery.min.js"></script>
@@ -335,17 +296,6 @@
           // var paras = location.href.split('userID=')[1];
           // var userid = paras.split('&orderID=')[0];
           // var orderid = paras.split('&orderID=')[1];
-
-          
-          d3.select("#confirmButton").on("click", function () {
-              d3.select("#confirm_Order").style("display", "none");
-              // drawOrderList(userID, 0);
-          });
-          d3.selectAll(".cancel").on("click", function () {
-              d3.select("#confirm_Order").style("display", "none");
-              // drawOrderList(userID, 0);
-          });
-
           var userid = {{userID}};
           var orderid = location.href.split('orderID=')[1];
           var userType;
@@ -356,7 +306,6 @@
               userType = data.Type;
               drawOrderDetails(orderid, userid);
           });
-
 
           // d3.select("#order_ID").html(orderid);
           //d3.select("#to_Comp").on("click", function(){

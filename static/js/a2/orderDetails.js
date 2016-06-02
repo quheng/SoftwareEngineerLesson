@@ -460,34 +460,20 @@ function drawInfo(data, user_id)
             var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "refund(orderid);").html("申请退款");
         }
     }
-    console.log("test");
+
     if (data.orderStatus==2) {
         //需要判断是不是卖家
-        console.log("test");
         if (isBuyer == 0) {
             var div = d3.select("#order_info");
             var a;
-            console.log("test");
             if (JSON.parse(data.orderItems)[0].id[0]=="H") {
-                console.log("test");
-                a = div.append("a").attr("id", "confirmOK").attr("class", "btn btn-success").html("确认入住");
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认入住");
             } else {
-                // d3.select("#confirm_Order").style("display", "block");
-                a = div.append("a").attr("id", "confirmOK").attr("class", "btn btn-success").html("确认乘机");
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认乘机");
             }
-            // d3.select("#ordercode").html("验证码："+"1234567890");
+
         //    var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认收货");
         }
-        else{
-            d3.select("#ordercode").html("验证码："+"1234567890");
-        }
-
-        d3.select("#confirmButton").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");");
-        d3.select("#confirmOK").on("click", function () {
-                  d3.select("#confirm_Order").style("display", "block");
-                  // drawOrderList(userID, 0);
-              });
-          
     }
 
     if (data.orderStatus==3) {
@@ -506,7 +492,6 @@ function drawInfo(data, user_id)
             var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "accept(orderid, "+data.seller+", "+data.buyer+", "+data.orderAmount+");").html("同意退款");
             a = div.append("a").attr("class", "btn btn-success").attr("onclick", "reject(orderid);").html("拒绝退款");
         }
-
     }
 
     //交易关闭、已退款和退款失败没有额外按钮
