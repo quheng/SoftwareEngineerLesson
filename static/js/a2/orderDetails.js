@@ -231,7 +231,7 @@ function receive(orderid, sellerid, amount) {
                 if (1==1/*success*/) {
                     new PNotify({
                         title: '操作成功',
-                        text: '您已成功确认收货！',
+                        text: '您已成功确认消费！',
                         type: 'success',
                     styling: 'bootstrap3'
                     });
@@ -467,9 +467,9 @@ function drawInfo(data, user_id)
             var div = d3.select("#order_info");
             var a;
             if (JSON.parse(data.orderItems)[0].id[0]=="H") {
-                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认入住");
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认入住");
             } else {
-                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "confirmorder(orderid);").html("确认乘机");
+                a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认乘机");
             }
 
         //    var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认收货");
