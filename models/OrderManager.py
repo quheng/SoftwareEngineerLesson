@@ -93,7 +93,7 @@ class OrderManager(db.Model):
         query = query.filter(OrderManager.orderTime > date)
 
         if (int(c.sort) == 0):
-            line = query.order_by(OrderManager.orderTime).all()
+            line = query.order_by(OrderManager.orderTime.desc()).all()
         else:
             line = query.order_by(OrderManager.orderStatus).all()
 
