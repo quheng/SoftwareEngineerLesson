@@ -47,6 +47,49 @@ def UpdateOrderState():
         res = 0
     return jsonify({'result': res})
 
+@app.route("/a2/api/updateorderamount", methods=['POST'])
+def UpdateOrderAmount():
+    """
+    use to update orders amount
+    ---
+    tags:
+      - order
+    parameters:
+      - name: orderID
+        in: query
+        type: integer
+        description: order id
+      - name: amount
+        in: query
+        type: integer
+        description: new amount
+    responses:
+      200:
+        description: update result
+        schema:
+          id: result
+          properties:
+            result:
+              type: string
+              description: The result, 1 is successful
+              default: '1'
+    """
+    orderJson = request.get_json()
+
+    orderID = orderJson['orderID']
+    amount = orderJson['amount']
+    if orderID is None:
+        abort(400, message="you should pass order id")
+    if status is None:
+        abort(400, message="you should pass amount")
+    try:
+        res = OrderManager.UpdateOrderAmount(orderID, amount)
+        res = 1
+    except Exception, e:
+        res = 0
+    return jsonify({'result': res})
+
+
 @app.route("/a2/api/insertorder", methods=['POST'])
 def InsertOrder():
     """

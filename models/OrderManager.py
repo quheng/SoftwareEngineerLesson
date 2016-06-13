@@ -25,6 +25,11 @@ class OrderManager(db.Model):
         db.session.commit()
 
     @staticmethod
+    def UpdateOrderAmount(ID, amount):
+        db.session.query(OrderManager).filter(OrderManager.orderID == ID).update({OrderManager.orderAmount: amount})
+        db.session.commit()
+
+    @staticmethod
     def UpdateOrderState(ID, status):
         db.session.query(OrderManager).filter(OrderManager.orderID == ID).update({OrderManager.orderStatus: status})
         db.session.commit()
