@@ -126,6 +126,7 @@ class OrderManager(db.Model):
     orderItems = db.Column(db.String(200))
     orderStatus = db.Column(db.Integer)
     orderTime = db.Column(db.DateTime)
+    captcha = db.Column(db.String(10))
 
 class OrderCondition(object):
     def __init__(self):

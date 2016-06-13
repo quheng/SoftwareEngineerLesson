@@ -99,7 +99,7 @@ def InsertOrder():
     newOrder.orderStatus = orderJson['orderStatus']
     data = orderJson['orderTime']
     newOrder.orderTime = datetime.strptime(data, "%Y-%m-%d %H:%M:%S")
-
+    newOrder.captcha = str(random.randint(0, 999999999))
     if newOrder.buyer is None:
         abort(400, message="you should pass enough order")
     if newOrder.seller is None:
