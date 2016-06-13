@@ -53,25 +53,7 @@
                       <div class="menu_section">
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
-                              <li>
-                                  <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
-                                  <ul class="nav child_menu">
-                                      <li>
-                                          <a href="/account/info">账户记录</a>
-                                      </li>
-                                      <li>
-                                          <a href="/account/transaction">交易信息</a>
-                                      </li>
-                                  </ul>
-                              </li>
-                              <li class="active">
-                                  <a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
-                                  <ul class="nav child_menu" style="display:block;">
-                                      <li>
-                                          <a href="orderlist">所有订单</a>
-                                      </li>
-                                  </ul>
-                              </li>
+
                               <li>
                                   <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
@@ -80,6 +62,26 @@
                                       </li>
                                       <li>
                                           <a href="/a3/admin/">管理员</a>
+                                      </li>
+                                  </ul>
+                              </li>
+                              
+                              <li class="active">
+                                  <a><i class="fa fa-edit"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu" style="display:block;">
+                                      <li>
+                                          <a href="orderlist">所有订单</a>
+                                      </li>
+                                  </ul>
+                              </li>
+                              <li>
+                                  <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu">
+                                      <li>
+                                          <a href="/account/info">账户记录</a>
+                                      </li>
+                                      <li>
+                                          <a href="/account/transaction">交易信息</a>
                                       </li>
                                   </ul>
                               </li>
@@ -103,9 +105,11 @@
                       </div>
 
                       <ul class="nav navbar-nav navbar-right">
+
                           <li class="">
+
                               <a id="userID" href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                  <img src="http://121.42.175.1/static/images/img.jpg" alt="" />
+                                  <img src="http://121.42.175.1/static/images/img.jpg" alt="" class="profile_img" />
                                   <span class="username"></span>
                                   <span class=" fa fa-angle-down"></span>
                               </a>
@@ -115,6 +119,33 @@
                                   </li>
                               </ul>
                           </li>
+
+                          <li role="presentation" class="dropdown">
+                              <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-envelope-o"></i>
+                                  <span id="messageAmount" class="badge bg-green"></span>
+                              </a>
+                              <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                  <li id="messageEnd">
+                                      <div class="text-center">
+                                          <a id="messageClickAll">
+                                              <strong>确认看过了所有新消息</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="text-center">
+                                          <a href="http://121.42.175.1/account/message">
+                                              <strong>查看所有通知</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </li>
+
+                         
 
                          
 
@@ -303,12 +334,51 @@
           }
     </script>
     <script>
-          var userid = {{userID}}
+        var userid = {{userID}}
+
+        window.onload=function(){
+            var accountID = userid;
+            $.get('http://121.42.175.1/A1/API/message/clickedMessage', {backUrl:window.location.href, accountID : accountID}, function(data, status){
+                var mydoc = "";
+                data = JSON.parse(data);
+                for (var i in data) {
+                    mydoc += 
+                    "<li>\
+                        <a href=\"http://121.42.175.1" + data[i].href + "\">\
+                          <span class=\"image\">\
+                            <img src=\"http://121.42.175.1/static/images/sys.png\" alt=\"Profile Image\" />\
+                          </span>\
+                          <span>\
+                            <span>来自" + data[i].sender + "的消息</span>\
+                          <span class=\"time\">" + data[i].time + "</span>\
+                          </span>\
+                          <span class=\"message\">\
+                            " + data[i].message + "\
+                          </span>\
+                        </a>\
+                      </li>";
+                }
+                $('#messageEnd').before(mydoc);
+                var myclickAllUrl = "http://121.42.175.1/account/message/clear?backUrl=" + window.location.href + "&accountID=" + accountID;
+                $('#messageClickAll').attr("href", myclickAllUrl);
+                $('#messageAmount').text("" + data.length);
+            });
+        }
+
+
           var orderid = location.href.split('orderID=')[1];
           d3.select("#orderid").html("投诉订单号：" + orderid);
-          
+          var usertype;
           post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userid }, function (data, error) {
               data = JSON.parse(data.data);
+              usertype=data.type;
+              if (usertype == 1 )
+              {
+                  d3.selectAll(".profile_img").attr("src","http://121.42.175.1/static/images/seller.png");
+              }
+              else{
+                  d3.selectAll(".profile_img").attr("src","http://121.42.175.1/static/images/buyer.png");
+              }
               var accountName = data.AccountName;
              
               d3.selectAll(".username").html(accountName);
