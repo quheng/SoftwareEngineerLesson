@@ -10,23 +10,16 @@ from templates.a2_models import a2_index
 @app.route('/orderdetails', methods=['GET'])
 def orderdetails():
     ID = request.cookies.get('kitty')
-    if ID:
-        return render_template("a2/orderdetails.html", userID = ID)
-    else:
-        return redirect("http://121.42.175.1/login")
+    return render_template("a2/orderdetails.html", userID = 123)
+
 
 @app.route('/complaint')
 def complaint():
     ID = request.cookies.get('kitty')
-    if ID:
-        return render_template("a2/complaint.html", userID = ID)
-    else:
-        return redirect("http://121.42.175.1/login")
+    return render_template("a2/complaint.html", userID = 123)
+
 
 @app.route('/orderlist')
 def orderlist():
     ID = request.cookies.get('kitty')
-    if ID:
-        return render_template("a2/orderlist.html", userID = ID)
-    else:
-        return redirect("http://121.42.175.1/login")
+    return render_template("a2/orderlist.html", userID = 123)
