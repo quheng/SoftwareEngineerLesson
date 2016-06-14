@@ -34,7 +34,7 @@
                   <!-- menu profile quick info -->
                   <div class="profile">
                       <div class="profile_pic">
-                          <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
+                          <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img portrait">
                       </div>
                       <div class="profile_info">
                           <span>您好,</span>
@@ -51,6 +51,25 @@
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
                               <li>
+                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu">
+                                      <li>
+                                          <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
+                                      </li>
+                                      <!--<li>
+                <a href="/a3/admin/">管理员</a>
+            </li>-->
+                                  </ul>
+                              </li>
+                              <li class="active">
+                                  <a><i class="fa fa-edit"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu" style="display:block;">
+                                      <li>
+                                          <a href="orderlist">所有订单</a>
+                                      </li>
+                                  </ul>
+                              </li>
+                              <li>
                                   <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
@@ -61,26 +80,6 @@
                                       </li>
                                   </ul>
                               </li>
-                              <li class="active">
-                                  <a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
-                                  <ul class="nav child_menu" style="display:block;">
-                                      <li>
-                                          <a href="orderlist">所有订单</a>
-                                      </li>
-                                  </ul>
-                              </li>
-                              <li>
-                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
-                                  <ul class="nav child_menu">
-                                      <li>
-                                          <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
-                                      </li>
-                                      <!--<li>
-                                          <a href="/a3/admin/">管理员</a>
-                                      </li>-->
-                                  </ul>
-                              </li>
-
                           </ul>
                       </div>
                   </div>
@@ -99,7 +98,7 @@
                       <ul class="nav navbar-nav navbar-right">
                           <li class="">
                               <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                  <img src="http://121.42.175.1/static/images/img.jpg" alt=""/>
+                                  <img src="http://121.42.175.1/static/images/img.jpg" alt="" class="portrait" />
                                   <span class="userName"></span>
                                   <span class=" fa fa-angle-down"></span>
                               </a>
@@ -109,6 +108,31 @@
                                   </li>
                               </ul>
                           </li>
+                          <li role="presentation" class="dropdown">
+                              <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-envelope-o"></i>
+                                  <span id="messageAmount" class="badge bg-green"></span>
+                              </a>
+                              <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                  <li id="messageEnd">
+                                      <div class="text-center">
+                                          <a id="messageClickAll">
+                                              <strong>确认看过了所有新消息</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="text-center">
+                                          <a href="http://121.42.175.1/account/message">
+                                              <strong>查看所有通知</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </li>
+
                       </ul>
                   </nav>
               </div>
@@ -226,9 +250,10 @@
       <script src="http://121.42.175.1/static/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-      <script src="http://121.42.175.1/static/js/custom.js"></script>
-<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/a2/orderList.js')}}"></script>
+    <script src="http://121.42.175.1/static/js/custom.js"></script>
+    <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/a2/orderList.js')}}"></script>
+
       <div class="alert ui-pnotify-container alert-info ui-pnotify-shadow" role="alert" style="min-height: 16px; position:absolute; top:200px; left:500px; width:550px; display:none" id="notifyDIV">
           <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" style="cursor: pointer; visibility: hidden; display: none;">
               <span class="glyphicon glyphicon-remove"></span>
@@ -242,21 +267,54 @@
           <h4 class="ui-pnotify-title"></h4>
           <div class="ui-pnotify-text" aria-role="alert" style="font-size:20px;">无符合条件订单</div>
       </div>
+
+      <script>
+          window.onload=function(){
+              var accountID = {{userID}};
+              $.get('http://121.42.175.1/A1/API/message/clickedMessage', {backUrl:window.location.href, accountID : accountID}, function(data, status){
+                  var mydoc = "";
+                  data = JSON.parse(data);
+                  for (var i in data) {
+                      mydoc += 
+                      "<li>\
+                        <a href=\"http://121.42.175.1" + data[i].href + "\">\
+                          <span class=\"image\">\
+                            <img src=\"http://121.42.175.1/static/images/sys.png\" alt=\"Profile Image\" />\
+                          </span>\
+                          <span>\
+                            <span>来自" + data[i].sender + "的消息</span>\
+                          <span class=\"time\">" + data[i].time + "</span>\
+                          </span>\
+                          <span class=\"message\">\
+                            " + data[i].message + "\
+                          </span>\
+                        </a>\
+                      </li>";
+                  }
+                  $('#messageEnd').before(mydoc);
+                  var myclickAllUrl = "http://121.42.175.1/account/message/clear?backUrl=" + window.location.href + "&accountID=" + accountID;
+                  $('#messageClickAll').attr("href", myclickAllUrl);
+                  $('#messageAmount').text("" + data.length);
+              });
+          }
+      </script>
+
       <script> 
           var userID = {{userID}};
-          var searchContent = location.href.split('search=')[1];
           var userType;
           post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': userID }, function (data, error) {
               data = JSON.parse(data.data);
               userType = data.Type;
               userName = data.AccountName;
               d3.selectAll(".userName").html(data.AccountName);
-              var th = d3.select("#borsTh");
-              if (userType == 0) {
-                  th.html("卖家");
+              if (userType == 1 )
+              {
+                  d3.select("#borsTh").html("买家");
+                  d3.selectAll(".portrait").attr("src","http://121.42.175.1/static/images/seller.png");
               }
-              else {
-                  th.html("买家");
+              else{
+                  d3.select("#borsTh").html("卖家");
+                  d3.selectAll(".portrait").attr("src","http://121.42.175.1/static/images/buyer.png");
               }
               d3.select("#timeButton").on("click", function () {
                   drawOrderList(userID, 0);
@@ -270,20 +328,10 @@
               d3.select("#selectStatus").on("change", function () {
                   drawOrderList(userID, 0);
               });
-              //d3.select("#searchText").on("onkeypress",function(e){
-              //    console.log("keypress");
-              //});
               d3.select("#searchButton").on("click", function () {
                   search();
               });
-              if (searchContent)
-              {
-                  document.getElementById('searchText').value = searchContent;
-              }
-              else
-              {
-                  drawOrderList(userID, 0);
-              }
+              drawOrderList(userID, 0);
           });         
       </script>
   </body>

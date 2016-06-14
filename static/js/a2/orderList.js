@@ -44,7 +44,6 @@ function get(URL, PARAMS, f) {
         URL += p + '=' + PARAMS[p];
         flag = true;
     }
-    console.log(URL);
     $.ajax({
         type: "GET",
         url: URL,
@@ -155,7 +154,6 @@ function drawOrderList(userID,sort)
     selTime = timeNo[selTime];
     var selStatus = d3.select("#selectStatus").property("value");
     selStatus = statusNo[selStatus];
-    console.log(selStatus);
     var postObj = new Object();
     postObj['userID'] = userID;
     postObj['date'] = selTime;
