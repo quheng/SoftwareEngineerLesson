@@ -571,7 +571,7 @@ function drawInfo(data, user_id)
                 console.log("click");
                 get("http://121.42.175.1/a3/getdetail", { 'ID': JSON.parse(data.orderItems)[0].id}, function (itemData, error) {
                     console.log(itemData);
-                    window.location = "comment?Hotel_ID=" + itemData.Hotel_ID + "&HotelName=" + itemData.Hotel_Name + "&OrderPrice=2016&OrderDate=" + data.orderAmount;   //TODO
+                    window.location = "http://121.42.175.1:5003/a3/comment?Hotel_ID=" + itemData.Hotel_ID + "&HotelName=" + itemData.Hotel_Name + "&OrderPrice=2016&OrderDate=" + data.orderAmount;   //TODO
                 });
             });
         }
