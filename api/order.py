@@ -1,3 +1,6 @@
+# !/usr/bin/env python
+# coding=utf8
+# Author: quheng
 from flask import Flask, request, jsonify
 from datetime import datetime
 from manager import db, app
@@ -5,6 +8,26 @@ from models.OrderManager import OrderManager
 from flask.ext.restful import abort
 from models.OrderManager import OrderCondition
 import random
+import requests
+import json
+
+def send_change(para):
+    order = OrderManager.selectOrderByID(para["orderID"])
+    para["accountID"] = str(order["buyer"])
+    itemID = json.loads(order["orderItems"])[0].get("id")
+    if itemID[0] == "H":
+        para["goodKind"] = "酒店"
+        url = "http://121.42.175.1/a3/getdetail?ID=" + itemID
+        it = requests.get(url)
+        para["goodName"] = json.loads(it.content)["Hotel_Name"]
+    else:
+        para["goodName"] = "机票"
+    url = "http://121.42.175.1/A1/API/userMessageAPI"
+    res = requests.get(url, params=para)
+    print res.url
+    print json.dumps(para)
+    print res.content
+
 @app.route("/a2/api/updateorderstate", methods=['POST'])
 def UpdateOrderState():
     """
@@ -45,6 +68,10 @@ def UpdateOrderState():
         res = 1
     except Exception, e:
         res = 0
+    para = {}
+    para["orderID"] = orderID
+    para["newState"] = status
+    send_change(para)
     return jsonify({'result': res})
 
 @app.route("/a2/api/updateorderamount", methods=['POST'])
