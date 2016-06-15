@@ -119,7 +119,6 @@ class OrderManager(db.Model):
         temp['orderStatus'] = line.orderStatus
         temp['orderItems'] = line.orderItems
         temp['captcha'] = line.captcha
-
         temp['orderTime'] = line.orderTime.strftime("%Y-%m-%d %H:%M:%S")
         return temp
 

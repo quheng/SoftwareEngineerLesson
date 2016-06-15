@@ -115,7 +115,7 @@ def UpdateOrderAmount():
     amount = orderJson['amount']
     if orderID is None:
         abort(400, message="you should pass order id")
-    if status is None:
+    if amount is None:
         abort(400, message="you should pass amount")
     try:
         res = OrderManager.UpdateOrderAmount(orderID, amount)
