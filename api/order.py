@@ -11,9 +11,12 @@ import random
 import requests
 import json
 
-def send_change(para):
+def send_change(para, send):
     order = OrderManager.selectOrderByID(para["orderID"])
-    para["accountID"] = str(order["buyer"])
+    if send:
+        para["accountID"] = str(order["buyer"])
+    else:
+        para["accountID"] = str(order["seller"])
     itemID = json.loads(order["orderItems"])[0].get("id")
     if itemID[0] == "H":
         para["goodKind"] = "酒店"
@@ -22,11 +25,14 @@ def send_change(para):
         para["goodName"] = json.loads(it.content)["Hotel_Name"]
     else:
         para["goodName"] = "机票"
+        url = "http://121.42.175.1/a3/getdetail?ID=" + itemID
+        it = requests.get(url)
+        para["goodName"] = json.loads(it.content)["Flight_Company"]
     url = "http://121.42.175.1/A1/API/userMessageAPI"
     res = requests.get(url, params=para)
-    print res.url
-    print json.dumps(para)
-    print res.content
+    # print res.url
+    # print json.dumps(para)
+    # print res.content
 
 @app.route("/a2/api/updateorderstate", methods=['POST'])
 def UpdateOrderState():
@@ -71,7 +77,9 @@ def UpdateOrderState():
     para = {}
     para["orderID"] = orderID
     para["newState"] = status
-    send_change(para)
+    send_change(para, 1)
+    if status == 1:
+        send_change(para, 0)
     return jsonify({'result': res})
 
 @app.route("/a2/api/updateorderamount", methods=['POST'])
