@@ -161,7 +161,7 @@ def NewComplaint():
     newComplaint.buyer = paser['buyer']
     newComplaint.content = paser['content']
     newComplaint.orderID = paser['orderID']
-    newComplaint.complaintTime = datetime.utcnow()
+    newComplaint.complaintTime = datetime.now()
     newComplaint.status = 0
     try:
         Complaints.insertComplaints(newComplaint)
