@@ -564,12 +564,14 @@ function drawInfo(data, user_id)
 
     if (data.orderStatus==8) {
         //需要判断是不是买家
-        if (isBuyer == 1) {
+        if (isBuyer == 1 && JSON.parse(data.orderItems)[0].id[0] == "H") {
             var div = d3.select("#order_info");
         var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comment").html("评价")
             .on("click", function () {
                 console.log("click");
-                window.location = "comment?orderID=" + orderid;   //TODO
+                get("http://121.42.175.1/a3/getdetail", { 'ID': parse(data.orderItems)[0].id }, function (itemData, error) {
+                    window.location = "comment?Hotel_ID=" + itemData.Hotel_id + "&HotelName=" + itemData.Hotel_Name + "&OrderPrice=2016&OrderDate=" + data.orderAmount;   //TODO
+                });
             });
         }
     }
