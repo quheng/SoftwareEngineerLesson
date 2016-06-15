@@ -54,7 +54,7 @@
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
 
-                              <li>
+                              <li id="goout">
                                   <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
@@ -375,6 +375,7 @@
               if (usertype == 1 )
               {
                   d3.selectAll(".profile_img").attr("src","http://121.42.175.1/static/images/seller.png");
+                  d3.select("#goout").remove();
               }
               else{
                   d3.selectAll(".profile_img").attr("src","http://121.42.175.1/static/images/buyer.png");
