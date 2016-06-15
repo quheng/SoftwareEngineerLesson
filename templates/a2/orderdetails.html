@@ -66,7 +66,7 @@
             <!-- menu profile quick info -->
             <div class="profile">
               <div class="profile_pic">
-                <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="http://121.42.175.1/static/images/img.jpg" alt="..." class="img-circle profile_img portrait">
               </div>
               <div class="profile_info">
                 <span>您好,</span>
@@ -82,12 +82,15 @@
                       <div class="menu_section">
                           <h3>&nbsp</h3>
                           <ul class="nav side-menu">
-                              <li>
+                              <li id="goout">
                                   <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
                                   <ul class="nav child_menu">
                                       <li>
                                           <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
                                       </li>
+                                      <!--<li>
+                <a href="/a3/admin/">管理员</a>
+            </li>-->
                                   </ul>
                               </li>
                               <li class="active">
@@ -126,7 +129,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="http://121.42.175.1/static/images/img.jpg" alt=""/>
+                    <img src="http://121.42.175.1/static/images/img.jpg" alt="" class="portrait" />
                     <span class="username"></span>
                     <span class=" fa fa-angle-down"></span>
                   </a>
@@ -355,6 +358,36 @@
 <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/a2/orderDetails.js')}}"></script>
       <script>
+          window.onload=function(){
+              var accountID = {{userID}};
+              $.get('http://121.42.175.1/A1/API/message/clickedMessage', {backUrl:window.location.href, accountID : accountID}, function(data, status){
+                  var mydoc = "";
+                  data = JSON.parse(data);
+                  for (var i in data) {
+                      mydoc += 
+                      "<li>\
+                        <a href=\"http://121.42.175.1" + data[i].href + "\">\
+                          <span class=\"image\">\
+                            <img src=\"http://121.42.175.1/static/images/sys.png\" alt=\"Profile Image\" />\
+                          </span>\
+                          <span>\
+                            <span>来自" + data[i].sender + "的消息</span>\
+                          <span class=\"time\">" + data[i].time + "</span>\
+                          </span>\
+                          <span class=\"message\">\
+                            " + data[i].message + "\
+                          </span>\
+                        </a>\
+                      </li>";
+                  }
+                  $('#messageEnd').before(mydoc);
+                  var myclickAllUrl = "http://121.42.175.1/account/message/clear?backUrl=" + window.location.href + "&accountID=" + accountID;
+                  $('#messageClickAll').attr("href", myclickAllUrl);
+                  $('#messageAmount').text("" + data.length);
+              });
+          }
+      </script>
+      <script>
           // var paras = location.href.split('userID=')[1];
           // var userid = paras.split('&orderID=')[0];
           // var orderid = paras.split('&orderID=')[1];
@@ -377,6 +410,17 @@
               var accountName = data.AccountName;
               d3.selectAll(".username").html(accountName);
               userType = data.Type;
+              console.log("userinfo~~~~~~");
+              console.log(userType);
+              if (userType == 1)
+              {
+                  d3.selectAll(".portrait").attr("src","http://121.42.175.1/static/images/seller.png");
+                  d3.select("#goout").remove();
+              }
+              else{
+                  d3.selectAll(".portrait").attr("src","http://121.42.175.1/static/images/buyer.png");
+              }
+
               drawOrderDetails(orderid, userid);
           });
 

@@ -216,6 +216,7 @@ function confirmorder(order_id) {
 }
 
 function receive(orderid, sellerid, amount) {
+
     post("http://121.42.175.1/A1/API/addmoney", { 'accountID': sellerid, 'amount': amount}, function (data, error) {
         data=JSON.parse(data.data).result;
         console.log(data);
@@ -479,10 +480,25 @@ function drawInfo(data, user_id)
         //    var a = div.append("a").attr("class", "btn btn-success").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");").html("确认收货");
         }
         else{
-            d3.select("#ordercode").html("验证码："+"1234567890");
+            d3.select("#ordercode").html("验证码："+data.captcha);
         }
 
-        d3.select("#confirmButton").attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+");");
+        d3.select("#confirmButton").on("click", function() {
+            var ordercodeVar = document.getElementById("codeText");
+            ordercodeVar = ordercodeVar.value;
+            console.log(ordercodeVar);
+            if (data.captcha!=ordercodeVar) {
+                new PNotify({
+                    title: '操作失败',
+                    text: '验证码错误，确认消费失败。',
+                    type: 'error',
+                    styling: 'bootstrap3'
+            });
+            } else {
+                receive(orderid, data.seller, data.orderAmount);
+            }
+        });
+        //attr("onclick", "receive(orderid, "+data.seller+", "+data.orderAmount+", "+ordercodeVar+");");
         d3.select("#confirmOK").on("click", function () {
                   d3.select("#confirm_Order").style("display", "block");
                   // drawOrderList(userID, 0);
@@ -536,9 +552,16 @@ function drawGoods(alldata, data) {
         get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
             console.log(itemData);
             console.log(itemData.File_Pos);
-            tr.append("td").append("img").attr("src", "http://121.42.175.1:5003/"+itemData.File_Pos)
+            if (d.id[0]=="T") {
+                tr.append("td").append("img").attr("src", "http://121.42.175.1:5003/avatar/flight.png")
                 .attr("width", "100px")
                 .attr("height","100px");
+            } else {
+                tr.append("td").append("img").attr("src", "http://121.42.175.1:5003/"+itemData.File_Pos)
+                .attr("width", "100px")
+                .attr("height","100px");
+            }
+
             var td = tr.append("td").html(itemData.Hotel_Name);//d.title);
             td = tr.append("td").html(alldata.orderAmount+"元");//d.amount/d.quantity);
             td = tr.append("td").attr("class", "hidden-phone").html("1");//d.quantity);
@@ -557,6 +580,7 @@ function drawOrderDetails(order_id, user_id)
     console.log(order_id);
     d3.select("#order_ID").html("订单号："+order_id);
     get("http://121.42.175.1/a2/api/getorderdetial", { 'orderID': order_id }, function (data, error) {
+        console.log("getorderdetial");
         console.log(data);
         // data = JSON.parse(data);
         drawInfo(data, user_id);
