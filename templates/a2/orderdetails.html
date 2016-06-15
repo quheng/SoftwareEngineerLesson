@@ -78,43 +78,42 @@
             <br />
 
             <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <h3>&nbsp</h3>
-                  <ul class="nav side-menu">
-                      <li>
-                          <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
+                  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                      <div class="menu_section">
+                          <h3>&nbsp</h3>
+                          <ul class="nav side-menu">
                               <li>
-                                  <a href="/account/info">账户记录</a>
+                                  <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu">
+                                      <li>
+                                          <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
+                                      </li>
+                                  </ul>
+                              </li>
+                              <li class="active">
+                                  <a><i class="fa fa-edit"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu" style="display:block;">
+                                      <li>
+                                          <a href="orderlist">所有订单</a>
+                                      </li>
+                                  </ul>
                               </li>
                               <li>
-                                  <a href="/account/transaction">交易信息</a>
+                                  <a><i class="fa fa-home"></i>我的账户 <span class="fa fa-chevron-down"></span></a>
+                                  <ul class="nav child_menu">
+                                      <li>
+                                          <a href="/account/info">账户记录</a>
+                                      </li>
+                                      <li>
+                                          <a href="/account/transaction">交易信息</a>
+                                      </li>
+                                  </ul>
                               </li>
                           </ul>
-                      </li>
-                      <li class="active">
-                          <a><i class="fa fa-table"></i> 订单管理 <span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu" style="display:block;">
-                              <li>
-                                  <a href="orderlist">所有订单</a>
-                              </li>
-                          </ul>
-                      </li>
-                      <li>
-                          <a><i class="fa fa-beer"></i> 出去走走 <span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                              <li>
-                                  <a href="http://121.42.175.1:5003/">旅店与飞行器预定</a>
-                              </li>
-                          </ul>
-                      </li>
-
-                  </ul>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
 
         <div class="top_nav">
 
@@ -136,6 +135,30 @@
                     </li>
                   </ul>
                 </li>
+                          <li role="presentation" class="dropdown">
+                              <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                  <i class="fa fa-envelope-o"></i>
+                                  <span id="messageAmount" class="badge bg-green"></span>
+                              </a>
+                              <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                  <li id="messageEnd">
+                                      <div class="text-center">
+                                          <a id="messageClickAll">
+                                              <strong>确认看过了所有新消息</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                                  <li>
+                                      <div class="text-center">
+                                          <a href="http://121.42.175.1/account/message">
+                                              <strong>查看所有通知</strong>
+                                              <i class="fa fa-angle-right"></i>
+                                          </a>
+                                      </div>
+                                  </li>
+                              </ul>
+                          </li>
               </ul>
             </nav>
           </div>

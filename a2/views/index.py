@@ -15,6 +15,7 @@ def orderdetails():
     else:
         return redirect("http://121.42.175.1/login")
 
+
 @app.route('/complaint')
 def complaint():
     ID = request.cookies.get('kitty')
@@ -22,6 +23,7 @@ def complaint():
         return render_template("a2/complaint.html", userID = ID)
     else:
         return redirect("http://121.42.175.1/login")
+
 
 @app.route('/orderlist')
 def orderlist():
