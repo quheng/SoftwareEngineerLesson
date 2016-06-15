@@ -569,7 +569,7 @@ function drawInfo(data, user_id)
         var a = div.append("a").attr("class", "btn btn-success").attr("id", "to_Comment").html("评价")
             .on("click", function () {
                 console.log("click");
-                redirect("http://121.42.175.1/a3/getdetail", { 'ID': parse(data.orderItems)[0].id }, function (itemData, error) {
+                get("http://121.42.175.1/a3/getdetail", { 'ID': JSON.parse(data.orderItems)[0].id }, function (itemData, error) {
                     window.location = "comment?Hotel_ID=" + itemData.Hotel_id + "&HotelName=" + itemData.Hotel_Name + "&OrderPrice=2016&OrderDate=" + data.orderAmount;   //TODO
                 });
             });
