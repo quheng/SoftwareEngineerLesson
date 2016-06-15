@@ -81,6 +81,15 @@ function addOrder(tr,orderID)
             .append("li");
         lis.each(function (d, i) {
             var li = d3.select(this);
+            console.log(d.id[0]);
+            if (d.id[0] == "T")
+            {
+               li.append("img")
+                .attr("src", "http://121.42.175.1:5003/avatar/flight.png")
+                .style("width", "50px")
+                .style("height", "50px");
+            }
+            else
             get("http://121.42.175.1/a3/getdetail", { 'ID': d.id }, function (itemData, error) {
                 li.append("img")
                     .attr("src","http://121.42.175.1:5003/"+itemData.File_Pos)
@@ -92,7 +101,10 @@ function addOrder(tr,orderID)
         
         //卖家/买家
         td = tr.append("td").attr('id', 'td' + orderID);
-        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': data.seller }, function (data, error){ 
+        var checkID = data.seller;
+        if (userType == 1)
+            checkID = data.buyer;
+        post("http://121.42.175.1/A1/API/userInfoAPI", {  'accountID': checkID }, function (data, error){ 
             data = JSON.parse(data.data);
             var name = data.AccountName;
             td = d3.select("#td" + orderID)
