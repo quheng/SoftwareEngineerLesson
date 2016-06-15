@@ -1,4 +1,4 @@
-﻿var StateType = ["待付款", "待商家确认房间/待出票", "房间已确认/已出票", "已入住/已乘机", "交易关闭", "待退款", "已退款", "退款失败"];
+﻿var StateType = ["待付款", "待商家确认房间/待出票", "房间已确认/已出票", "已入住/已乘机", "交易关闭", "待退款", "已退款", "退款失败","交易成功"];
 var statusNo = {
     '所有状态':-1,
     '待付款':0,
@@ -7,7 +7,8 @@ var statusNo = {
     '已入住/已乘机': 3,
     '待退款':5,
     '已退款':6,
-    '退款失败':7
+    '退款失败': 7,
+    '交易成功':8
 };
 var timeNo = {
     '所有时间':-1,
@@ -117,7 +118,7 @@ function addOrder(tr,orderID)
         var div = td.append("div").attr("class", "progress progress_sm");
         var normal;
         var progress;
-        if (data.orderStatus <= 4) {
+        if (data.orderStatus <= 4 || data.orderStatus == 8) {
             normal = true;
             progress = (data.orderStatus + 1) / 4 * 100;
             if (data.status > 2)
